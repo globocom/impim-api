@@ -10,7 +10,8 @@ from images_api.handlers import HealthCheckHandler
 class ImagesApplication(tornado.web.Application):
 
     def __init__(self):
-        httpclient.AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
+        httpclient.AsyncHTTPClient.configure(
+                'tornado.curl_httpclient.CurlAsyncHTTPClient')
         handlers = [
             (r'/healthcheck(?:/|\.html)?', HealthCheckHandler),
         ]

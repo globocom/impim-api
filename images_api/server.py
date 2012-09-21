@@ -16,7 +16,9 @@ def main():
     parser.add_option('-i', '--ip', dest='ip', default='0.0.0.0',
                       help='Host ip to start the server in.')
     parser.add_option('-l', '--log-level', dest='log_level', default="warning",
-                      help = 'The log level to be used. Possible values are: debug, info, warning, error, critical or notset. [default: warning].' )
+                      help = 'The log level to be used. Possible values are: ' \
+                             'debug, info, warning, error, critical or notset.'\
+                             '[default: warning].')
 
     (opt, args) = parser.parse_args()
 
