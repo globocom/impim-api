@@ -3,3 +3,9 @@ run:
 
 test:
 	@nosetests tests/
+
+requirements:
+	pip install -r test_requirements.txt
+	pip install -r requirements.txt
+	
+ci: requirements test
