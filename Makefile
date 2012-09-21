@@ -9,3 +9,6 @@ requirements:
 	pip install -r requirements.txt
 	
 ci: requirements test
+	git checkout master
+	git pull
+	git push git@ngit.globoi.com:images-project/images-api.git master
