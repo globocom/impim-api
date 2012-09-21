@@ -32,7 +32,8 @@ def main():
     server.bind(opt.port, opt.ip)
     server.start(1)
 
-    logging.info('-- Images API started listening in %s:%d --' % (opt.ip, opt.port))
+    logging.info('-- Images API started listening in %s:%d --' % (opt.ip,
+        opt.port))
     try:
         main_loop.start()
     except KeyboardInterrupt:
