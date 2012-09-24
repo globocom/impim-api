@@ -12,4 +12,4 @@ class SearchHandler(AlphaBaseHandler):
     @tornado.web.asynchronous
     def get(self):
         image_resource = ImageResource()
-        self.respond_with({'photos': image_resource.all()})
+        self.respond_with(image_resource.all())
