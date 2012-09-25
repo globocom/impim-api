@@ -1,2 +1,6 @@
+libthumbor==0.6.1
+nose==1.2.1
+pycrypto==2.6
 pycurl==7.19.0
 tornado==2.4
+tornado-thumbor-url==0.1.0
