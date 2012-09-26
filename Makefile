@@ -1,5 +1,5 @@
 run:
-	@PYTHONPATH=.:$$PYTHONPATH python images_api/server.py -l info
+	@honcho start -f Procfile.local
 
 test:
 	@nosetests tests/
