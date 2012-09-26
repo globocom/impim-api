@@ -1,1 +1,1 @@
-web: python images_api/server.py -l error
+web: PYTHONPATH=$PYTHONPATH:. python images_api/server.py
