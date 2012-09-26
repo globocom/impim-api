@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from json import loads
-from os.path import abspath, dirname, join
+from tornado import gen
+from tornado.httpclient import AsyncHTTPClient
 
-IMAGES_FILE_PATH = abspath(join(dirname(__file__), 'images.json'))
 
 class ImageResource(object):
 
-    def all(self):
-        if not hasattr(self, '_images'):
-            with open(IMAGES_FILE_PATH) as file_with_images:
-                self._images = loads(file_with_images.read())
-        return self._images
+    @gen.engine
+    def all(self, callback):
+        http_client = AsyncHTTPClient()
+        response = yield gen.Task(http_client.fetch, 'http://localhost:9200/images-api/image/_search')
+        callback(response.body)
