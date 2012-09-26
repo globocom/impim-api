@@ -9,7 +9,7 @@ from images_api.alpha.handlers import SearchHandler
 
 
 class ImagesApplication(tornado.web.Application):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         httpclient.AsyncHTTPClient.configure(
                 'tornado.curl_httpclient.CurlAsyncHTTPClient')
         handlers = [
@@ -19,4 +19,6 @@ class ImagesApplication(tornado.web.Application):
         ]
         super(ImagesApplication, self).__init__(handlers,
                 thumbor_security_key='abc',
-                thumbor_server_url='http://localhost:8888/')
+                thumbor_server_url='http://localhost:8888/',
+                *args,
+                **kwargs)

@@ -19,6 +19,8 @@ def main():
                       help = 'The log level to be used. Possible values are: ' \
                              'debug, info, warning, error, critical or notset.'\
                              '[default: warning].')
+    parser.add_option('-d', '--debug', action='store_true', dest='debug', default=False,
+                      help='Debug flag.')
 
     (opt, args) = parser.parse_args()
 
@@ -26,7 +28,7 @@ def main():
 
     main_loop = tornado.ioloop.IOLoop.instance()
 
-    application = ImagesApplication()
+    application = ImagesApplication(debug=opt.debug)
 
     server = HTTPServer(application)
     server.bind(opt.port, opt.ip)
