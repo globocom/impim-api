@@ -4,8 +4,8 @@
 from tornado import gen
 from tornado.web import asynchronous
 
+from images_api.alpha.domain.images import Images
 from images_api.alpha.handlers.base import AlphaBaseHandler
-from images_api.alpha.resources.images import ImageResource
 
 
 class SearchHandler(AlphaBaseHandler):
@@ -13,6 +13,6 @@ class SearchHandler(AlphaBaseHandler):
     @asynchronous
     @gen.engine
     def get(self):
-        image_resource = ImageResource()
-        response = yield gen.Task(image_resource.all, self.config.ELASTIC_SEARCH_PHOTOS_URL)
+        images = Images()
+        response = yield gen.Task(images.all, self.config.ELASTIC_SEARCH_PHOTOS_URL)
         self.respond_with(response)

@@ -6,7 +6,7 @@ from tornado.httpclient import AsyncHTTPClient
 
 from images_api.alpha.domain import EsParser
 
-class ImageResource(object):
+class Images(object):
 
     def __init__(self):
         self._es_parser = EsParser()
