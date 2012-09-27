@@ -12,4 +12,3 @@ Config.define('THUMBOR_SERVER_URL', 'http://localhost:8888/', 'The thumbor serve
 
 if __name__ == '__main__':
     print Config.get_config_text()
-
