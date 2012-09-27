@@ -34,7 +34,7 @@ class EsParserTestCase(TestCase):
             }
         """
         
-        parsed = loads(self._es_parser.parse_images_from_search(es_json))
+        parsed = self._es_parser.parse_images_from_search(es_json)
         
         assert len(parsed['photos']) == 1
         assert parsed['photos'][0]['url'] == 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
