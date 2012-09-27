@@ -13,7 +13,8 @@ class EsParser(object):
             photos.append({'url': hit['_source']['url']})
         
         parsed_data = {
-            'photos': photos
+            'numFound': len(photos),
+            'photos': photos,
         }
         
         return parsed_data
