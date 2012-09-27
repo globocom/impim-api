@@ -10,7 +10,10 @@ class EsParser(object):
         
         photos = []
         for hit in es_data['hits']['hits']:
-            photos.append({'url': hit['_source']['url']})
+            photo = {}
+            for key in hit['_source'].keys():
+                photo[key] = hit['_source'][key]
+            photos.append(photo)
         
         parsed_data = {
             'numFound': len(photos),
