@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from optparse import OptionParser
 import logging
+from optparse import OptionParser
 
 import tornado.ioloop
 from tornado.httpserver import HTTPServer
@@ -19,6 +19,8 @@ def main():
                       help = 'The log level to be used. Possible values are: ' \
                              'debug, info, warning, error, critical or notset.'\
                              '[default: warning].')
+    parser.add_option('-c', '--conf', dest='conf', default=None,
+                      help='Configuration file to use for the server.')
     parser.add_option('-d', '--debug', action='store_true', dest='debug', default=False,
                       help='Debug flag.')
 
@@ -28,7 +30,7 @@ def main():
 
     main_loop = tornado.ioloop.IOLoop.instance()
 
-    application = ImagesApplication(debug=opt.debug)
+    application = ImagesApplication(conf=opt.conf, debug=opt.debug)
 
     server = HTTPServer(application)
     server.bind(opt.port, opt.ip)

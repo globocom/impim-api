@@ -12,8 +12,8 @@ class ImageResource(object):
         self._es_parser = EsParser()
 
     @gen.engine
-    def all(self, callback):
+    def all(self, url, callback):
         http_client = AsyncHTTPClient()
-        response = yield gen.Task(http_client.fetch, 'http://esearch.dev.globoi.com/images/image/_search')
+        response = yield gen.Task(http_client.fetch, url)
         json = self._es_parser.parse_images_from_search(response.body)
         callback(json)
