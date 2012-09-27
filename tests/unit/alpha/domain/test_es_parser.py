@@ -36,9 +36,9 @@ class EsParserTestCase(TestCase):
                     "thumbUrl": "http://local.globo.com:8888/SGVhWvXVXH4HvduSL1f01ZWj6b16SKVBoC59rDy3Nm5YXWVN3JkSEoOsXwy0SRop/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg",
                     "creditos": "Salve Jorge/TV Globo",
                     "url": "s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg",
-                    "dataCadastro": "24/09/2012",
+                    "dataCadastro": "2012-09-24T14:12:12",
                     "largura": 940,
-                    "dataEvento": "24/09/2012",
+                    "dataEvento": "2012-09-24T14:12:12",
                     "titulo": "Istambul é a única cidade no mundo que fica em dois continentes: Europa e Ásia",
                     "altura": 588
                   }

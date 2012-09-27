@@ -3,5 +3,6 @@ honcho==0.1.0
 libthumbor==0.6.1
 pycrypto==2.6
 pycurl==7.19.0
+python-dateutil==2.1
 tornado==2.4
 tornado-thumbor-url==0.1.0
