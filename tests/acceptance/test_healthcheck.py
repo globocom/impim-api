@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from tests import BaseImagesAPITestCase
+from tests.acceptance import BaseImagesAPITestCase
 
 class TestHealthCheckHandlerTestCase(BaseImagesAPITestCase):
 
