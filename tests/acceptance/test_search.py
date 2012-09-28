@@ -20,7 +20,7 @@ class ImageSearchTestCase(BaseImagesAPITestCase):
             'dataCadastro': '2009-11-15T14:12:12',
             'dataEvento': '2009-11-15T14:12:12',
         }
-        self.put('http://esearch.dev.globoi.com/images-test/image/WFz6iH4LSgay39ePvteCsw', dumps(data))
+        self.post('http://esearch.dev.globoi.com/images-test/image', dumps(data))
     
     def test_search_without_filters(self):
         response = self.get('/alpha/search')
