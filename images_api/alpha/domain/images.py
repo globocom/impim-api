@@ -9,9 +9,9 @@ from images_api.alpha.infrastructure import EsUrls
 
 class Images(object):
 
-    def __init__(self):
+    def __init__(self, config):
         self._http_client = AsyncHTTPClient()
-        self._es_urls = EsUrls()
+        self._es_urls = EsUrls(config=config)
         self._es_parser = EsParser()
 
     @gen.engine

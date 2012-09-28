@@ -13,6 +13,6 @@ class SearchHandler(AlphaBaseHandler):
     @asynchronous
     @gen.engine
     def get(self):
-        images = Images()
+        images = Images(config=self.config)
         response = yield gen.Task(images.all)
         self.respond_with(response)
