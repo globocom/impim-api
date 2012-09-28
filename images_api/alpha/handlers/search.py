@@ -14,5 +14,5 @@ class SearchHandler(AlphaBaseHandler):
     @gen.engine
     def get(self):
         images = Images()
-        response = yield gen.Task(images.all, self.config.ELASTIC_SEARCH_PHOTOS_URL)
+        response = yield gen.Task(images.all)
         self.respond_with(response)
