@@ -5,11 +5,9 @@ class EsUrls(object):
     
     IMAGE_TYPE = 'image'
     
-    @classmethod
-    def type_url(cls, type):
+    def type_url(self, type):
         return 'http://esearch.dev.globoi.com/images/%s' % type
     
-    @classmethod
-    def search_url(cls, type):
-        return cls.type_url(type) + '/_search'
+    def search_url(self, type):
+        return self.type_url(type) + '/_search'
         
