@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 from unittest import TestCase
 
 from images_api.alpha.infrastructure import ElasticSearchUrls
 from tests.support import MockConfig
+
 
 class ElasticSearchUrlsTestCase(TestCase):
     
