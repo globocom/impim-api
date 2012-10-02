@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from tests import BaseImagesAPITestCase
 
-class TestHealthCheckHandlerTestCase(BaseImagesAPITestCase):
+from tests.support import ImagesAPIAsyncHTTPTestCase
+
+
+class TestHealthCheckHandlerTestCase(ImagesAPIAsyncHTTPTestCase):
 
     def test_access_to_healthcheck(self):
         response = self.get('/healthcheck')

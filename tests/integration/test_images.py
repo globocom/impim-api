@@ -9,7 +9,7 @@ from tornado.httpclient import AsyncHTTPClient
 from images_api.alpha.domain import Images
 from images_api.alpha.infrastructure import ElasticSearchUrls
 
-from tests import AsyncHTTPClientMixin
+from tests.support import AsyncHTTPClientMixin
 from tests.support import es_cleanup
 from tests.support import MockConfig
 

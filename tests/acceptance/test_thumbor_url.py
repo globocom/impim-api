@@ -3,9 +3,9 @@
 
 from json import loads
 
-from tests import BaseImagesAPITestCase
+from tests.support import ImagesAPIAsyncHTTPTestCase
 
-class ThumborUrlAsJsonpTestCase(BaseImagesAPITestCase):
+class ThumborUrlAsJsonpTestCase(ImagesAPIAsyncHTTPTestCase):
 
     def test_jsonp_call(self):
         response = self.get('/thumbor_urls', image_url='http://s.glbimg.com/myimg.jpg')

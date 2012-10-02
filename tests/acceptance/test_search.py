@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 from json import dumps, loads
 
-from tests import BaseImagesAPITestCase
+from tests.support import ImagesAPIAsyncHTTPTestCase
 
-class ImageSearchTestCase(BaseImagesAPITestCase):
+
+class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase):
     
     def setUp(self):
         super(ImageSearchTestCase, self).setUp()
