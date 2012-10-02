@@ -21,6 +21,6 @@ class ElasticSearchUrls(object):
         if query_string:
             query_string = '?%s' % query_string
         return self.type_url(document_type) + '/_search%s' % query_string
-        
+    
     def refresh_url(self):
         return "%s/_refresh" % self.index_url()
