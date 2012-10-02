@@ -49,7 +49,7 @@ class EsParserTestCase(TestCase):
         
         parsed = self._es_parser.parse_images_from_search(es_json)
         
-        assert parsed['numFound'] == 1
+        assert parsed['total'] == 1
         assert len(parsed['photos']) == 1
         assert parsed['photos'][0]['assunto'] == "Istambul; Salve Jorge"
         assert parsed['photos'][0]['imagemAtual'] == False

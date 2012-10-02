@@ -2,3 +2,4 @@
 # -*- coding: utf-8 -*-
 
 from .es_parser import EsParser
+from .images import Images

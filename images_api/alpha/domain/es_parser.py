@@ -21,7 +21,7 @@ class EsParser(object):
             photos.append(photo)
         
         parsed_data = {
-            'numFound': len(photos),
+            'total': es_data['hits']['total'],
             'photos': photos,
         }
         
