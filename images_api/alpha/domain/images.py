@@ -11,7 +11,7 @@ class Images(object):
 
     def __init__(self, config, http_client=AsyncHTTPClient()):
         self._http_client = http_client
-        self._es_urls = ElasticSearchUrls(config=config)
+        self._elastic_search_urls = ElasticSearchUrls(config=config)
         self._elastic_search_parser = ElasticSearchParser()
 
     @gen.engine
@@ -21,6 +21,6 @@ class Images(object):
             'size': page_size,
         }
         
-        response = yield gen.Task(self._http_client.fetch, self._es_urls.search_url(ElasticSearchUrls.IMAGE_TYPE, **es_args))
+        response = yield gen.Task(self._http_client.fetch, self._elastic_search_urls.search_url(ElasticSearchUrls.IMAGE_TYPE, **es_args))
         json = self._elastic_search_parser.parse_images_from_search(response.body)
         callback(json)
