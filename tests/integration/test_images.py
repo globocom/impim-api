@@ -21,39 +21,33 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
         self.http_client = AsyncHTTPClient(self.io_loop)
         self.mock_config = MockConfig()
         self.elastic_search_urls = ElasticSearchUrls(self.mock_config)
-
-    def _post_to_elastic_search(self, url, data=''):
-        self.post(url, dumps(data))
-        self.post(self.elastic_search_urls.refresh_url(), '')
-    
-    def test_all(self):
+        
         es_cleanup(self.elastic_search_urls)
 
+    def test_all(self):
         self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
             'titulo': u'Título'
         })
-        
+
         images = Images(config=self.mock_config, http_client=AsyncHTTPClient(self.io_loop))
-        images.all(self._all_callback)
+        images.all(self.assert_all_callback)
         self.wait()
-    
-    def _all_callback(self, response):
+
+    def assert_all_callback(self, response):
         assert response['total'] == 1
         assert len(response['photos']) == 1
         assert response['photos'][0]['titulo'] == u'Título'
-        
+
         self.stop()
-    
+
     def test_all_pagination(self):
-        es_cleanup(self.elastic_search_urls)
-        
         self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
             'titulo': u'Título'
         })
         self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
             'titulo': u'Título'
         })
-        
+
         images = Images(config=self.mock_config, http_client=self.http_client)
         images.all(self.assert_all_pagination_callback_page_1, page=1, page_size=1)
         self.wait()
@@ -71,3 +65,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
         assert len(response['photos']) == 1
 
         self.stop()
+
+    def _post_to_elastic_search(self, url, data=''):
+        self.post(url, dumps(data))
+        self.post(self.elastic_search_urls.refresh_url(), '')
