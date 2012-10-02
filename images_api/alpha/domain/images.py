@@ -5,13 +5,13 @@ from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 
 from images_api.alpha.domain import EsParser
-from images_api.alpha.infrastructure import EsUrls
+from images_api.alpha.infrastructure import ElasticSearchUrls
 
 class Images(object):
 
     def __init__(self, config, http_client=AsyncHTTPClient()):
         self._http_client = http_client
-        self._es_urls = EsUrls(config=config)
+        self._es_urls = ElasticSearchUrls(config=config)
         self._es_parser = EsParser()
 
     @gen.engine
@@ -21,6 +21,6 @@ class Images(object):
             'size': page_size,
         }
         
-        response = yield gen.Task(self._http_client.fetch, self._es_urls.search_url(EsUrls.IMAGE_TYPE, **es_args))
+        response = yield gen.Task(self._http_client.fetch, self._es_urls.search_url(ElasticSearchUrls.IMAGE_TYPE, **es_args))
         json = self._es_parser.parse_images_from_search(response.body)
         callback(json)

@@ -1,4 +1,4 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .es_urls import EsUrls
+from .elastic_search_urls import ElasticSearchUrls

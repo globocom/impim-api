@@ -7,7 +7,7 @@ from tornado.testing import AsyncTestCase
 from tornado.httpclient import AsyncHTTPClient
 
 from images_api.alpha.domain import Images
-from images_api.alpha.infrastructure import EsUrls
+from images_api.alpha.infrastructure import ElasticSearchUrls
 
 from tests import AsyncHTTPClientMixin
 from tests.support import es_cleanup
@@ -20,7 +20,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
         super(ImagesTestCase, self).setUp()
         self.http_client = AsyncHTTPClient(self.io_loop)
         self.mock_config = MockConfig()
-        self.elastic_search_urls = EsUrls(self.mock_config)
+        self.elastic_search_urls = ElasticSearchUrls(self.mock_config)
 
     def _post_to_elastic_search(self, url, data=''):
         self.post(url, dumps(data))
@@ -29,7 +29,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
     def test_all(self):
         es_cleanup(self.elastic_search_urls)
 
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(EsUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
             'titulo': u'Título'
         })
         
@@ -47,10 +47,10 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
     def test_all_pagination(self):
         es_cleanup(self.elastic_search_urls)
         
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(EsUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
             'titulo': u'Título'
         })
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(EsUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
             'titulo': u'Título'
         })
         
