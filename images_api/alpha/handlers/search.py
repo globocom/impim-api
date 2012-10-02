@@ -10,9 +10,14 @@ from images_api.alpha.handlers.base import AlphaBaseHandler
 
 class SearchHandler(AlphaBaseHandler):
 
+    def __init__(self, *args, **kwargs):
+        super(SearchHandler, self).__init__(*args, **kwargs)
+        self._images = Images(config=self.config)
+
     @asynchronous
     @gen.engine
     def get(self):
-        images = Images(config=self.config)
-        response = yield gen.Task(images.all)
+        accepted_arguments = ['page', 'pageSize']
+        self.extract_arguments(accepted_arguments)
+        response = yield gen.Task(self._images.all)
         self.respond_with(response)
