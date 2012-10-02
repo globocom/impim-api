@@ -3,8 +3,8 @@
 
 from tornado.httpclient import HTTPClient, HTTPError
 
-def es_cleanup():
+def es_cleanup(elastic_search_urls):
     try:
-        HTTPClient().fetch('http://images:images@esearch.dev.globoi.com/images-test', method='DELETE')
+        HTTPClient().fetch(elastic_search_urls.index_url(), method='DELETE')
     except HTTPError, e:
         pass

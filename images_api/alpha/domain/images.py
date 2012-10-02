@@ -21,6 +21,6 @@ class Images(object):
             'size': page_size,
         }
         
-        response = yield gen.Task(self._http_client.fetch, self._es_urls.search_url(type=EsUrls.IMAGE_TYPE, **es_args))
+        response = yield gen.Task(self._http_client.fetch, self._es_urls.search_url(EsUrls.IMAGE_TYPE, **es_args))
         json = self._es_parser.parse_images_from_search(response.body)
         callback(json)

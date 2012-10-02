@@ -3,7 +3,7 @@
 
 from json import dumps, loads
 
-from tests.acceptance import BaseImagesAPITestCase
+from tests import BaseImagesAPITestCase
 
 class ImageSearchTestCase(BaseImagesAPITestCase):
     
