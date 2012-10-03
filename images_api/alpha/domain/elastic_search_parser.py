@@ -9,7 +9,7 @@ class ElasticSearchParser(object):
     def parse_images_from_search(self, es_json):
         es_data = loads(es_json)
         
-        date_fields = ['dataCadastro', 'dataEvento']
+        date_fields = ['createdDate', 'eventDate']
         
         images = []
         for hit in es_data['hits']['hits']:
