@@ -26,7 +26,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
 
     def test_all(self):
         self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
-            'titulo': u'Título'
+            'title': u'Title'
         })
 
         images = Images(config=self.mock_config, http_client=AsyncHTTPClient(self.io_loop))
@@ -36,16 +36,36 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
     def assert_all_callback(self, response):
         assert response['total'] == 1
         assert len(response['items']) == 1
-        assert response['items'][0]['titulo'] == u'Título'
+        assert response['items'][0]['title'] == u'Title'
 
         self.stop()
 
-    def test_all_pagination(self):
+
+    def test_all_query(self):
         self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
-            'titulo': u'Título'
+            'title': u'One'
         })
         self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
-            'titulo': u'Título'
+            'title': u'Two'
+        })
+        
+        images = Images(config=self.mock_config, http_client=AsyncHTTPClient(self.io_loop))
+        images.all(self.assert_all_query_callback, q='One')
+        self.wait()
+        
+    def assert_all_query_callback(self, response):
+        assert response['total'] == 1
+        assert response['items'][0]['title'] == u'One'
+        
+        self.stop()
+
+
+    def test_all_pagination(self):
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+            'title': u'Title'
+        })
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+            'title': u'Title'
         })
 
         images = Images(config=self.mock_config, http_client=self.http_client)
@@ -67,6 +87,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
         assert len(response['items']) == 1
 
         self.stop()
+
 
     def _post_to_elastic_search(self, url, data=''):
         self.post(url, dumps(data))

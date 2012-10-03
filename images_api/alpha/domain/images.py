@@ -15,13 +15,14 @@ class Images(object):
         self._elastic_search_parser = ElasticSearchParser()
 
     @gen.engine
-    def all(self, callback, page=1, page_size=10):
+    def all(self, callback, q=None, page=1, page_size=10):
         page = int(page)
         page_size = int(page_size)
         es_args = {
             'from': (page - 1) * page_size,
             'size': page_size,
         }
+        if q: es_args['q'] = q
         
         url = self._elastic_search_urls.search_url(ElasticSearchUrls.IMAGE_TYPE, **es_args)
         elastic_search_response = yield gen.Task(self._http_client.fetch, url)
