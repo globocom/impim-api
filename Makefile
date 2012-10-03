@@ -4,6 +4,9 @@ run:
 test:
 	@nosetests tests/
 
+clean:
+	@find . -name "*.pyc" -delete
+
 requirements:
 	pip install -r test_requirements.txt
 	pip install -r requirements.txt

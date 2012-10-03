@@ -4,6 +4,7 @@
 from tornado import gen
 from tornado.web import asynchronous
 
+from images_api.handlers import BaseHandlerMixin
 from images_api.alpha.domain.images import Images
 from images_api.alpha.handlers.base import AlphaBaseHandler
 
@@ -17,7 +18,7 @@ class SearchHandler(AlphaBaseHandler):
     @asynchronous
     @gen.engine
     def get(self):
-        accepted_arguments = ['page', 'pageSize']
-        self.extract_arguments(accepted_arguments)
-        response = yield gen.Task(self._images.all)
+        accepted_arguments = [('page', 1), ('pageSize', 10)]
+        arguments = self.extract_arguments(accepted_arguments)
+        response = yield gen.Task(self._images.all, **arguments)
         self.respond_with(response)

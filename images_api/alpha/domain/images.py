@@ -16,6 +16,8 @@ class Images(object):
 
     @gen.engine
     def all(self, callback, page=1, page_size=10):
+        page = int(page)
+        page_size = int(page_size)
         es_args = {
             'from': (page - 1) * page_size,
             'size': page_size,
