@@ -56,12 +56,14 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
 
     def assert_all_pagination_callback_page_1(self, response):
         assert response['total'] == 2
+        assert response['pageSize'] == 1
         assert len(response['items']) == 1
 
         self.stop()
 
     def assert_all_pagination_callback_page_2(self, response):
         assert response['total'] == 2
+        assert response['pageSize'] == 1
         assert len(response['items']) == 1
 
         self.stop()

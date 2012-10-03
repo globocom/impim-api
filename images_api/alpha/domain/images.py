@@ -23,6 +23,9 @@ class Images(object):
             'size': page_size,
         }
         
-        response = yield gen.Task(self._http_client.fetch, self._elastic_search_urls.search_url(ElasticSearchUrls.IMAGE_TYPE, **es_args))
-        json = self._elastic_search_parser.parse_images_from_search(response.body)
-        callback(json)
+        url = self._elastic_search_urls.search_url(ElasticSearchUrls.IMAGE_TYPE, **es_args)
+        elastic_search_response = yield gen.Task(self._http_client.fetch, url)
+        
+        images_dict = self._elastic_search_parser.parse_images_from_search(elastic_search_response.body)
+        images_dict['pageSize'] = page_size
+        callback(images_dict)

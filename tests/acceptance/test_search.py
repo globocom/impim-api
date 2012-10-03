@@ -14,6 +14,7 @@ class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase):
 
     def test_search_without_filters(self):
         response = self.get('/alpha/search')
+        
         self.assertEqual(response.code, 200)
         self.assertTrue('application/json' in response.headers['Content-Type'])
         results = loads(response.body)

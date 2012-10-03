@@ -20,5 +20,5 @@ class SearchHandler(AlphaBaseHandler):
     def get(self):
         accepted_arguments = [('page', 1), ('pageSize', 10)]
         arguments = self.extract_arguments(accepted_arguments)
-        response = yield gen.Task(self._images.all, **arguments)
-        self.respond_with(response)
+        images_dict = yield gen.Task(self._images.all, **arguments)
+        self.respond_with(images_dict)
