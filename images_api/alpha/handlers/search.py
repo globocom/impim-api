@@ -18,7 +18,7 @@ class SearchHandler(AlphaBaseHandler):
     @asynchronous
     @gen.engine
     def get(self):
-        accepted_arguments = [('page', 1), ('pageSize', 10)]
+        accepted_arguments = [('q', None), ('page', 1), ('pageSize', 10)]
         arguments = self.extract_arguments(accepted_arguments)
         images_dict = yield gen.Task(self._images.all, **arguments)
         self.respond_with(images_dict)
