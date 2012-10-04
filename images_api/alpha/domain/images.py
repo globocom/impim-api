@@ -41,7 +41,7 @@ class Images(object):
                 'range': {
                     'createdDate': {
                         'gte': query_arguments.get('created_date_from').isoformat(),
-                        'to': query_arguments.get('created_date_to').isoformat()
+                        'lte': query_arguments.get('created_date_to').isoformat()
                     }
                 }
             }
