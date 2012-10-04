@@ -31,7 +31,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
             'title': u'Title'
         })
 
-        self._images.all(self.assert_all_callback)
+        self._images.all(self.assert_all_callback, page=1, page_size=10)
         self.wait()
 
     def assert_all_callback(self, response):
@@ -50,7 +50,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
             'title': u'Two'
         })
         
-        self._images.all(self.assert_all_query_callback, q='One')
+        self._images.all(self.assert_all_query_callback, q='One', page=1, page_size=10)
         self.wait()
         
     def assert_all_query_callback(self, response):
@@ -77,7 +77,8 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
         self._images.all(
             self.assert_all_created_date_filter_callback,
             created_date_from=datetime(2012, 10, 4, 13, 0, 1),
-            created_date_to=datetime(2012, 10, 4, 13, 0, 2)
+            created_date_to=datetime(2012, 10, 4, 13, 0, 2),
+            page=1, page_size=10
         )
         self.wait()
 

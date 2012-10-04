@@ -20,29 +20,29 @@ class Images(object):
         self._elastic_search_parser = ElasticSearchParser()
 
     @gen.engine
-    def all(self, callback, q=None, created_date_from=None,
-            created_date_to=None, page=1, page_size=10):
-        page = int(page)
-        page_size = int(page_size)
+    def all(self, callback, **query_arguments):
+        elastic_search_request = self._build_elastic_search_request(**query_arguments)
+        elastic_search_response = yield gen.Task(self._http_client.fetch, elastic_search_request)
         
-        es_args = {
-            'from': (page - 1) * page_size,
-            'size': page_size,
+        images_dict = self._elastic_search_parser.parse_images_from_search(elastic_search_response.body)
+        images_dict['pageSize'] = query_arguments.get('page_size')
+        callback(images_dict)
+
+    def _build_elastic_search_request(self, **query_arguments):
+        url = self._elastic_search_urls.search_url(ElasticSearchUrls.IMAGE_TYPE)
+        elastic_search_arguments = {
+            'from': (query_arguments.get('page') - 1) * query_arguments.get('page_size'),
+            'size': query_arguments.get('page_size'),
         }
-        if q: es_args['query'] = {'query_string': {'query': q}}
-        if created_date_from:
-            es_args['query'] = {
+        if query_arguments.get('q'):
+            elastic_search_arguments['query'] = {'query_string': {'query': query_arguments.get('q')}}
+        if query_arguments.get('created_date_from'):
+            elastic_search_arguments['query'] = {
                 'range': {
                     'createdDate': {
-                        'gte': created_date_from.isoformat(),
-                        'to': created_date_to.isoformat()
+                        'gte': query_arguments.get('created_date_from').isoformat(),
+                        'to': query_arguments.get('created_date_to').isoformat()
                     }
                 }
             }
-        
-        url = self._elastic_search_urls.search_url(ElasticSearchUrls.IMAGE_TYPE)
-        elastic_search_response = yield gen.Task(self._http_client.fetch, url, body=dumps(es_args), allow_nonstandard_methods=True)
-        
-        images_dict = self._elastic_search_parser.parse_images_from_search(elastic_search_response.body)
-        images_dict['pageSize'] = page_size
-        callback(images_dict)
+        return HTTPRequest(url, body=dumps(elastic_search_arguments), allow_nonstandard_methods=True)
