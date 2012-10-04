@@ -25,9 +25,6 @@ class ImagesApplication(tornado.web.Application):
                 '/etc/'
             ])
 
-        httpclient.AsyncHTTPClient.configure(
-            'tornado.curl_httpclient.CurlAsyncHTTPClient')
-
         handlers = [
             (r'/healthcheck(?:/|\.html)?', HealthCheckHandler),
             (r'/alpha/search/?', SearchHandler),

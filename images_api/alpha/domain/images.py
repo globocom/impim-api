@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+from json import dumps
+
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
+from tornado.httpclient import HTTPRequest
 
 from images_api.alpha.domain import ElasticSearchParser
 from images_api.alpha.infrastructure import ElasticSearchUrls
+
 
 class Images(object):
 
@@ -15,17 +20,28 @@ class Images(object):
         self._elastic_search_parser = ElasticSearchParser()
 
     @gen.engine
-    def all(self, callback, q=None, page=1, page_size=10):
+    def all(self, callback, q=None, created_date_from=None,
+            created_date_to=None, page=1, page_size=10):
         page = int(page)
         page_size = int(page_size)
+        
         es_args = {
             'from': (page - 1) * page_size,
             'size': page_size,
         }
-        if q: es_args['q'] = q
+        if q: es_args['query'] = {'query_string': {'query': q}}
+        if created_date_from:
+            es_args['query'] = {
+                'range': {
+                    'createdDate': {
+                        'gte': created_date_from.isoformat(),
+                        'to': created_date_to.isoformat()
+                    }
+                }
+            }
         
-        url = self._elastic_search_urls.search_url(ElasticSearchUrls.IMAGE_TYPE, **es_args)
-        elastic_search_response = yield gen.Task(self._http_client.fetch, url)
+        url = self._elastic_search_urls.search_url(ElasticSearchUrls.IMAGE_TYPE)
+        elastic_search_response = yield gen.Task(self._http_client.fetch, url, body=dumps(es_args), allow_nonstandard_methods=True)
         
         images_dict = self._elastic_search_parser.parse_images_from_search(elastic_search_response.body)
         images_dict['pageSize'] = page_size

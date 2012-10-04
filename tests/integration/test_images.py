@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 from json import dumps, loads
 
 from tornado.testing import AsyncTestCase
@@ -21,6 +22,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
         self.http_client = AsyncHTTPClient(self.io_loop)
         self.mock_config = MockConfig()
         self.elastic_search_urls = ElasticSearchUrls(self.mock_config)
+        self._images = Images(config=self.mock_config, http_client=AsyncHTTPClient(self.io_loop))
         
         es_cleanup(self.elastic_search_urls)
 
@@ -29,8 +31,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
             'title': u'Title'
         })
 
-        images = Images(config=self.mock_config, http_client=AsyncHTTPClient(self.io_loop))
-        images.all(self.assert_all_callback)
+        self._images.all(self.assert_all_callback)
         self.wait()
 
     def assert_all_callback(self, response):
@@ -49,13 +50,41 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
             'title': u'Two'
         })
         
-        images = Images(config=self.mock_config, http_client=AsyncHTTPClient(self.io_loop))
-        images.all(self.assert_all_query_callback, q='One')
+        self._images.all(self.assert_all_query_callback, q='One')
         self.wait()
         
     def assert_all_query_callback(self, response):
         assert response['total'] == 1
         assert response['items'][0]['title'] == u'One'
+        
+        self.stop()
+
+
+    def test_all_created_date_filter(self):
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+            'title': u'First', 'createdDate': '2012-10-04T13:00:00'
+        })
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+            'title': u'Second', 'createdDate': '2012-10-04T13:00:01'
+        })
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+            'title': u'Third', 'createdDate': '2012-10-04T13:00:02'
+        })
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+            'title': u'Fourth', 'createdDate': '2012-10-04T13:00:03'
+        })
+        
+        self._images.all(
+            self.assert_all_created_date_filter_callback,
+            created_date_from=datetime(2012, 10, 4, 13, 0, 1),
+            created_date_to=datetime(2012, 10, 4, 13, 0, 2)
+        )
+        self.wait()
+
+    def assert_all_created_date_filter_callback(self, response):
+        assert response['total'] == 2
+        assert response['items'][0]['title'] == u'Second'
+        assert response['items'][1]['title'] == u'Third'
         
         self.stop()
 
@@ -68,10 +97,9 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
             'title': u'Title'
         })
 
-        images = Images(config=self.mock_config, http_client=self.http_client)
-        images.all(self.assert_all_pagination_callback_page_1, page=1, page_size=1)
+        self._images.all(self.assert_all_pagination_callback_page_1, page=1, page_size=1)
         self.wait()
-        images.all(self.assert_all_pagination_callback_page_2, page=2, page_size=1)
+        self._images.all(self.assert_all_pagination_callback_page_2, page=2, page_size=1)
         self.wait()
 
     def assert_all_pagination_callback_page_1(self, response):
