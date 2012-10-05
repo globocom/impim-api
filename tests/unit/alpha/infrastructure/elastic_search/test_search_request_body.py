@@ -26,3 +26,8 @@ class SearchRequestBodyTestCase(TestCase):
     def test_size(self):
         self._request_body.size(1)
         assert loads(self._request_body.as_json()) == {'query': {'size': 1}}
+    
+    def test_query(self):
+        self._request_body.query('my query')
+        assert loads(self._request_body.as_json()) == {'query': {'query_string': {'query': 'my query'}}}
+    
