@@ -88,6 +88,13 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
             page=1, page_size=10
         )
         self.wait()
+        
+        self._images.all(
+            self.assert_all_created_date_to_filter_callback,
+            created_date_to=datetime(2012, 10, 4, 13, 0, 2),
+            page=1, page_size=10
+        )
+        self.wait()
 
     def assert_all_created_date_filter_callback(self, response):
         assert response['total'] == 2
@@ -101,6 +108,14 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
         assert response['items'][0]['title'] == u'Second'
         assert response['items'][1]['title'] == u'Third'
         assert response['items'][2]['title'] == u'Fourth'
+
+        self.stop()
+
+    def assert_all_created_date_to_filter_callback(self, response):
+        assert response['total'] == 3
+        assert response['items'][0]['title'] == u'First'
+        assert response['items'][1]['title'] == u'Second'
+        assert response['items'][2]['title'] == u'Third'
 
         self.stop()
 
