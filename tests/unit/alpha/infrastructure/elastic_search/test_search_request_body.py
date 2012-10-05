@@ -31,3 +31,7 @@ class SearchRequestBodyTestCase(TestCase):
         self._request_body.query('my query')
         assert loads(self._request_body.as_json()) == {'query': {'query_string': {'query': 'my query'}}}
     
+    def test_range(self):
+        self._request_body.range('myField').gte(1).lte(10)
+        assert loads(self._request_body.as_json()) == {'query': {'range': {'myField': {'gte': 1, 'lte': 10}}}}
+    
