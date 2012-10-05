@@ -30,3 +30,12 @@ class SearchRequestBodyTestCase(TestCase):
         self._request_body.range('myField').gte(1).lte(10)
         assert loads(self._request_body.as_json()) == {'query': {'range': {'myField': {'gte': 1, 'lte': 10}}}}
     
+    def test_range_twice(self):
+        self._request_body.range('myField').gte(1)
+        self._request_body.range('myField').lte(10)
+        assert loads(self._request_body.as_json()) == {'query': {'range': {'myField': {'gte': 1, 'lte': 10}}}}
+    
+    def test_range_twice_different_arguments(self):
+        self._request_body.range('myField1').gte(1)
+        self._request_body.range('myField2').lte(10)
+        assert loads(self._request_body.as_json()) == {'query': {'range': {'myField1': {'gte': 1}, 'myField2': {'lte': 10}}}}

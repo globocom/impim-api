@@ -36,8 +36,8 @@ class Images(object):
         if query_arguments.get('q'):
             search_request_body.query(query_arguments.get('q'))
         if query_arguments.get('created_date_from'):
-            search_request_body.range('createdDate')\
-                .gte(query_arguments.get('created_date_from').isoformat())\
-                .lte(query_arguments.get('created_date_to').isoformat())
+            search_request_body.range('createdDate').gte(query_arguments.get('created_date_from').isoformat())
+        if query_arguments.get('created_date_to'):
+            search_request_body.range('createdDate').lte(query_arguments.get('created_date_to').isoformat())
         
         return HTTPRequest(url, body=search_request_body.as_json(), allow_nonstandard_methods=True)
