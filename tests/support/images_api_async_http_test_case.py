@@ -7,7 +7,7 @@ from os.path import abspath, dirname, join
 from tornado.ioloop import IOLoop
 from tornado.testing import AsyncHTTPTestCase
 
-from images_api.alpha.infrastructure.elastic_search import Urls
+from images_api.infrastructure.elastic_search import Urls
 from images_api.app import ImagesApplication
 
 from tests.support import AsyncHTTPClientMixin

@@ -4,7 +4,7 @@
 
 from unittest import TestCase
 
-from images_api.alpha.infrastructure.elastic_search import Urls
+from images_api.infrastructure.elastic_search import Urls
 from tests.support import MockConfig
 
 
