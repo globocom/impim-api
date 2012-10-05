@@ -7,15 +7,15 @@ from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPRequest
 
 from images_api.alpha.domain import ElasticSearchParser
-from images_api.alpha.infrastructure import ElasticSearchUrls
 from images_api.alpha.infrastructure.elastic_search import SearchRequestBody
+from images_api.alpha.infrastructure.elastic_search import Urls
 
 
 class Images(object):
 
     def __init__(self, config, http_client=AsyncHTTPClient()):
         self._http_client = http_client
-        self._elastic_search_urls = ElasticSearchUrls(config=config)
+        self._elastic_search_urls = Urls(config=config)
         self._elastic_search_parser = ElasticSearchParser()
 
     @gen.engine
@@ -28,7 +28,7 @@ class Images(object):
         callback(images_dict)
 
     def _build_elastic_search_request(self, **query_arguments):
-        url = self._elastic_search_urls.search_url(ElasticSearchUrls.IMAGE_TYPE)
+        url = self._elastic_search_urls.search_url(Urls.IMAGE_TYPE)
         
         search_request_body = SearchRequestBody()
         search_request_body.from_index((query_arguments.get('page') - 1) * query_arguments.get('page_size'))

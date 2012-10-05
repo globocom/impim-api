@@ -8,7 +8,7 @@ from tornado.testing import AsyncTestCase
 from tornado.httpclient import AsyncHTTPClient
 
 from images_api.alpha.domain import Images
-from images_api.alpha.infrastructure import ElasticSearchUrls
+from images_api.alpha.infrastructure.elastic_search import Urls
 
 from tests.support import AsyncHTTPClientMixin
 from tests.support import es_cleanup
@@ -21,13 +21,13 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
         super(ImagesTestCase, self).setUp()
         self.http_client = AsyncHTTPClient(self.io_loop)
         self.mock_config = MockConfig()
-        self.elastic_search_urls = ElasticSearchUrls(self.mock_config)
+        self.elastic_search_urls = Urls(self.mock_config)
         self._images = Images(config=self.mock_config, http_client=AsyncHTTPClient(self.io_loop))
         
         es_cleanup(self.elastic_search_urls)
 
     def test_all(self):
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Title'
         })
 
@@ -43,10 +43,10 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
 
 
     def test_all_query(self):
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'One'
         })
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Two'
         })
         
@@ -61,16 +61,16 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
 
 
     def test_all_created_date_filter(self):
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'First', 'createdDate': '2012-10-04T13:00:00'
         })
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Second', 'createdDate': '2012-10-04T13:00:01'
         })
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Third', 'createdDate': '2012-10-04T13:00:02'
         })
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Fourth', 'createdDate': '2012-10-04T13:00:03'
         })
         
@@ -121,10 +121,10 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
 
 
     def test_all_pagination(self):
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Title'
         })
-        self._post_to_elastic_search(self.elastic_search_urls.type_url(ElasticSearchUrls.IMAGE_TYPE), {
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Title'
         })
 

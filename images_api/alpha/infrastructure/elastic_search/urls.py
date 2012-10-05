@@ -3,7 +3,7 @@
 
 from urllib import urlencode
 
-class ElasticSearchUrls(object):
+class Urls(object):
     
     IMAGE_TYPE = 'image'
     
