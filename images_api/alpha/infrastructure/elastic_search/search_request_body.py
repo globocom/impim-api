@@ -10,8 +10,11 @@ class SearchRequestBody:
     def __init__(self):
         self._body_dict = {'query': {}}
     
-    def from_param(self, from_argument):
+    def from_index(self, from_argument):
         self._body_dict['query']['from'] = from_argument
+    
+    def size(self, size_argument):
+        self._body_dict['query']['size'] = size_argument
     
     def as_json(self):
         return dumps(self._body_dict)
