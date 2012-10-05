@@ -17,7 +17,7 @@ class SearchRequestBody(object):
     def size(self, size_argument):
         self._body_dict['size'] = size_argument
     
-    def query(self, query_argument):
+    def query_string(self, query_argument):
         self._body_dict['query'] = {'query_string': {'query': query_argument}}
     
     def range(self, range_argument):

@@ -22,8 +22,8 @@ class SearchRequestBodyTestCase(TestCase):
         self._request_body.size(1)
         assert loads(self._request_body.as_json()) == {'size': 1}
     
-    def test_query(self):
-        self._request_body.query('my query')
+    def test_query_string(self):
+        self._request_body.query_string('my query')
         assert loads(self._request_body.as_json()) == {'query': {'query_string': {'query': 'my query'}}}
     
     def test_range(self):
@@ -39,3 +39,7 @@ class SearchRequestBodyTestCase(TestCase):
         self._request_body.range('myField1').gte(1)
         self._request_body.range('myField2').lte(10)
         assert loads(self._request_body.as_json()) == {'query': {'range': {'myField1': {'gte': 1}, 'myField2': {'lte': 10}}}}
+    
+    def test_query_and_range(self):
+        """docstring for test_query_and_range"""
+        pass

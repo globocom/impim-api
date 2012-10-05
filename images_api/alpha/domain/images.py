@@ -34,7 +34,7 @@ class Images(object):
         search_request_body.from_index((query_arguments.get('page') - 1) * query_arguments.get('page_size'))
         search_request_body.size(query_arguments.get('page_size'))
         if query_arguments.get('q'):
-            search_request_body.query(query_arguments.get('q'))
+            search_request_body.query_string(query_arguments.get('q'))
         if query_arguments.get('created_date_from'):
             search_request_body.range('createdDate').gte(query_arguments.get('created_date_from').isoformat())
         if query_arguments.get('created_date_to'):
