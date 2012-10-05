@@ -18,11 +18,11 @@ class SearchRequestBody(object):
         self._body_dict['size'] = size_argument
     
     def query_string(self, query_argument):
-        self._body_dict['query'] = {'query_string': {'query': query_argument}}
+        self._initialize_query()
+        self._body_dict['query']['query_string'] = {'query': query_argument}
     
     def range(self, range_argument):
-        if not self._body_dict.get('query'):
-            self._body_dict['query'] = {}
+        self._initialize_query()
         
         if not self._body_dict['query'].get('range'):
             self._body_dict['query']['range'] = {}
@@ -35,6 +35,10 @@ class SearchRequestBody(object):
     
     def as_json(self):
         return dumps(self._body_dict)
+    
+    def _initialize_query(self):
+        if not self._body_dict.get('query'):
+            self._body_dict['query'] = {}
     
     
     class Range(object):

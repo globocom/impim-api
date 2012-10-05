@@ -40,6 +40,12 @@ class SearchRequestBodyTestCase(TestCase):
         self._request_body.range('myField2').lte(10)
         assert loads(self._request_body.as_json()) == {'query': {'range': {'myField1': {'gte': 1}, 'myField2': {'lte': 10}}}}
     
-    def test_query_and_range(self):
-        """docstring for test_query_and_range"""
-        pass
+    def test_query_string_and_range(self):
+        self._request_body.query_string('my query')
+        self._request_body.range('myField').gte(1).lte(10)
+        assert loads(self._request_body.as_json()) == {
+            'query': {
+                'query_string': {'query': 'my query'},
+                'range': {'myField': {'gte': 1, 'lte': 10}}
+            }
+        }
