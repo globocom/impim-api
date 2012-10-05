@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 
 
-from json import dumps
-
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPRequest
 
 from images_api.alpha.domain import ElasticSearchParser
 from images_api.alpha.infrastructure import ElasticSearchUrls
+from images_api.alpha.infrastructure.elastic_search import SearchRequestBody
 
 
 class Images(object):
@@ -30,19 +29,15 @@ class Images(object):
 
     def _build_elastic_search_request(self, **query_arguments):
         url = self._elastic_search_urls.search_url(ElasticSearchUrls.IMAGE_TYPE)
-        elastic_search_arguments = {
-            'from': (query_arguments.get('page') - 1) * query_arguments.get('page_size'),
-            'size': query_arguments.get('page_size'),
-        }
+        
+        search_request_body = SearchRequestBody()
+        search_request_body.from_index((query_arguments.get('page') - 1) * query_arguments.get('page_size'))
+        search_request_body.size(query_arguments.get('page_size'))
         if query_arguments.get('q'):
-            elastic_search_arguments['query'] = {'query_string': {'query': query_arguments.get('q')}}
+            search_request_body.query(query_arguments.get('q'))
         if query_arguments.get('created_date_from'):
-            elastic_search_arguments['query'] = {
-                'range': {
-                    'createdDate': {
-                        'gte': query_arguments.get('created_date_from').isoformat(),
-                        'lte': query_arguments.get('created_date_to').isoformat()
-                    }
-                }
-            }
-        return HTTPRequest(url, body=dumps(elastic_search_arguments), allow_nonstandard_methods=True)
+            search_request_body.range('createdDate')\
+                .gte(query_arguments.get('created_date_from').isoformat())\
+                .lte(query_arguments.get('created_date_to').isoformat())
+        
+        return HTTPRequest(url, body=search_request_body.as_json(), allow_nonstandard_methods=True)
