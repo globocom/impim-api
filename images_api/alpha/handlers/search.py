@@ -22,6 +22,8 @@ class SearchHandler(AlphaBaseHandler):
             ('q', str, None),
             ('createdDateFrom', 'datetime', None),
             ('createdDateTo', 'datetime', None),
+            ('eventDateFrom', 'datetime', None),
+            ('eventDateTo', 'datetime', None),
             ('page', int, 1),
             ('pageSize', int, 10)
         ]
