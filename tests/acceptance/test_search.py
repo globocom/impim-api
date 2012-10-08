@@ -2,23 +2,23 @@
 # -*- coding: utf-8 -*-
 
 
-from json import dumps, loads
+from json import loads
 
 from images_api.infrastructure.elastic_search import Urls
 
+from tests.support import ElasticSearchMixin
 from tests.support import es_cleanup
 from tests.support import ImagesAPIAsyncHTTPTestCase
 from tests.support import MockConfig
 
 
-class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase):
+class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
 
     def setUp(self):
         super(ImageSearchTestCase, self).setUp()
         self._elastic_search_urls = Urls(MockConfig())
         es_cleanup(self._elastic_search_urls)
-        self.post(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), dumps({'title': u'Title'}))
-        self.post(self._elastic_search_urls.refresh_url(), '')
+        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {'title': 'Title'})
 
     def test_search(self):
         response = self.get('/alpha/search')

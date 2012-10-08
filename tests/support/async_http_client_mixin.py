@@ -5,7 +5,7 @@
 import urllib
 
 
-class AsyncHTTPClientMixin:
+class AsyncHTTPClientMixin(object):
     
     def get(self, path, **querystring):
         url = self.get_url(path)
