@@ -120,6 +120,66 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin):
         self.stop()
 
 
+    def test_all_event_date_filter(self):
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
+            'title': u'First', 'eventDate': '2012-10-04T13:00:00'
+        })
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
+            'title': u'Second', 'eventDate': '2012-10-04T13:00:01'
+        })
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
+            'title': u'Third', 'eventDate': '2012-10-04T13:00:02'
+        })
+        self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
+            'title': u'Fourth', 'eventDate': '2012-10-04T13:00:03'
+        })
+
+        self._images.all(
+            self.assert_all_event_date_filter_callback,
+            event_date_from=datetime(2012, 10, 4, 13, 0, 1),
+            event_date_to=datetime(2012, 10, 4, 13, 0, 2),
+            page=1, page_size=10
+        )
+        self.wait()
+        
+        self._images.all(
+            self.assert_all_event_date_from_filter_callback,
+            event_date_from=datetime(2012, 10, 4, 13, 0, 1),
+            page=1, page_size=10
+        )
+        self.wait()
+        
+        self._images.all(
+            self.assert_all_event_date_to_filter_callback,
+            event_date_to=datetime(2012, 10, 4, 13, 0, 2),
+            page=1, page_size=10
+        )
+        self.wait()
+
+    def assert_all_event_date_filter_callback(self, response):
+        assert response['total'] == 2
+        assert response['items'][0]['title'] == u'Second'
+        assert response['items'][1]['title'] == u'Third'
+
+        self.stop()
+
+    def assert_all_event_date_from_filter_callback(self, response):
+        assert response['total'] == 3
+        assert response['items'][0]['title'] == u'Second'
+        assert response['items'][1]['title'] == u'Third'
+        assert response['items'][2]['title'] == u'Fourth'
+
+        self.stop()
+
+    def assert_all_event_date_to_filter_callback(self, response):
+        assert response['total'] == 3
+        assert response['items'][0]['title'] == u'First'
+        assert response['items'][1]['title'] == u'Second'
+        assert response['items'][2]['title'] == u'Third'
+
+        self.stop()
+
+
     def test_all_pagination(self):
         self._post_to_elastic_search(self.elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Title'

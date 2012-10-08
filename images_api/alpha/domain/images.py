@@ -39,5 +39,9 @@ class Images(object):
             search_request_body.range('createdDate').gte(query_arguments.get('created_date_from').isoformat())
         if query_arguments.get('created_date_to'):
             search_request_body.range('createdDate').lte(query_arguments.get('created_date_to').isoformat())
+        if query_arguments.get('event_date_from'):
+            search_request_body.range('eventDate').gte(query_arguments.get('event_date_from').isoformat())
+        if query_arguments.get('event_date_to'):
+            search_request_body.range('eventDate').lte(query_arguments.get('event_date_to').isoformat())
         
         return HTTPRequest(url, body=search_request_body.as_json(), allow_nonstandard_methods=True)
