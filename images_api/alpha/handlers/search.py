@@ -4,7 +4,6 @@
 from tornado import gen
 from tornado.web import asynchronous
 
-from images_api.handlers import BaseHandlerMixin
 from images_api.alpha.domain.images import Images
 from images_api.alpha.handlers.base import AlphaBaseHandler
 
