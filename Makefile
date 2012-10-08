@@ -1,3 +1,11 @@
+help:
+	@echo '    run  .................... run project'
+	@echo '    test  ................... run tests'
+	@echo '    clean  .................. remove build files (*.pyc, etc.)'
+	@echo '    requirements ............ update project dependencies from requirements.txt and test_requirements.txt'
+	@echo '    ci ...................... run CI build'
+	@echo '    update_deps ............. update project dependencies in requirements.txt'
+
 run:
 	@honcho start -f Procfile.local
 
