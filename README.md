@@ -1,3 +1,8 @@
+Images API
+==========
+
+API for handling images.
+
 Dependencies
 ------------
 
