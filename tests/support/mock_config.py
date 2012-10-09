@@ -3,5 +3,5 @@
 
 class MockConfig(object):
 
-    ELASTIC_SEARCH_BASE_URL = 'http://images:images@esearch.dev.globoi.com'
+    ELASTIC_SEARCH_BASE_URL = 'http://localhost:9200'
     ELASTIC_SEARCH_INDEX = 'images-test'

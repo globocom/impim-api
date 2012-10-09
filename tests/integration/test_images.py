@@ -127,13 +127,13 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
             'title': u'First', 'eventDate': '2012-10-04T13:00:00', 'createdDate': '2012-10-04T13:00:00'
         })
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Second', 'eventDate': '2012-10-04T13:00:01', 'createdDate': '2012-10-04T13:00:00'
+            'title': u'Second', 'eventDate': '2012-10-04T13:00:01', 'createdDate': '2011-10-04T13:00:00'
         })
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Third', 'eventDate': '2012-10-04T13:00:02', 'createdDate': '2012-10-04T13:00:00'
+            'title': u'Third', 'eventDate': '2012-10-04T13:00:02', 'createdDate': '2010-10-04T13:00:00'
         })
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Fourth', 'eventDate': '2012-10-04T13:00:03', 'createdDate': '2012-10-04T13:00:00'
+            'title': u'Fourth', 'eventDate': '2012-10-04T13:00:03', 'createdDate': '2009-10-04T13:00:00'
         })
 
         self._images.all(

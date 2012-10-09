@@ -15,13 +15,13 @@ class UrlsTestCase(TestCase):
         self._elastic_search_urls = Urls(config=MockConfig())
     
     def test_index_url(self):
-        assert self._elastic_search_urls.index_url() == 'http://images:images@esearch.dev.globoi.com/images-test'
+        assert self._elastic_search_urls.index_url() == 'http://localhost:9200/images-test'
     
     def test_type_url(self):
-        assert self._elastic_search_urls.type_url(Urls.IMAGE_TYPE) == 'http://images:images@esearch.dev.globoi.com/images-test/image'
+        assert self._elastic_search_urls.type_url(Urls.IMAGE_TYPE) == 'http://localhost:9200/images-test/image'
     
     def test_search_url(self):
-        assert self._elastic_search_urls.search_url(Urls.IMAGE_TYPE, q='search term') == 'http://images:images@esearch.dev.globoi.com/images-test/image/_search?q=search+term'
+        assert self._elastic_search_urls.search_url(Urls.IMAGE_TYPE, q='search term') == 'http://localhost:9200/images-test/image/_search?q=search+term'
     
     def test_refresh_url(self):
-        assert self._elastic_search_urls.refresh_url() == 'http://images:images@esearch.dev.globoi.com/images-test/_refresh'
+        assert self._elastic_search_urls.refresh_url() == 'http://localhost:9200/images-test/_refresh'
