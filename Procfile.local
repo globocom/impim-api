@@ -1,3 +1,2 @@
-thumbor: thumbor
 elasticsearch: elasticsearch -f
 tornado: PYTHONPATH=.:$$PYTHONPATH python images_api/server.py -l info -d
