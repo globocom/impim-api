@@ -3,6 +3,7 @@
 
 
 from json import loads
+from urllib import urlencode
 
 from images_api.infrastructure.elastic_search import Urls
 
@@ -18,7 +19,11 @@ class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
         super(ImageSearchTestCase, self).setUp()
         self._elastic_search_urls = Urls(MockConfig())
         es_cleanup(self._elastic_search_urls)
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {'title': 'Title'})
+        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
+            'title': 'Title',
+            'createdDate': '2012-10-08T17:02:00',
+            'eventDate': '2012-10-08T17:02:00',
+        })
 
     def test_search(self):
         response = self.get('/alpha/search')
@@ -26,7 +31,32 @@ class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-        assert body == {u'items': [{u'title': u'Title'}], u'total': 1, u'pageSize': 10}
+        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'08/10/2012', u'createdDate': u'08/10/2012'}], u'total': 1, u'pageSize': 10}
+
+    def test_search_with_query_string(self):
+        query_string = {
+            'q': 'Title',
+            'createdDateFrom': '2012-10-08T17:02:00',
+            'createdDateTo': '2012-10-08T17:02:00',
+            'eventDateFrom': '2012-10-08T17:02:00',
+            'eventDateTo': '2012-10-08T17:02:00',
+            'page': '1',
+            'pageSize': '10',
+        }
+        response = self.get('/alpha/search?%s' % urlencode(query_string))
+
+        assert response.code == 200
+        assert 'application/json' in response.headers['Content-Type']
+        body = loads(response.body)
+        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'08/10/2012', u'createdDate': u'08/10/2012'}], u'total': 1, u'pageSize': 10}
+
+    def test_search_with_empty_query_string(self):
+        response = self.get('/alpha/search?q=&createdDateFrom=&createdDateTo=&eventDateFrom=&eventDateTo=&page=&pageSize=')
+
+        assert response.code == 200
+        assert 'application/json' in response.headers['Content-Type']
+        body = loads(response.body)
+        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'08/10/2012', u'createdDate': u'08/10/2012'}], u'total': 1, u'pageSize': 10}
 
     def test_search_with_callback(self):
         response = self.get('/alpha/search', callback='my_images')

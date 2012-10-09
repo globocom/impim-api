@@ -19,17 +19,14 @@ class SearchRequestBody(object):
     
     def query_string(self, query_argument):
         self._initialize_query()
-        self._body_dict['query']['query_string'] = {'query': query_argument}
+        self._body_dict['query']['bool']['must'].append({'query_string': {'query': query_argument}})
     
     def range(self, range_argument):
         self._initialize_query()
         
-        if not self._body_dict['query'].get('range'):
-            self._body_dict['query']['range'] = {}
-        
         if not self._ranges.get(range_argument):
             self._ranges[range_argument] = self.Range(range_argument)
-            self._body_dict['query']['range'][range_argument] = self._ranges[range_argument].range_dict
+            self._body_dict['query']['bool']['must'].append({'range': {range_argument: self._ranges[range_argument].range_dict}})
         
         return self._ranges[range_argument]
     
@@ -38,7 +35,7 @@ class SearchRequestBody(object):
     
     def _initialize_query(self):
         if not self._body_dict.get('query'):
-            self._body_dict['query'] = {}
+            self._body_dict['query'] = {'bool': {'must': []}}
     
     
     class Range(object):
