@@ -8,7 +8,7 @@ Config.define('JSONP_CALLBACK', 'defaultCallback', 'Callback default for JSONP r
 Config.define('ELASTIC_SEARCH_BASE_URL', 'http://localhost:9200', 'ElasticSearch base url.', 'ElasticSearch')
 Config.define('ELASTIC_SEARCH_INDEX', 'images', 'ElasticSearch index.', 'ElasticSearch')
 
-Config.define('THUMBOR_SECURITY_KEY', 'MY_SECURE_LEY', 'The thumbor security key.', 'Thumbor configuration')
+Config.define('THUMBOR_SECURITY_KEY', 'MY_SECURE_KEY', 'The thumbor security key.', 'Thumbor configuration')
 Config.define('THUMBOR_SERVER_URL', 'http://localhost:8888/', 'The thumbor server url.', 'Thumbor configuration')
 
 if __name__ == '__main__':
