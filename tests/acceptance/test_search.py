@@ -31,7 +31,7 @@ class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'08/10/2012', u'createdDate': u'08/10/2012'}], u'total': 1, u'pageSize': 10}
+        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'2012-10-08T17:02:00', u'createdDate': u'2012-10-08T17:02:00'}], u'total': 1, u'pageSize': 10}
 
     def test_search_with_query_string(self):
         query_string = {
@@ -48,7 +48,7 @@ class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'08/10/2012', u'createdDate': u'08/10/2012'}], u'total': 1, u'pageSize': 10}
+        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'2012-10-08T17:02:00', u'createdDate': u'2012-10-08T17:02:00'}], u'total': 1, u'pageSize': 10}
 
     def test_search_with_empty_query_string(self):
         response = self.get('/alpha/search?q=&createdDateFrom=&createdDateTo=&eventDateFrom=&eventDateTo=&page=&pageSize=')
@@ -56,7 +56,7 @@ class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'08/10/2012', u'createdDate': u'08/10/2012'}], u'total': 1, u'pageSize': 10}
+        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'2012-10-08T17:02:00', u'createdDate': u'2012-10-08T17:02:00'}], u'total': 1, u'pageSize': 10}
 
     def test_search_with_callback(self):
         response = self.get('/alpha/search', callback='my_images')

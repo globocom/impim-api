@@ -55,8 +55,8 @@ class ElasticSearchParserTestCase(TestCase):
         assert parsed['items'][0]['thumbUrl'] == "http://local.globo.com:8888/SGVhWvXVXH4HvduSL1f01ZWj6b16SKVBoC59rDy3Nm5YXWVN3JkSEoOsXwy0SRop/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg"
         assert parsed['items'][0]['credits'] == u"Salve Jorge/TV Globo"
         assert parsed['items'][0]['url'] == "s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg"
-        assert parsed['items'][0]['createdDate'] == "24/09/2012"
+        assert parsed['items'][0]['createdDate'] == "2012-09-24T14:12:12"
         assert parsed['items'][0]['width'] == 940
-        assert parsed['items'][0]['eventDate'] == "24/09/2012"
+        assert parsed['items'][0]['eventDate'] == "2012-09-24T14:12:12"
         assert parsed['items'][0]['title'] == u"Istambul é a única cidade no mundo que fica em dois continentes: Europa e Ásia"
         assert parsed['items'][0]['height'] == 588

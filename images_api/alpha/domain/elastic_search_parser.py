@@ -17,7 +17,7 @@ class ElasticSearchParser(object):
             for key in hit['_source'].keys():
                 image[key] = hit['_source'][key]
                 if key in date_fields:
-                    image[key] = dateutil.parser.parse(image[key]).strftime('%d/%m/%Y')
+                    image[key] = dateutil.parser.parse(image[key]).isoformat()
             images.append(image)
         
         parsed_data = {
