@@ -1,3 +1,4 @@
 honcho==0.1.0
 mock==1.0b1
 nose==1.2.1
+thumbor==3.6.3
