@@ -1,4 +1,5 @@
 help:
+	@echo '    setup ................... setup the current environment to run the project properly'
 	@echo '    run  .................... run project'
 	@echo '    test  ................... run tests'
 	@echo '    clean  .................. remove build files (*.pyc, etc.)'
@@ -18,6 +19,9 @@ clean:
 requirements:
 	pip install -r test_requirements.txt
 	pip install -r requirements.txt
+
+setup: requirements
+	@sh setup.sh
 
 ci: requirements test
 
