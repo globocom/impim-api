@@ -9,9 +9,13 @@ Setup
 
 Install ElasticSearch (needs to be done manually).
 
-Install Thumbor in its own virtualenv:
+Install Thumbor in its own virtualenv and install python dependencies from requirements files:
 
     make setup
+
+Update python dependencies from requirements files:
+
+    make requirements
 
 Running
 -------
