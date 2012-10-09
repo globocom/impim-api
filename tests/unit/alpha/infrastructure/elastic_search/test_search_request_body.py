@@ -53,3 +53,7 @@ class SearchRequestBodyTestCase(TestCase):
                 }
             }
         }
+        
+    def test_sort(self):
+        self._request_body.sort([{'_score': 'desc'}, {'createdDate': 'desc'}])
+        assert loads(self._request_body.as_json()) == {'sort': [{'_score': 'desc'}, {'createdDate': 'desc'}]}

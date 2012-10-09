@@ -30,6 +30,9 @@ class SearchRequestBody(object):
         
         return self._ranges[range_argument]
     
+    def sort(self, sort_argument):
+        self._body_dict['sort'] = sort_argument
+    
     def as_json(self):
         return dumps(self._body_dict)
     

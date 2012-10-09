@@ -30,7 +30,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
 
     def test_all(self):
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Title'
+            'title': u'Title', 'createdDate': '2012-10-04T13:00:00'
         })
 
         self._images.all(self.assert_all_callback, page=1, page_size=10)
@@ -46,10 +46,10 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
 
     def test_all_query(self):
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'One'
+            'title': u'One', 'createdDate': '2012-10-04T13:00:00'
         })
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Two'
+            'title': u'Two', 'createdDate': '2012-10-04T13:00:00'
         })
         
         self._images.all(self.assert_all_query_callback, q='One', page=1, page_size=10)
@@ -100,40 +100,40 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
 
     def assert_all_created_date_filter_callback(self, response):
         assert response['total'] == 2
-        assert response['items'][0]['title'] == u'Second'
-        assert response['items'][1]['title'] == u'Third'
+        assert response['items'][0]['title'] == u'Third'
+        assert response['items'][1]['title'] == u'Second'
 
         self.stop()
 
     def assert_all_created_date_from_filter_callback(self, response):
         assert response['total'] == 3
-        assert response['items'][0]['title'] == u'Second'
+        assert response['items'][0]['title'] == u'Fourth'
         assert response['items'][1]['title'] == u'Third'
-        assert response['items'][2]['title'] == u'Fourth'
+        assert response['items'][2]['title'] == u'Second'
 
         self.stop()
 
     def assert_all_created_date_to_filter_callback(self, response):
         assert response['total'] == 3
-        assert response['items'][0]['title'] == u'First'
+        assert response['items'][0]['title'] == u'Third'
         assert response['items'][1]['title'] == u'Second'
-        assert response['items'][2]['title'] == u'Third'
+        assert response['items'][2]['title'] == u'First'
 
         self.stop()
 
 
     def test_all_event_date_filter(self):
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'First', 'eventDate': '2012-10-04T13:00:00'
+            'title': u'First', 'eventDate': '2012-10-04T13:00:00', 'createdDate': '2012-10-04T13:00:00'
         })
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Second', 'eventDate': '2012-10-04T13:00:01'
+            'title': u'Second', 'eventDate': '2012-10-04T13:00:01', 'createdDate': '2012-10-04T13:00:00'
         })
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Third', 'eventDate': '2012-10-04T13:00:02'
+            'title': u'Third', 'eventDate': '2012-10-04T13:00:02', 'createdDate': '2012-10-04T13:00:00'
         })
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Fourth', 'eventDate': '2012-10-04T13:00:03'
+            'title': u'Fourth', 'eventDate': '2012-10-04T13:00:03', 'createdDate': '2012-10-04T13:00:00'
         })
 
         self._images.all(
@@ -182,12 +182,50 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
         self.stop()
 
 
-    def test_all_pagination(self):
+    def test_all_order_by_relevance_with_query(self):
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Title'
+            'title': u'Exact title', 'createdDate': '2012-10-04T13:00:00'
         })
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Title'
+            'title': u'Title', 'createdDate': '2012-10-05T13:00:00'
+        })
+        
+        self._images.all(self.assert_all_order_by_relevance_with_query, q='Exact title', page=1, page_size=10)
+        self.wait()
+
+    def assert_all_order_by_relevance_with_query(self, response):
+        assert response['total'] == 2
+        assert response['items'][0]['title'] == u'Exact title'
+        assert response['items'][1]['title'] == u'Title'
+        
+        self.stop()
+
+
+    def test_all_order_by_newest_first_with_no_query(self):
+        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
+            'title': u'Exact title', 'createdDate': '2012-10-04T13:00:00'
+        })
+        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
+            'title': u'Title', 'createdDate': '2012-10-05T13:00:00'
+        })
+
+        self._images.all(self.assert_all_order_by_newest_first_with_no_query, page=1, page_size=10)
+        self.wait()
+
+    def assert_all_order_by_newest_first_with_no_query(self, response):
+        assert response['total'] == 2
+        assert response['items'][0]['title'] == u'Title'
+        assert response['items'][1]['title'] == u'Exact title'
+
+        self.stop()
+
+
+    def test_all_pagination(self):
+        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
+            'title': u'Title', 'createdDate': '2012-10-04T13:00:00'
+        })
+        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
+            'title': u'Title', 'createdDate': '2012-10-04T13:00:00'
         })
 
         self._images.all(self.assert_all_pagination_callback_page_1, page=1, page_size=1)
