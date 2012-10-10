@@ -7,7 +7,7 @@ from json import dumps, loads
 from tornado.testing import AsyncTestCase
 from tornado.httpclient import AsyncHTTPClient
 
-from images_api.alpha.domain import Images
+from images_api.domain import Images
 from images_api.infrastructure.elastic_search import Urls
 
 from tests.support import AsyncHTTPClientMixin

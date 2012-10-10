@@ -4,11 +4,11 @@
 from tornado import gen
 from tornado.web import asynchronous
 
-from images_api.alpha.domain.images import Images
-from images_api.alpha.handlers.base import AlphaBaseHandler
+from images_api.domain.images import Images
+from images_api.handlers.base import BaseHandler
 
 
-class SearchHandler(AlphaBaseHandler):
+class SearchHandler(BaseHandler):
 
     def __init__(self, *args, **kwargs):
         super(SearchHandler, self).__init__(*args, **kwargs)

@@ -4,13 +4,13 @@
 from json import loads
 from unittest import TestCase
 
-from images_api.alpha.domain import ElasticSearchParser
+from images_api.domain import ElasticSearchParser
 
 class ElasticSearchParserTestCase(TestCase):
-    
+
     def setUp(self):
         self._es_parser = ElasticSearchParser()
-    
+
     def test_parse_images_from_search(self):
         es_json = """
             {
@@ -45,9 +45,9 @@ class ElasticSearchParserTestCase(TestCase):
               }
             }
         """
-        
+
         parsed = self._es_parser.parse_images_from_search(es_json)
-        
+
         assert parsed['total'] == 1
         assert len(parsed['items']) == 1
         assert parsed['items'][0]['subject'] == "Istambul; Salve Jorge"

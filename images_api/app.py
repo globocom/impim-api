@@ -10,7 +10,7 @@ from tornado import httpclient
 
 from images_api.conf import Config
 from images_api.handlers import HealthCheckHandler, JsonpEnabledThumborUrlHandler
-from images_api.alpha.handlers import SearchHandler
+from images_api.handlers import SearchHandler
 
 
 class ImagesApplication(tornado.web.Application):

@@ -6,7 +6,7 @@ from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPRequest
 
-from images_api.alpha.domain import ElasticSearchParser
+from images_api.domain import ElasticSearchParser
 from images_api.infrastructure.elastic_search import SearchRequestBody
 from images_api.infrastructure.elastic_search import Urls
 
