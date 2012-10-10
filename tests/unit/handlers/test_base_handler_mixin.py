@@ -7,15 +7,15 @@ from unittest import TestCase
 
 from mock import MagicMock
 
-from images_api.handlers import BaseHandlerMixin
+from images_api.handlers import ExtractArgumentsMixin
 
 
-class BaseHandlerMixinTestCase(TestCase):
-    
+class ExtractArgumentsMixinTestCase(TestCase):
+
     def setUp(self):
-        super(BaseHandlerMixinTestCase, self).setUp()
-        self._base_handler_mixin = BaseHandlerMixin()
-    
+        super(ExtractArgumentsMixinTestCase, self).setUp()
+        self.extract_arguments_mixin = ExtractArgumentsMixin()
+
     def test_extract_arguments(self):
         def get_argument_returns(argument, default):
             return {
@@ -23,10 +23,10 @@ class BaseHandlerMixinTestCase(TestCase):
                 'intCamelCase': '2',
                 'date': '2012-09-24T14:12:13',
             }.get(argument, default)
-        
-        self._base_handler_mixin.get_argument = MagicMock()
-        self._base_handler_mixin.get_argument = get_argument_returns
-        
+
+        self.extract_arguments_mixin.get_argument = MagicMock()
+        self.extract_arguments_mixin.get_argument = get_argument_returns
+
         accepted_arguments = [
             ('int', int, None),
             ('intCamelCase', int, None),
@@ -34,8 +34,8 @@ class BaseHandlerMixinTestCase(TestCase):
             ('default', int, 3),
             ('strDefaultNone', str, None),
         ]
-        arguments = self._base_handler_mixin.extract_arguments(accepted_arguments)
-        
+        arguments = self.extract_arguments_mixin.extract_arguments(accepted_arguments)
+
         assert arguments['int'] == 1
         assert arguments['int_camel_case'] == 2
         assert arguments['date'] == datetime(2012, 9, 24, 14, 12, 13)

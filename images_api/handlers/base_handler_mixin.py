@@ -6,8 +6,8 @@ import dateutil.parser
 import re
 
 
-class BaseHandlerMixin(object):
-    
+class ExtractArgumentsMixin(object):
+
     def extract_arguments(self, accepted_arguments):
         arguments = {}
         for argument_tuple in accepted_arguments:
@@ -16,7 +16,7 @@ class BaseHandlerMixin(object):
             argument_value = self._parse(self.get_argument(argument_key, default), argument_tuple[1])
             arguments[self._to_underscore(argument_key)] = argument_value
         return arguments
-    
+
     def _to_underscore(self, string):
         return re.sub(r'([A-Z]){1}', lambda match: '_' + match.group(1).lower(), string)
 
