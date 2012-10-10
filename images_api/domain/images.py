@@ -43,6 +43,6 @@ class Images(object):
             search_request_body.range('eventDate').gte(query_arguments.get('event_date_from').isoformat())
         if query_arguments.get('event_date_to'):
             search_request_body.range('eventDate').lte(query_arguments.get('event_date_to').isoformat())
-        search_request_body.sort([{'_score': 'desc'}, {'createdDate': 'desc'}])
+        search_request_body.sort([{'_score': 'desc'}, {'createdDate': {'order': 'desc', 'ignore_unmapped': True}}])
 
         return HTTPRequest(url, body=search_request_body.as_json(), allow_nonstandard_methods=True)
