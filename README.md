@@ -6,8 +6,8 @@ API for handling images.
 Dependencies
 ------------
 
-- ElasticSearch
-- Thumbor
+- [ElasticSearch](http://www.elasticsearch.org/)
+- [Thumbor](https://github.com/globocom/thumbor)
 
 Setup
 -----
