@@ -17,15 +17,15 @@ from tests.support import MockConfig
 
 
 class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
-    
+
     def setUp(self):
         super(ImagesTestCase, self).setUp()
-        
+
         self.http_client = AsyncHTTPClient(self.io_loop)
         self.mock_config = MockConfig()
         self._elastic_search_urls = Urls(self.mock_config)
         self._images = Images(config=self.mock_config, http_client=AsyncHTTPClient(self.io_loop))
-        
+
         es_cleanup(self._elastic_search_urls)
 
     def test_all(self):
@@ -51,14 +51,14 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Two', 'createdDate': '2012-10-04T13:00:00'
         })
-        
+
         self._images.all(self.assert_all_query_callback, q='One', page=1, page_size=10)
         self.wait()
-        
+
     def assert_all_query_callback(self, response):
         assert response['total'] == 1
         assert response['items'][0]['title'] == u'One'
-        
+
         self.stop()
 
 
@@ -75,7 +75,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Fourth', 'createdDate': '2012-10-04T13:00:03'
         })
-        
+
         self._images.all(
             self.assert_all_created_date_filter_callback,
             created_date_from=datetime(2012, 10, 4, 13, 0, 1),
@@ -83,14 +83,14 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
             page=1, page_size=10
         )
         self.wait()
-        
+
         self._images.all(
             self.assert_all_created_date_from_filter_callback,
             created_date_from=datetime(2012, 10, 4, 13, 0, 1),
             page=1, page_size=10
         )
         self.wait()
-        
+
         self._images.all(
             self.assert_all_created_date_to_filter_callback,
             created_date_to=datetime(2012, 10, 4, 13, 0, 2),
@@ -143,14 +143,14 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
             page=1, page_size=10
         )
         self.wait()
-        
+
         self._images.all(
             self.assert_all_event_date_from_filter_callback,
             event_date_from=datetime(2012, 10, 4, 13, 0, 1),
             page=1, page_size=10
         )
         self.wait()
-        
+
         self._images.all(
             self.assert_all_event_date_to_filter_callback,
             event_date_to=datetime(2012, 10, 4, 13, 0, 2),
@@ -189,7 +189,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': u'Title', 'createdDate': '2012-10-05T13:00:00'
         })
-        
+
         self._images.all(self.assert_all_order_by_relevance_with_query, q='Exact title', page=1, page_size=10)
         self.wait()
 
@@ -197,7 +197,7 @@ class ImagesTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
         assert response['total'] == 2
         assert response['items'][0]['title'] == u'Exact title'
         assert response['items'][1]['title'] == u'Title'
-        
+
         self.stop()
 
 

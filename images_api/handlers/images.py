@@ -5,18 +5,18 @@ from tornado import gen
 from tornado.web import asynchronous
 
 from images_api.domain.images import Images
-from images_api.handlers.base import BaseHandler
+from images_api.handlers.extract_arguments_mixin import ExtractArgumentsMixin
+from images_api.rest_api import ApiResourceHandler
 
+class ImagesHandler(ApiResourceHandler, ExtractArgumentsMixin):
 
-class SearchHandler(BaseHandler):
-
-    def __init__(self, *args, **kwargs):
-        super(SearchHandler, self).__init__(*args, **kwargs)
-        self._images = Images(config=self.config)
+    def __init__(self, *args, **kwarsg):
+        super(ImagesHandler, self).__init__(*args, **kwarsg)
+        self.images_storage = Images(config=self.application.config)
 
     @asynchronous
     @gen.engine
-    def get(self):
+    def get_collection(self, callback, *args):
         accepted_arguments = [
             ('q', str, None),
             ('createdDateFrom', 'datetime', None),
@@ -27,5 +27,5 @@ class SearchHandler(BaseHandler):
             ('pageSize', int, 10)
         ]
         arguments = self.extract_arguments(accepted_arguments)
-        images_dict = yield gen.Task(self._images.all, **arguments)
-        self.respond_with(images_dict)
+        images_dict = yield gen.Task(self.images_storage.all, **arguments)
+        callback(images_dict)

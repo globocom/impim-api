@@ -26,9 +26,10 @@ class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
         })
 
     def test_search(self):
-        response = self.get('/alpha/search')
+        response = self.get('/alpha/images')
 
-        assert response.code == 200
+        assert response.code == 200, 'the response code should be 200 but it ' \
+                                        'was %s' % response.code
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
         assert body == {u'items': [{u'title': u'Title', u'eventDate': u'2012-10-08T17:02:00', u'createdDate': u'2012-10-08T17:02:00'}], u'total': 1, u'pageSize': 10}
@@ -43,7 +44,7 @@ class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
             'page': '1',
             'pageSize': '10',
         }
-        response = self.get('/alpha/search?%s' % urlencode(query_string))
+        response = self.get('/alpha/images?%s' % urlencode(query_string))
 
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
@@ -51,7 +52,7 @@ class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert body == {u'items': [{u'title': u'Title', u'eventDate': u'2012-10-08T17:02:00', u'createdDate': u'2012-10-08T17:02:00'}], u'total': 1, u'pageSize': 10}
 
     def test_search_with_empty_query_string(self):
-        response = self.get('/alpha/search?q=&createdDateFrom=&createdDateTo=&eventDateFrom=&eventDateTo=&page=&pageSize=')
+        response = self.get('/alpha/images?q=&createdDateFrom=&createdDateTo=&eventDateFrom=&eventDateTo=&page=&pageSize=')
 
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
@@ -59,5 +60,8 @@ class ImageSearchTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert body == {u'items': [{u'title': u'Title', u'eventDate': u'2012-10-08T17:02:00', u'createdDate': u'2012-10-08T17:02:00'}], u'total': 1, u'pageSize': 10}
 
     def test_search_with_callback(self):
-        response = self.get('/alpha/search', callback='my_images')
+        response = self._fetch(
+            self.get_url('/alpha/images?callback=my_images'), 'GET', headers={
+                'Accept': 'text/javascript'
+            })
         self.assertTrue(response.body.startswith('my_images('))

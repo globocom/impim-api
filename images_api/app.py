@@ -9,8 +9,9 @@ import tornado.web
 from tornado import httpclient
 
 from images_api.conf import Config
+from images_api.rest_api import ApiManager
 from images_api.handlers import HealthCheckHandler, JsonpEnabledThumborUrlHandler
-from images_api.handlers import SearchHandler
+from images_api.handlers import ImagesHandler
 
 
 class ImagesApplication(tornado.web.Application):
@@ -25,11 +26,14 @@ class ImagesApplication(tornado.web.Application):
                 '/etc/'
             ])
 
+        rest_api = ApiManager()
+        rest_api.add_resource_handler('alpha/images', ImagesHandler)
+        resources_mapping = rest_api.build_handlers()
+
         handlers = [
             (r'/healthcheck(?:/|\.html)?', HealthCheckHandler),
-            (r'/alpha/search/?', SearchHandler),
             (r'/thumbor_urls/?', JsonpEnabledThumborUrlHandler),
-        ]
+        ] + resources_mapping
 
         super(ImagesApplication, self).__init__(handlers,
                 thumbor_security_key=self.config.THUMBOR_SECURITY_KEY,
