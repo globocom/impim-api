@@ -11,7 +11,7 @@ from tornado import httpclient
 from images_api.conf import Config
 from images_api.rest_api import TornadoRESTful
 from images_api.handlers import HealthCheckHandler, JsonpEnabledThumborUrlHandler
-from images_api.handlers import ImagesHandler
+from images_api.handlers import ImagesResourceHandler
 
 
 class ImagesApplication(tornado.web.Application):
@@ -27,7 +27,7 @@ class ImagesApplication(tornado.web.Application):
             ])
 
         rest_api = TornadoRESTful()
-        rest_api.add_resource('alpha/images', ImagesHandler)
+        rest_api.add_resource('alpha/images', ImagesResourceHandler)
 
         handlers = [
             (r'/healthcheck(?:/|\.html)?', HealthCheckHandler),

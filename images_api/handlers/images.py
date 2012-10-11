@@ -6,12 +6,13 @@ from tornado.web import asynchronous
 
 from images_api.domain.images import Images
 from images_api.handlers.extract_arguments_mixin import ExtractArgumentsMixin
-from images_api.rest_api import ApiResourceHandler
+from images_api.rest_api import ResourceHandler
 
-class ImagesHandler(ApiResourceHandler, ExtractArgumentsMixin):
+
+class ImagesResourceHandler(ResourceHandler, ExtractArgumentsMixin):
 
     def __init__(self, *args, **kwarsg):
-        super(ImagesHandler, self).__init__(*args, **kwarsg)
+        super(ImagesResourceHandler, self).__init__(*args, **kwarsg)
         self.images_storage = Images(config=self.application.config)
 
     @asynchronous
