@@ -6,3 +6,6 @@ install: make requirements
 script:  make test
 services:
   - elasticsearch
+notifications:
+  email:
+    - lambda@corp.globo.com
