@@ -1,6 +1,6 @@
+tapioca>=0.1.0
 derpconf==0.3.0
 libthumbor==0.6.1
-mimeparse==0.1.3
 python-dateutil==2.1
 tornado==2.4
 tornado-thumbor-url==0.1.0
