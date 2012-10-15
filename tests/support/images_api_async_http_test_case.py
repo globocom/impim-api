@@ -21,7 +21,7 @@ class ImagesAPIAsyncHTTPTestCase(AsyncHTTPTestCase, AsyncHTTPClientMixin):
         es_cleanup(Urls(self._app.config))
     
     def get_app(self):
-        return ImagesApplication(conf_file=abspath(join(dirname(__file__), '..', '..', 'images_api.test.conf')))
+        return ImagesApplication(conf_file=abspath(join(dirname(__file__), '..', 'images_api.test.conf')))
     
     def get_new_ioloop(self):
         return IOLoop.instance()
