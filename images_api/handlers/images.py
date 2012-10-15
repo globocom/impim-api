@@ -4,9 +4,10 @@
 from tornado import gen
 from tornado.web import asynchronous
 
+from tapioca import ResourceHandler
+
 from images_api.domain.images import Images
 from images_api.handlers.extract_arguments_mixin import ExtractArgumentsMixin
-from images_api.rest_api import ResourceHandler
 
 
 class ImagesResourceHandler(ResourceHandler, ExtractArgumentsMixin):
