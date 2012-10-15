@@ -23,7 +23,8 @@ class ImagesApplication(tornado.web.Application):
                 here,
                 os.curdir,
                 expanduser('~'),
-                '/etc/'
+                '/etc/',
+                dirname(__file__),
             ])
 
         rest_api = TornadoRESTful()
