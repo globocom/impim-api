@@ -7,9 +7,9 @@ from os.path import expanduser, dirname
 
 import tornado.web
 from tornado import httpclient
+from tapioca import TornadoRESTful
 
 from images_api.conf import Config
-from images_api.rest_api import TornadoRESTful
 from images_api.handlers import HealthCheckHandler, JsonpEnabledThumborUrlHandler
 from images_api.handlers import ImagesResourceHandler
 

@@ -10,7 +10,7 @@ help:
 run:
 	@honcho start -f Procfile.local
 
-test:
+test: clean
 	@nosetests tests/
 
 clean:
