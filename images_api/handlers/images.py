@@ -21,12 +21,12 @@ class ImagesResourceHandler(ResourceHandler, ExtractArgumentsMixin):
     def get_collection(self, callback, *args):
         accepted_arguments = [
             ('q', str, None),
-            ('createdDateFrom', 'datetime', None),
-            ('createdDateTo', 'datetime', None),
-            ('eventDateFrom', 'datetime', None),
-            ('eventDateTo', 'datetime', None),
+            ('created_date_from', 'datetime', None),
+            ('created_date_to', 'datetime', None),
+            ('event_date_from', 'datetime', None),
+            ('event_date_to', 'datetime', None),
             ('page', int, 1),
-            ('pageSize', int, 10)
+            ('page_size', int, 10)
         ]
         arguments = self.extract_arguments(accepted_arguments)
         images_dict = yield gen.Task(self.images_storage.all, **arguments)
