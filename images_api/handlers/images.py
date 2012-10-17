@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 from tornado import gen
 from tornado.web import asynchronous
 
-from tapioca import ResourceHandler
-
 from images_api.domain.images import Images
-from images_api.handlers.extract_arguments_mixin import ExtractArgumentsMixin
+from images_api.handlers import BaseHandler
 
 
-class ImagesResourceHandler(ResourceHandler, ExtractArgumentsMixin):
+class ImagesResourceHandler(BaseHandler):
 
-    def __init__(self, *args, **kwarsg):
-        super(ImagesResourceHandler, self).__init__(*args, **kwarsg)
+    def __init__(self, *args, **kwargs):
+        super(ImagesResourceHandler, self).__init__(*args, **kwargs)
         self.images_storage = Images(config=self.application.config)
 
     @asynchronous
