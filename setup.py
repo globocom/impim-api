@@ -13,6 +13,7 @@ setup(
     version='0.1.0dev',
     author='globo.com',
     author_email='lambda@corp.globo.com',
+    license = 'MIT',
     install_requires=[requirement for requirement in readfile('requirements.txt').split('\n') if requirement],
     entry_points = {
         'console_scripts': [
