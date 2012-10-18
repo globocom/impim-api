@@ -1,4 +1,4 @@
-Images API [![Build Status](https://secure.travis-ci.org/globocom/images-api.png)](http://travis-ci.org/globocom/images-api)
+Images API [![Build Status](https://secure.travis-ci.org/globocom/images-api.png)](http://travis-ci.org/globocom/impim-api)
 ==========
 
 API for managing images.
