@@ -30,7 +30,7 @@ def main():
 
     main_loop = tornado.ioloop.IOLoop.instance()
 
-    application = ImagesApplication(conf=opt.conf, debug=opt.debug)
+    application = ImagesApplication(conf_file=opt.conf, debug=opt.debug)
 
     server = HTTPServer(application)
     server.bind(opt.port, opt.ip)
