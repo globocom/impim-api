@@ -7,7 +7,7 @@ from optparse import OptionParser
 import tornado.ioloop
 from tornado.httpserver import HTTPServer
 
-from images_api.app import ImagesApplication
+from impim_api.app import ImagesApplication
 
 def main():
     parser = OptionParser()
@@ -36,13 +36,13 @@ def main():
     server.bind(opt.port, opt.ip)
     server.start(1)
 
-    logging.info('-- Images API started listening in %s:%d --' % (opt.ip,
+    logging.info('-- Impim API started listening in %s:%d --' % (opt.ip,
         opt.port))
     try:
         main_loop.start()
     except KeyboardInterrupt:
         logging.info('')
-        logging.info('-- Images API closed by user interruption --')
+        logging.info('-- Impim API closed by user interruption --')
 
 if __name__ == '__main__':
     main()
