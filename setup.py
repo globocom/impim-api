@@ -16,8 +16,8 @@ setup(
     install_requires=[requirement for requirement in readfile('requirements.txt').split('\n') if requirement],
     entry_points = {
         'console_scripts': [
-            'images-api = images_api.server:main',
-            'images-api-config = images_api.conf:generate_config',
+            'impim-api = impim_api.server:main',
+            'impim-api-config = impim_api.conf:generate_config',
         ]
     }
 )

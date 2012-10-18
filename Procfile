@@ -1,1 +1,1 @@
-web: PYTHONPATH=$PYTHONPATH:. python images_api/server.py -l info
+web: PYTHONPATH=$PYTHONPATH:. python impim_api/server.py -l info

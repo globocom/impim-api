@@ -4,7 +4,7 @@
 from json import loads
 from unittest import TestCase
 
-from images_api.domain import ElasticSearchParser
+from impim_api.domain import ElasticSearchParser
 
 class ElasticSearchParserTestCase(TestCase):
 

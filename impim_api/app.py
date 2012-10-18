@@ -9,16 +9,16 @@ import tornado.web
 from tornado import httpclient
 from tapioca import TornadoRESTful
 
-from images_api.conf import Config
-from images_api.handlers import HealthCheckHandler, JsonpEnabledThumborUrlHandler
-from images_api.handlers import ImagesResourceHandler
+from impim_api.conf import Config
+from impim_api.handlers import HealthCheckHandler, JsonpEnabledThumborUrlHandler
+from impim_api.handlers import ImagesResourceHandler
 
 
 class ImagesApplication(tornado.web.Application):
 
     def __init__(self, conf_file=None, *args, **kwargs):
         here = dirname(dirname(sys.argv[0]))
-        self.config = Config.load(path=conf_file, conf_name="images_api.conf",
+        self.config = Config.load(path=conf_file, conf_name="impim_api.conf",
             lookup_paths=[
                 here,
                 os.curdir,

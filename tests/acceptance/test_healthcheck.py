@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 
-from tests.support import ImagesAPIAsyncHTTPTestCase
+from tests.support import ImpimAPIAsyncHTTPTestCase
 
 
-class TestHealthCheckHandlerTestCase(ImagesAPIAsyncHTTPTestCase):
+class TestHealthCheckHandlerTestCase(ImpimAPIAsyncHTTPTestCase):
 
     def test_access_to_healthcheck(self):
         response = self.get('/healthcheck')

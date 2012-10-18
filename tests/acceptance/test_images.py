@@ -5,15 +5,15 @@
 from json import loads
 from urllib import urlencode
 
-from images_api.infrastructure.elastic_search import Urls
+from impim_api.infrastructure.elastic_search import Urls
 
 from tests.support import ElasticSearchMixin
 from tests.support import es_cleanup
-from tests.support import ImagesAPIAsyncHTTPTestCase
+from tests.support import ImpimAPIAsyncHTTPTestCase
 from tests.support import MockConfig
 
 
-class ImagesTestCase(ImagesAPIAsyncHTTPTestCase, ElasticSearchMixin):
+class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
 
     def setUp(self):
         super(ImagesTestCase, self).setUp()

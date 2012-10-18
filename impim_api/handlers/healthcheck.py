@@ -3,7 +3,7 @@
 
 import tornado.web
 
-from images_api.handlers.base import BaseHandler
+from impim_api.handlers.base import BaseHandler
 
 class HealthCheckHandler(BaseHandler):
 

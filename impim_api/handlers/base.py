@@ -6,7 +6,7 @@ from json import dumps
 
 from tapioca import ResourceHandler
 
-from images_api.handlers import ExtractArgumentsMixin
+from impim_api.handlers import ExtractArgumentsMixin
 
 
 class BaseHandler(ResourceHandler, ExtractArgumentsMixin):

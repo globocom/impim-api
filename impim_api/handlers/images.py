@@ -5,8 +5,8 @@
 from tornado import gen
 from tornado.web import asynchronous
 
-from images_api.domain.images import Images
-from images_api.handlers import BaseHandler
+from impim_api.domain.images import Images
+from impim_api.handlers import BaseHandler
 
 
 class ImagesResourceHandler(BaseHandler):

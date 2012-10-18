@@ -7,7 +7,7 @@ from unittest import TestCase
 
 from mock import MagicMock
 
-from images_api.handlers import ExtractArgumentsMixin
+from impim_api.handlers import ExtractArgumentsMixin
 
 
 class ExtractArgumentsMixinTestCase(TestCase):
