@@ -3,7 +3,6 @@
 
 
 import dateutil.parser
-import re
 
 
 class ExtractArgumentsMixin(object):
@@ -18,6 +17,10 @@ class ExtractArgumentsMixin(object):
         return arguments
 
     def _parse(self, argument, argument_type):
-        if argument == None: return None
-        if argument_type == 'datetime': return dateutil.parser.parse(argument)
+        if argument == None:
+            return None
+        if argument_type == 'datetime':
+            return dateutil.parser.parse(argument)
+        if argument_type == 'list':
+            return [a.strip() for a in argument.split(',')]
         return argument_type(argument)

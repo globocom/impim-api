@@ -41,6 +41,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
             'created_date_to': '2012-10-08T17:02:00',
             'event_date_from': '2012-10-08T17:02:00',
             'event_date_to': '2012-10-08T17:02:00',
+            'thumb_sizes': '200x100',
             'page': '1',
             'page_size': '10',
         }
@@ -49,7 +50,16 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'2012-10-08T17:02:00', u'createdDate': u'2012-10-08T17:02:00'}], u'total': 1, u'pageSize': 10}
+        assert body == {
+            u'items': [{
+                u'title': u'Title',
+                u'eventDate': u'2012-10-08T17:02:00',
+                u'createdDate': u'2012-10-08T17:02:00'
+            }],
+            # u'thumbs': [{'200x100': 'http://'}],
+            u'total': 1,
+            u'pageSize': 10
+        }
 
     def test_images_with_empty_query_string(self):
         response = self.get('/alpha/images?q=&created_date_from=&created_date_to=&event_date_from=&event_date_to=&page=&page_size=')

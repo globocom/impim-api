@@ -24,8 +24,9 @@ class ImagesResourceHandler(BaseHandler):
             ('created_date_to', 'datetime', None),
             ('event_date_from', 'datetime', None),
             ('event_date_to', 'datetime', None),
+            ('thumb_sizes', 'list', None),
             ('page', int, 1),
-            ('page_size', int, 10)
+            ('page_size', int, 10),
         ]
         arguments = self.extract_arguments(accepted_arguments)
         images_dict = yield gen.Task(self.images_storage.all, **arguments)
