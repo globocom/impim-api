@@ -7,8 +7,8 @@ from os.path import abspath, dirname, join
 from tornado.ioloop import IOLoop
 from tornado.testing import AsyncHTTPTestCase
 
-from impim_api.infrastructure.elastic_search import Urls
 from impim_api.app import ImagesApplication
+from impim_api.domain.storage.elastic_search import Urls
 
 from tests.support import AsyncHTTPClientMixin
 from tests.support import es_cleanup

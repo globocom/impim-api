@@ -5,7 +5,7 @@
 from json import loads
 from urllib import urlencode
 
-from impim_api.infrastructure.elastic_search import Urls
+from impim_api.domain.storage.elastic_search import Urls
 
 from tests.support import ElasticSearchMixin
 from tests.support import es_cleanup

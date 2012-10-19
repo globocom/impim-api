@@ -4,7 +4,8 @@
 
 from unittest import TestCase
 
-from impim_api.infrastructure.elastic_search import Urls
+from impim_api.domain.storage.elastic_search import Urls
+
 from tests.support import MockConfig
 
 

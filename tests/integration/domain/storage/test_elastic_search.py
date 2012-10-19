@@ -8,7 +8,7 @@ from tornado.httpclient import AsyncHTTPClient
 from tornado.testing import AsyncTestCase
 
 from impim_api.domain.storage import ElasticSearch
-from impim_api.infrastructure.elastic_search import Urls
+from impim_api.domain.storage.elastic_search import Urls
 
 from tests.support import AsyncHTTPClientMixin
 from tests.support import ElasticSearchMixin

@@ -7,8 +7,8 @@ from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPRequest
 
 from impim_api.domain import ElasticSearchParser
+from impim_api.domain.storage.elastic_search import Urls
 from impim_api.infrastructure.elastic_search import SearchRequestBody
-from impim_api.infrastructure.elastic_search import Urls
 
 
 class ElasticSearch(object):

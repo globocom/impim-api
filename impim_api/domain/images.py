@@ -18,4 +18,3 @@ class Images(object):
         # images_dict['thumbs'] = self._thumb_urls.cropped_to_sizes(search_arguments.get('thumb_sizes'))
         images_dict['pageSize'] = search_arguments.get('page_size')
         callback(images_dict)
-
