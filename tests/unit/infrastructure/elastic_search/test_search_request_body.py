@@ -5,7 +5,7 @@
 from json import loads
 from unittest import TestCase
 
-from impim_api.infrastructure.elastic_search import SearchRequestBody
+from impim_api.domain.storage.elastic_search import SearchRequestBody
 
 
 class SearchRequestBodyTestCase(TestCase):
