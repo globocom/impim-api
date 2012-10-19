@@ -4,12 +4,12 @@
 from json import loads
 from unittest import TestCase
 
-from impim_api.domain import ElasticSearchParser
+from impim_api.domain.storage.elastic_search import Parser
 
-class ElasticSearchParserTestCase(TestCase):
+class ParserTestCase(TestCase):
 
     def setUp(self):
-        self._es_parser = ElasticSearchParser()
+        self._es_parser = Parser()
 
     def test_parse_images_from_search(self):
         es_json = """

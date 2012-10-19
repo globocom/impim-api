@@ -4,7 +4,7 @@
 import dateutil.parser
 from json import dumps, loads
 
-class ElasticSearchParser(object):
+class Parser(object):
     
     def parse_images_from_search(self, es_json):
         es_data = loads(es_json)

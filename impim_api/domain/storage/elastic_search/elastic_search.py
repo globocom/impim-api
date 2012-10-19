@@ -6,9 +6,9 @@ from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPRequest
 
-from impim_api.domain import ElasticSearchParser
-from impim_api.domain.storage.elastic_search import Urls
+from impim_api.domain.storage.elastic_search import Parser
 from impim_api.domain.storage.elastic_search import SearchRequestBody
+from impim_api.domain.storage.elastic_search import Urls
 
 
 class ElasticSearch(object):
@@ -16,7 +16,7 @@ class ElasticSearch(object):
     def __init__(self, config, http_client=AsyncHTTPClient()):
         self._http_client = http_client
         self._elastic_search_urls = Urls(config=config)
-        self._elastic_search_parser = ElasticSearchParser()
+        self._elastic_search_parser = Parser()
 
     @gen.engine
     def search(self, callback, **search_arguments):
