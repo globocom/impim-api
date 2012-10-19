@@ -3,10 +3,11 @@
 
 
 from mock import MagicMock
-from tornado.httpclient import AsyncHTTPClient
 from tornado.testing import AsyncTestCase
 
 from impim_api.domain import Images
+from impim_api.domain.storage import ElasticSearch
+
 from tests.support import MockConfig
 
 
@@ -14,11 +15,12 @@ class ImagesTestCase(AsyncTestCase):
     
     def setUp(self):
         super(ImagesTestCase, self).setUp()
-        self._mock_config = MockConfig()
-        self._images = Images(config=self._mock_config, http_client=AsyncHTTPClient(self.io_loop))
+        config = MockConfig()
+        self._storage = ElasticSearch(config=config)
+        self._images = Images(config=config, storage=self._storage)
     
     def test_images_should_return_page_size(self):
-        self._images._es = MagicMock(side_effect=lambda callback, **query_arguments: callback({}))
+        self._storage.search = MagicMock(side_effect=lambda callback, **query_arguments: callback({}))
         self._images.all(self._images_should_return_page_size_callback, page=1, page_size=10)
         self.wait()
 
