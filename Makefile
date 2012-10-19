@@ -3,7 +3,8 @@ help:
 	@echo '    run  .................... run project'
 	@echo '    test  ................... run tests'
 	@echo '    clean  .................. remove build files (*.pyc, etc.)'
-	@echo '    requirements ............ update project dependencies from requirements.txt and test_requirements.txt'
+	@echo '    requirements ............ install project dependencies from requirements.txt and test_requirements.txt'
+	@echo '    upgrade_requirements .... upgrade project dependencies from requirements.txt and test_requirements.txt'
 	@echo '    ci ...................... run CI build'
 	@echo '    update_deps ............. update project dependencies in requirements.txt'
 
@@ -19,6 +20,10 @@ clean:
 requirements:
 	pip install -r test_requirements.txt
 	pip install -r requirements.txt
+
+upgrade_requirements:
+	pip install -U -r test_requirements.txt
+	pip install -U -r requirements.txt
 
 setup: requirements
 	@sh setup.sh
