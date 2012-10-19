@@ -13,7 +13,7 @@ class ImagesResourceHandler(BaseHandler):
 
     def __init__(self, *args, **kwargs):
         super(ImagesResourceHandler, self).__init__(*args, **kwargs)
-        self.images_storage = Images(config=self.application.config)
+        self._images = Images(config=self.application.config)
 
     @asynchronous
     @gen.engine
@@ -29,5 +29,5 @@ class ImagesResourceHandler(BaseHandler):
             ('page_size', int, 10),
         ]
         arguments = self.extract_arguments(accepted_arguments)
-        images_dict = yield gen.Task(self.images_storage.all, **arguments)
+        images_dict = yield gen.Task(self._images.all, **arguments)
         callback(images_dict)
