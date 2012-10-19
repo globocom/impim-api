@@ -4,8 +4,8 @@
 from datetime import datetime
 from json import dumps, loads
 
-from tornado.testing import AsyncTestCase
 from tornado.httpclient import AsyncHTTPClient
+from tornado.testing import AsyncTestCase
 
 from impim_api.domain import Images
 from impim_api.infrastructure.elastic_search import Urls

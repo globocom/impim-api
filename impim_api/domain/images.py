@@ -20,11 +20,16 @@ class Images(object):
 
     @gen.engine
     def all(self, callback, **query_arguments):
+        images_dict = yield gen.Task(self._es, **query_arguments)
+        # images_dict['thumbs'] = self._thumb_urls.cropped_to_sizes(query_arguments.get('thumb_sizes'))
+        images_dict['pageSize'] = query_arguments.get('page_size')
+        callback(images_dict)
+
+    @gen.engine
+    def _es(self, callback, **query_arguments):
         elastic_search_request = self._build_elastic_search_request(**query_arguments)
         elastic_search_response = yield gen.Task(self._http_client.fetch, elastic_search_request)
-
         images_dict = self._elastic_search_parser.parse_images_from_search(elastic_search_response.body)
-        images_dict['pageSize'] = query_arguments.get('page_size')
         callback(images_dict)
 
     def _build_elastic_search_request(self, **query_arguments):
