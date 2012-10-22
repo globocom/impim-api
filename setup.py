@@ -9,7 +9,7 @@ def readfile(file_name):
     return f.read()
 
 setup(
-    name='images-api',
+    name='impim-api',
     version='0.1.0dev',
     author='globo.com',
     author_email='lambda@corp.globo.com',

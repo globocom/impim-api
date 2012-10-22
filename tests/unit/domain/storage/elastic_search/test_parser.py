@@ -25,7 +25,7 @@ class ParserTestCase(TestCase):
                 "total" : 1,
                 "max_score" : 1.0,
                 "hits" : [ {
-                  "_index" : "images-api",
+                  "_index" : "impim-api",
                   "_type" : "image",
                   "_id" : "Ngpkqld6T0SftZpL6KnMhA",
                   "_score" : 1.0,
