@@ -21,10 +21,9 @@ class ImagesTestCase(AsyncTestCase):
         self._storage = ElasticSearch(config=config)
         self._thumbor_url_service = ThumborUrlService(config=config)
         self._images = Images(config=config, storage=self._storage, thumbor_url_service=self._thumbor_url_service)
-        
-        self._mocks()
 
     def test_images_should_return_thumb_urls(self):
+        self._mocks()
         self._images.all(
             self._images_should_return_thumb_urls,
             thumb_sizes=['200x100'],
@@ -38,7 +37,7 @@ class ImagesTestCase(AsyncTestCase):
         self.stop()
 
     def test_images_should_return_page_size(self):
-        self._storage.search = MagicMock(side_effect=lambda callback, **query_arguments: callback({'items': []}))
+        self._mocks()
         self._images.all(self._images_should_return_page_size_callback, page=1, page_size=10)
         self.wait()
 
