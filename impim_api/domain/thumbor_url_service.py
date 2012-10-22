@@ -9,13 +9,12 @@ from impim_api.domain.storage import ElasticSearch
 
 
 class ThumborUrlService(object):
-    
+
     def __init__(self, config):
         self._config = config
-    
-    # TODO: get thumbor security key from config.
+
     def fit_in_urls(self, original_url, sizes):
-        crypto = CryptoURL(key='MY_SECURE_KEY')
+        crypto = CryptoURL(key=self._config.THUMBOR_SECURITY_KEY)
         urls = {}
         for size in sizes:
             split_size = size.split('x')
