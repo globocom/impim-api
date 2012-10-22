@@ -21,6 +21,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         es_cleanup(self._elastic_search_urls)
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': 'Title',
+            'url': 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
             'createdDate': '2012-10-08T17:02:00',
             'eventDate': '2012-10-08T17:02:00',
         })
@@ -32,7 +33,17 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
                                         'was %s' % response.code
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'2012-10-08T17:02:00', u'createdDate': u'2012-10-08T17:02:00'}], u'total': 1, u'pageSize': 10}
+        assert body == {
+            u'items': [{
+                u'title': u'Title',
+                u'url': u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
+                u'eventDate': u'2012-10-08T17:02:00',
+                u'createdDate': u'2012-10-08T17:02:00',
+                u'thumbs': {},
+            }],
+            u'total': 1,
+            u'pageSize': 10
+        }
 
     def test_images_with_query_string(self):
         query_string = {
@@ -53,10 +64,11 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert body == {
             u'items': [{
                 u'title': u'Title',
+                u'url': u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
                 u'eventDate': u'2012-10-08T17:02:00',
-                u'createdDate': u'2012-10-08T17:02:00'
+                u'createdDate': u'2012-10-08T17:02:00',
+                u'thumbs': {'200x100': 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'},
             }],
-            # u'thumbs': [{'200x100': 'http://'}],
             u'total': 1,
             u'pageSize': 10
         }
@@ -67,7 +79,17 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-        assert body == {u'items': [{u'title': u'Title', u'eventDate': u'2012-10-08T17:02:00', u'createdDate': u'2012-10-08T17:02:00'}], u'total': 1, u'pageSize': 10}
+        assert body == {
+            u'items': [{
+                u'title': u'Title',
+                u'url': u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
+                u'eventDate': u'2012-10-08T17:02:00',
+                u'createdDate': u'2012-10-08T17:02:00',
+                u'thumbs': {},
+            }],
+            u'total': 1,
+            u'pageSize': 10
+        }
 
     def test_images_with_callback(self):
         response = self._fetch(

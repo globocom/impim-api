@@ -17,8 +17,8 @@ class ExtractArgumentsMixin(object):
         return arguments
 
     def _parse(self, argument, argument_type):
-        if argument == None:
-            return None
+        if argument == None or argument == []:
+            return argument
         if argument_type == 'datetime':
             return dateutil.parser.parse(argument)
         if argument_type == 'list':

@@ -2,5 +2,5 @@
 # -*- coding: utf-8 -*-
 
 
-from .images import Images
 from .thumbor_url_service import ThumborUrlService
+from .images import Images

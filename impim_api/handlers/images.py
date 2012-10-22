@@ -24,7 +24,7 @@ class ImagesResourceHandler(BaseHandler):
             ('created_date_to', 'datetime', None),
             ('event_date_from', 'datetime', None),
             ('event_date_to', 'datetime', None),
-            ('thumb_sizes', 'list', None),
+            ('thumb_sizes', 'list', []),
             ('page', int, 1),
             ('page_size', int, 10),
         ]
