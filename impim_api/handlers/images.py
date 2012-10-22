@@ -19,12 +19,12 @@ class ImagesResourceHandler(BaseHandler):
     @gen.engine
     def get_collection(self, callback, *args):
         accepted_arguments = [
-            ('q', str, None),
-            ('created_date_from', 'datetime', None),
-            ('created_date_to', 'datetime', None),
-            ('event_date_from', 'datetime', None),
-            ('event_date_to', 'datetime', None),
-            ('thumb_sizes', 'list', []),
+            ('q', str),
+            ('created_date_from', 'datetime'),
+            ('created_date_to', 'datetime'),
+            ('event_date_from', 'datetime'),
+            ('event_date_to', 'datetime'),
+            ('thumb_sizes', 'list'),
             ('page', int, 1),
             ('page_size', int, 10),
         ]

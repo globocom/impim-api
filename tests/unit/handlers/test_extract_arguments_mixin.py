@@ -19,7 +19,7 @@ class ExtractArgumentsMixinTestCase(TestCase):
     def test_extract_arguments_str(self):
         self._mock_get_argument({'str_argument': 'string'})
         
-        accepted_arguments = [('str_argument', str, None),]
+        accepted_arguments = [('str_argument', str),]
         arguments = self.extract_arguments_mixin.extract_arguments(accepted_arguments)
 
         assert arguments['str_argument'] == 'string'
@@ -27,7 +27,7 @@ class ExtractArgumentsMixinTestCase(TestCase):
     def test_extract_arguments_int(self):
         self._mock_get_argument({'int_argument': '1'})
         
-        accepted_arguments = [('int_argument', int, None),]
+        accepted_arguments = [('int_argument', int),]
         arguments = self.extract_arguments_mixin.extract_arguments(accepted_arguments)
 
         assert arguments['int_argument'] == 1
@@ -35,7 +35,7 @@ class ExtractArgumentsMixinTestCase(TestCase):
     def test_extract_arguments_datetime(self):
         self._mock_get_argument({'datetime_argument': '2012-09-24T14:12:13'})
 
-        accepted_arguments = [('datetime_argument', 'datetime', None),]
+        accepted_arguments = [('datetime_argument', 'datetime'),]
         arguments = self.extract_arguments_mixin.extract_arguments(accepted_arguments)
 
         assert arguments['datetime_argument'] == datetime(2012, 9, 24, 14, 12, 13)
@@ -43,7 +43,7 @@ class ExtractArgumentsMixinTestCase(TestCase):
     def test_extract_arguments_list(self):
         self._mock_get_argument({'list_argument': 'first, second'})
 
-        accepted_arguments = [('list_argument', 'list', None),]
+        accepted_arguments = [('list_argument', 'list'),]
         arguments = self.extract_arguments_mixin.extract_arguments(accepted_arguments)
 
         assert arguments['list_argument'] == ['first', 'second']
@@ -56,13 +56,21 @@ class ExtractArgumentsMixinTestCase(TestCase):
 
         assert arguments['default_argument'] == 'default'
 
-    def test_extract_arguments_default_none(self):
+    def test_extract_arguments_no_default(self):
         self._mock_get_argument({})
-        
-        accepted_arguments = [('default_argument', str, None),]
+
+        accepted_arguments = [('default_argument', str),]
         arguments = self.extract_arguments_mixin.extract_arguments(accepted_arguments)
 
         assert arguments['default_argument'] == None
+
+    def test_extract_arguments_no_default_list(self):
+        self._mock_get_argument({})
+
+        accepted_arguments = [('default_argument', 'list'),]
+        arguments = self.extract_arguments_mixin.extract_arguments(accepted_arguments)
+
+        assert arguments['default_argument'] == []
 
 
     def _mock_get_argument(self, arguments):
