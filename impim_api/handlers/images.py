@@ -17,7 +17,7 @@ class ImagesResourceHandler(BaseHandler):
 
     @asynchronous
     @gen.engine
-    def get_collection(self, callback, *args):
+    def get_collection(self, callback):
         accepted_arguments = [
             ('q', str),
             ('created_date_from', 'datetime'),
@@ -31,3 +31,12 @@ class ImagesResourceHandler(BaseHandler):
         arguments = self.extract_arguments(accepted_arguments)
         images_dict = yield gen.Task(self._images.all, **arguments)
         callback(images_dict)
+
+    def post(self):
+        import logging
+        logging.info('post')
+        logging.info(args)
+        logging.info(kwargs)
+        logging.info(self.request.files['image'][0]['filename'])
+        logging.info(self.request.files['image'][0]['content_type'])
+        logging.info(self.get_argument('name'))
