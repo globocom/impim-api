@@ -3,7 +3,6 @@
 
 
 from tornado import gen
-from tornado.web import asynchronous
 
 from impim_api.domain.images import Images
 from impim_api.handlers import BaseHandler
@@ -15,7 +14,6 @@ class ImagesResourceHandler(BaseHandler):
         super(ImagesResourceHandler, self).__init__(*args, **kwargs)
         self._images = Images(config=self.application.config)
 
-    @asynchronous
     @gen.engine
     def get_collection(self, callback):
         accepted_arguments = [
