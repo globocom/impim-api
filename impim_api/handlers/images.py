@@ -36,13 +36,12 @@ class ImagesResourceHandler(BaseHandler):
         logging.info('post')
         logging.info(self.request.files['image'][0]['filename'])
         logging.info(self.request.files['image'][0]['content_type'])
-        logging.info(self.get_argument('credits'))
         
         accepted_arguments = [
             ('name', str)
         ]
         arguments = self.extract_arguments(accepted_arguments)
-        # self._images.add(accepted_arguments)
+        self._images.add(accepted_arguments, **arguments)
         
         self.set_header('Content-Type', 'application/json')
         self.set_header('Access-Control-Allow-Origin', '*')

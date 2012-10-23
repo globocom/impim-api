@@ -21,3 +21,6 @@ class Images(object):
             item['thumbs'] = self._thumbor_url_service.fit_in_urls(item['url'], search_arguments.get('thumb_sizes'))
         images_dict['pageSize'] = search_arguments.get('page_size')
         callback(images_dict)
+
+    def add(self, **image_arguments):
+        self._storage.store(**image_arguments)

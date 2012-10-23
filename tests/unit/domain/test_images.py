@@ -22,30 +22,36 @@ class ImagesTestCase(AsyncTestCase):
         self._thumbor_url_service = ThumborUrlService(config=config)
         self._images = Images(config=config, storage=self._storage, thumbor_url_service=self._thumbor_url_service)
 
-    def test_images_should_return_thumb_urls(self):
-        self._mocks()
+    def test_all_should_return_thumb_urls(self):
+        self._all_mocks()
         self._images.all(
-            self._images_should_return_thumb_urls,
+            self._all_should_return_thumb_urls,
             thumb_sizes=['200x100'],
             page=1,
             page_size=10
         )
         self.wait()
 
-    def _images_should_return_thumb_urls(self, response):
+    def _all_should_return_thumb_urls(self, response):
         assert response['items'][0]['thumbs']['200x100'] == 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
         self.stop()
 
-    def test_images_should_return_page_size(self):
-        self._mocks()
-        self._images.all(self._images_should_return_page_size_callback, page=1, page_size=10)
+    def test_all_should_return_page_size(self):
+        self._all_mocks()
+        self._images.all(self._all_should_return_page_size_callback, page=1, page_size=10)
         self.wait()
 
-    def _images_should_return_page_size_callback(self, response):
+    def _all_should_return_page_size_callback(self, response):
         assert response['pageSize'] == 10
         self.stop()
 
-    def _mocks(self):
+    def test_add_should_store_image(self):
+        self._storage.store = MagicMock()
+        self._images.add(**{'name': u'image name'})
+        self._storage.store.assert_called_with(**{'name': u'image name'})
+
+
+    def _all_mocks(self):
         self._storage.search = MagicMock(side_effect=lambda callback, **query_arguments: callback({
             'items': [{'url': 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'}]
         }))
