@@ -30,11 +30,20 @@ class ImagesResourceHandler(BaseHandler):
         images_dict = yield gen.Task(self._images.all, **arguments)
         callback(images_dict)
 
+    
     def post(self):
         import logging
         logging.info('post')
-        logging.info(args)
-        logging.info(kwargs)
         logging.info(self.request.files['image'][0]['filename'])
         logging.info(self.request.files['image'][0]['content_type'])
-        logging.info(self.get_argument('name'))
+        logging.info(self.get_argument('credits'))
+        
+        accepted_arguments = [
+            ('name', str)
+        ]
+        arguments = self.extract_arguments(accepted_arguments)
+        # self._images.add(accepted_arguments)
+        
+        self.set_header('Content-Type', 'application/json')
+        self.set_header('Access-Control-Allow-Origin', '*')
+        self.write('{}')
