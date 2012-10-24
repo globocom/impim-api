@@ -48,7 +48,10 @@ class ImagesTestCase(AsyncTestCase):
     def test_add_should_store_image(self):
         self._storage.store = MagicMock()
         self._images.add(title=u'image title')
-        self._storage.store.assert_called_with(title=u'image title')
+        self._storage.store.assert_called_with(
+            title=u'image title',
+            url='s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
+        )
 
 
     def _all_mocks(self):

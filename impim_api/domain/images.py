@@ -23,4 +23,5 @@ class Images(object):
         callback(images_dict)
 
     def add(self, **image_arguments):
+        image_arguments['url'] = 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
         self._storage.store(**image_arguments)
