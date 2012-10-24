@@ -1,6 +1,6 @@
 derpconf>=0.3.0
 libthumbor>=1.0.0
 python-dateutil>=2.1
--e git+git://github.com/globocom/tapioca.git#egg=tapioca
+tapioca>=0.1.10
 tornado>=2.4
 tornado-thumbor-url>=0.1.0
