@@ -29,8 +29,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
     def test_images(self):
         response = self.get('/alpha/images')
 
-        assert response.code == 200, 'the response code should be 200 but it ' \
-                                        'was %s' % response.code
+        assert response.code == 200, 'response code should be 200 but was %s' % response.code
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
         assert body == {
