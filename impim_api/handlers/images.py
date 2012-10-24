@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from tornado import gen
+from tornado import gen, web
 
 from impim_api.domain.images import Images
 from impim_api.handlers import BaseHandler
@@ -30,7 +30,8 @@ class ImagesResourceHandler(BaseHandler):
         images_dict = yield gen.Task(self._images.all, **arguments)
         callback(images_dict)
 
-    
+    @web.asynchronous
+    @gen.engine
     def post(self):
         import logging
         logging.info('post')
@@ -43,8 +44,9 @@ class ImagesResourceHandler(BaseHandler):
             ('credits', unicode),
         ]
         arguments = self.extract_arguments(accepted_arguments)
-        self._images.add(**arguments)
+        yield gen.Task(self._images.add, **arguments)
         
         self.set_header('Content-Type', 'application/json')
         self.set_header('Access-Control-Allow-Origin', '*')
         self.write('{}')
+        self.finish()

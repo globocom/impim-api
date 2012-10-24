@@ -29,7 +29,8 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         es_cleanup(self._elastic_search_urls)
 
     def test_search(self):
-        self._elastic_search.store(title=u'Title')
+        self._elastic_search.store(self._noop_callback, title=u'Title')
+        self.wait()
         self.refresh_elastic_search()
         # self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
         #     'title': u'Title', 'createdDate': '2012-10-04T13:00:00'
@@ -245,4 +246,8 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         assert response['total'] == 2
         assert len(response['items']) == 1
     
+        self.stop()
+
+
+    def _noop_callback(self):
         self.stop()
