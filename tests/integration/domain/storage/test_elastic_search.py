@@ -45,16 +45,15 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
 
 
     def test_search_query(self):
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'One', 'createdDate': '2012-10-04T13:00:00'
-        })
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Two', 'createdDate': '2012-10-04T13:00:00'
-        })
-    
+        self._elastic_search.store(self._noop_callback, title=u'One')
+        self.wait()
+        self._elastic_search.store(self._noop_callback, title=u'Two')
+        self.wait()
+        self.refresh_elastic_search()
+
         self._elastic_search.search(self.assert_search_query_callback, q='One', page=1, page_size=10)
         self.wait()
-    
+
     def assert_search_query_callback(self, response):
         assert response['total'] == 1
         assert response['items'][0]['title'] == u'One'
@@ -183,16 +182,15 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
     
     
     def test_search_order_by_relevance_with_query(self):
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Exact title', 'createdDate': '2012-10-04T13:00:00'
-        })
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Title', 'createdDate': '2012-10-05T13:00:00'
-        })
-    
+        self._elastic_search.store(self._noop_callback, title=u'Exact title')
+        self.wait()
+        self._elastic_search.store(self._noop_callback, title=u'Title')
+        self.wait()
+        self.refresh_elastic_search()
+
         self._elastic_search.search(self.assert_search_order_by_relevance_with_query, q='Exact title', page=1, page_size=10)
         self.wait()
-    
+
     def assert_search_order_by_relevance_with_query(self, response):
         assert response['total'] == 2
         assert response['items'][0]['title'] == u'Exact title'
@@ -221,28 +219,27 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
     
     
     def test_search_pagination(self):
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Title', 'createdDate': '2012-10-04T13:00:00'
-        })
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Title', 'createdDate': '2012-10-04T13:00:00'
-        })
-    
+        self._elastic_search.store(self._noop_callback, title=u'Title')
+        self.wait()
+        self._elastic_search.store(self._noop_callback, title=u'Title')
+        self.wait()
+        self.refresh_elastic_search()
+
         self._elastic_search.search(self.assert_search_pagination_callback_page_1, page=1, page_size=1)
         self.wait()
         self._elastic_search.search(self.assert_search_pagination_callback_page_2, page=2, page_size=1)
         self.wait()
-    
+
     def assert_search_pagination_callback_page_1(self, response):
         assert response['total'] == 2
         assert len(response['items']) == 1
-    
+
         self.stop()
-    
+
     def assert_search_pagination_callback_page_2(self, response):
         assert response['total'] == 2
         assert len(response['items']) == 1
-    
+
         self.stop()
 
 
