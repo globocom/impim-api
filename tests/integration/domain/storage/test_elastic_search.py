@@ -29,9 +29,11 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         es_cleanup(self._elastic_search_urls)
 
     def test_search(self):
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Title', 'createdDate': '2012-10-04T13:00:00'
-        })
+        self._elastic_search.store(title=u'Title')
+        self.refresh_elastic_search()
+        # self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
+        #     'title': u'Title', 'createdDate': '2012-10-04T13:00:00'
+        # })
 
         self._elastic_search.search(self.assert_search_callback, page=1, page_size=10)
         self.wait()

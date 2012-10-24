@@ -41,7 +41,7 @@ class ImagesResourceHandler(BaseHandler):
             ('name', str)
         ]
         arguments = self.extract_arguments(accepted_arguments)
-        self._images.add(accepted_arguments, **arguments)
+        self._images.add(**arguments)
         
         self.set_header('Content-Type', 'application/json')
         self.set_header('Access-Control-Allow-Origin', '*')

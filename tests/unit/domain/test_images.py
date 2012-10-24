@@ -47,8 +47,8 @@ class ImagesTestCase(AsyncTestCase):
 
     def test_add_should_store_image(self):
         self._storage.store = MagicMock()
-        self._images.add(**{'name': u'image name'})
-        self._storage.store.assert_called_with(**{'name': u'image name'})
+        self._images.add(title=u'image title')
+        self._storage.store.assert_called_with(title=u'image title')
 
 
     def _all_mocks(self):

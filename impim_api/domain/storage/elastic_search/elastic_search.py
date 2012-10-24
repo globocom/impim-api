@@ -20,12 +20,20 @@ class ElasticSearch(object):
 
     @gen.engine
     def search(self, callback, **search_arguments):
-        elastic_search_request = self._build_elastic_search_request(**search_arguments)
+        elastic_search_request = self._build_search_request(**search_arguments)
         elastic_search_response = yield gen.Task(self._http_client.fetch, elastic_search_request)
         images_dict = self._elastic_search_parser.parse_images_from_search(elastic_search_response.body)
         callback(images_dict)
 
-    def _build_elastic_search_request(self, **search_arguments):
+    def store(self, **image_arguments):
+        # JsonEncoder
+        import json
+        from tornado.httpclient import HTTPClient
+        http_client = HTTPClient()
+        url = self._elastic_search_urls.type_url(Urls.IMAGE_TYPE)
+        http_client.fetch(url, method='POST', body=json.dumps(image_arguments))
+
+    def _build_search_request(self, **search_arguments):
         url = self._elastic_search_urls.search_url(Urls.IMAGE_TYPE)
 
         search_request_body = SearchRequestBody()
