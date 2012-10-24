@@ -42,13 +42,13 @@ class ElasticSearch(object):
         if search_arguments.get('q'):
             search_request_body.query_string(search_arguments.get('q'))
         if search_arguments.get('created_date_from'):
-            search_request_body.range('createdDate').gte(search_arguments.get('created_date_from').isoformat())
+            search_request_body.range('created_date').gte(search_arguments.get('created_date_from').isoformat())
         if search_arguments.get('created_date_to'):
-            search_request_body.range('createdDate').lte(search_arguments.get('created_date_to').isoformat())
+            search_request_body.range('created_date').lte(search_arguments.get('created_date_to').isoformat())
         if search_arguments.get('event_date_from'):
-            search_request_body.range('eventDate').gte(search_arguments.get('event_date_from').isoformat())
+            search_request_body.range('event_date').gte(search_arguments.get('event_date_from').isoformat())
         if search_arguments.get('event_date_to'):
-            search_request_body.range('eventDate').lte(search_arguments.get('event_date_to').isoformat())
-        search_request_body.sort([{'_score': 'desc'}, {'createdDate': {'order': 'desc', 'ignore_unmapped': True}}])
+            search_request_body.range('event_date').lte(search_arguments.get('event_date_to').isoformat())
+        search_request_body.sort([{'_score': 'desc'}, {'created_date': {'order': 'desc', 'ignore_unmapped': True}}])
 
         return HTTPRequest(url, body=search_request_body.as_json(), allow_nonstandard_methods=True)

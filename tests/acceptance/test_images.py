@@ -22,8 +22,8 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
             'title': 'Title',
             'url': 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
-            'createdDate': '2012-10-08T17:02:00',
-            'eventDate': '2012-10-08T17:02:00',
+            'created_date': '2012-10-08T17:02:00',
+            'event_date': '2012-10-08T17:02:00',
         })
 
     def test_images(self):

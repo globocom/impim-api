@@ -30,14 +30,11 @@ class ParserTestCase(TestCase):
                   "_id" : "Ngpkqld6T0SftZpL6KnMhA",
                   "_score" : 1.0,
                   "_source" : {
-                    "subject": "Istambul; Salve Jorge",
-                    "id": "http://novelas.be.globoi.com/photo/4d7e5b0ba6634faaa9bb0d0547d48c6e/solr",
-                    "thumbUrl": "http://local.globo.com:8888/SGVhWvXVXH4HvduSL1f01ZWj6b16SKVBoC59rDy3Nm5YXWVN3JkSEoOsXwy0SRop/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg",
                     "credits": "Salve Jorge/TV Globo",
                     "url": "s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg",
-                    "createdDate": "2012-09-24T14:12:12",
+                    "created_date": "2012-09-24T14:12:12",
                     "width": 940,
-                    "eventDate": "2012-09-24T14:12:12",
+                    "event_date": "2012-09-24T14:12:12",
                     "title": "Istambul é a única cidade no mundo que fica em dois continentes: Europa e Ásia",
                     "height": 588
                   }
@@ -50,9 +47,6 @@ class ParserTestCase(TestCase):
 
         assert parsed['total'] == 1
         assert len(parsed['items']) == 1
-        assert parsed['items'][0]['subject'] == "Istambul; Salve Jorge"
-        assert parsed['items'][0]['id'] == "http://novelas.be.globoi.com/photo/4d7e5b0ba6634faaa9bb0d0547d48c6e/solr"
-        assert parsed['items'][0]['thumbUrl'] == "http://local.globo.com:8888/SGVhWvXVXH4HvduSL1f01ZWj6b16SKVBoC59rDy3Nm5YXWVN3JkSEoOsXwy0SRop/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg"
         assert parsed['items'][0]['credits'] == u"Salve Jorge/TV Globo"
         assert parsed['items'][0]['url'] == "s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg"
         assert parsed['items'][0]['createdDate'] == "2012-09-24T14:12:12"

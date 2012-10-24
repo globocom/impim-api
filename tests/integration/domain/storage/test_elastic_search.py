@@ -62,19 +62,16 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
     
     
     def test_search_created_date_filter(self):
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'First', 'createdDate': '2012-10-04T13:00:00'
-        })
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Second', 'createdDate': '2012-10-04T13:00:01'
-        })
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Third', 'createdDate': '2012-10-04T13:00:02'
-        })
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Fourth', 'createdDate': '2012-10-04T13:00:03'
-        })
-    
+        self._elastic_search.store(self._noop_callback, title=u'First', created_date='2012-10-04T13:00:03')
+        self.wait()
+        self._elastic_search.store(self._noop_callback, title=u'Second', created_date='2012-10-04T13:00:02')
+        self.wait()
+        self._elastic_search.store(self._noop_callback, title=u'Third', created_date='2012-10-04T13:00:01')
+        self.wait()
+        self._elastic_search.store(self._noop_callback, title=u'Fourth', created_date='2012-10-04T13:00:00')
+        self.wait()
+        self.refresh_elastic_search()
+
         self._elastic_search.search(
             self.assert_search_created_date_filter_callback,
             created_date_from=datetime(2012, 10, 4, 13, 0, 1),
@@ -82,59 +79,56 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
             page=1, page_size=10
         )
         self.wait()
-    
+
         self._elastic_search.search(
             self.assert_search_created_date_from_filter_callback,
             created_date_from=datetime(2012, 10, 4, 13, 0, 1),
             page=1, page_size=10
         )
         self.wait()
-    
+
         self._elastic_search.search(
             self.assert_search_created_date_to_filter_callback,
             created_date_to=datetime(2012, 10, 4, 13, 0, 2),
             page=1, page_size=10
         )
         self.wait()
-    
+
     def assert_search_created_date_filter_callback(self, response):
         assert response['total'] == 2
-        assert response['items'][0]['title'] == u'Third'
-        assert response['items'][1]['title'] == u'Second'
+        assert response['items'][0]['title'] == u'Second'
+        assert response['items'][1]['title'] == u'Third'
     
         self.stop()
     
     def assert_search_created_date_from_filter_callback(self, response):
         assert response['total'] == 3
-        assert response['items'][0]['title'] == u'Fourth'
-        assert response['items'][1]['title'] == u'Third'
-        assert response['items'][2]['title'] == u'Second'
+        assert response['items'][0]['title'] == u'First'
+        assert response['items'][1]['title'] == u'Second'
+        assert response['items'][2]['title'] == u'Third'
     
         self.stop()
     
     def assert_search_created_date_to_filter_callback(self, response):
         assert response['total'] == 3
-        assert response['items'][0]['title'] == u'Third'
-        assert response['items'][1]['title'] == u'Second'
-        assert response['items'][2]['title'] == u'First'
-    
+        assert response['items'][0]['title'] == u'Second'
+        assert response['items'][1]['title'] == u'Third'
+        assert response['items'][2]['title'] == u'Fourth'
+
         self.stop()
-    
-    
+
+
     def test_search_event_date_filter(self):
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'First', 'eventDate': '2012-10-04T13:00:00', 'createdDate': '2012-10-04T13:00:00'
-        })
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Second', 'eventDate': '2012-10-04T13:00:01', 'createdDate': '2011-10-04T13:00:00'
-        })
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Third', 'eventDate': '2012-10-04T13:00:02', 'createdDate': '2010-10-04T13:00:00'
-        })
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Fourth', 'eventDate': '2012-10-04T13:00:03', 'createdDate': '2009-10-04T13:00:00'
-        })
-    
+        self._elastic_search.store(self._noop_callback, title=u'First', event_date='2012-10-04T13:00:03', created_date='2010-10-04T13:00:03')
+        self.wait()
+        self._elastic_search.store(self._noop_callback, title=u'Second', event_date='2012-10-04T13:00:02', created_date='2010-10-04T13:00:02')
+        self.wait()
+        self._elastic_search.store(self._noop_callback, title=u'Third', event_date='2012-10-04T13:00:01', created_date='2010-10-04T13:00:01')
+        self.wait()
+        self._elastic_search.store(self._noop_callback, title=u'Fourth', event_date='2012-10-04T13:00:00', created_date='2010-10-04T13:00:00')
+        self.wait()
+        self.refresh_elastic_search()
+
         self._elastic_search.search(
             self.assert_search_event_date_filter_callback,
             event_date_from=datetime(2012, 10, 4, 13, 0, 1),
@@ -142,21 +136,21 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
             page=1, page_size=10
         )
         self.wait()
-    
+
         self._elastic_search.search(
             self.assert_search_event_date_from_filter_callback,
             event_date_from=datetime(2012, 10, 4, 13, 0, 1),
             page=1, page_size=10
         )
         self.wait()
-    
+
         self._elastic_search.search(
             self.assert_search_event_date_to_filter_callback,
             event_date_to=datetime(2012, 10, 4, 13, 0, 2),
             page=1, page_size=10
         )
         self.wait()
-    
+
     def assert_search_event_date_filter_callback(self, response):
         assert response['total'] == 2
         assert response['items'][0]['title'] == u'Second'
@@ -166,17 +160,17 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
     
     def assert_search_event_date_from_filter_callback(self, response):
         assert response['total'] == 3
-        assert response['items'][0]['title'] == u'Second'
-        assert response['items'][1]['title'] == u'Third'
-        assert response['items'][2]['title'] == u'Fourth'
+        assert response['items'][0]['title'] == u'First'
+        assert response['items'][1]['title'] == u'Second'
+        assert response['items'][2]['title'] == u'Third'
     
         self.stop()
     
     def assert_search_event_date_to_filter_callback(self, response):
         assert response['total'] == 3
-        assert response['items'][0]['title'] == u'First'
-        assert response['items'][1]['title'] == u'Second'
-        assert response['items'][2]['title'] == u'Third'
+        assert response['items'][0]['title'] == u'Second'
+        assert response['items'][1]['title'] == u'Third'
+        assert response['items'][2]['title'] == u'Fourth'
     
         self.stop()
     
@@ -200,16 +194,15 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
     
     
     def test_search_order_by_newest_first_with_no_query(self):
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Exact title', 'createdDate': '2012-10-04T13:00:00'
-        })
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': u'Title', 'createdDate': '2012-10-05T13:00:00'
-        })
-    
+        self._elastic_search.store(self._noop_callback, title=u'Exact title', created_date='2012-10-04T13:00:00')
+        self.wait()
+        self._elastic_search.store(self._noop_callback, title=u'Title', created_date='2012-10-05T13:00:00')
+        self.wait()
+        self.refresh_elastic_search()
+
         self._elastic_search.search(self.assert_search_order_by_newest_first_with_no_query, page=1, page_size=10)
         self.wait()
-    
+
     def assert_search_order_by_newest_first_with_no_query(self, response):
         assert response['total'] == 2
         assert response['items'][0]['title'] == u'Title'
