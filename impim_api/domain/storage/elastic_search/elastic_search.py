@@ -9,6 +9,7 @@ from tornado.httpclient import HTTPRequest
 from impim_api.domain.storage.elastic_search import Parser
 from impim_api.domain.storage.elastic_search import SearchRequestBody
 from impim_api.domain.storage.elastic_search import Urls
+from impim_api.infrastructure import JsonEncoder
 
 
 class ElasticSearch(object):
@@ -17,6 +18,7 @@ class ElasticSearch(object):
         self._http_client = http_client
         self._elastic_search_urls = Urls(config=config)
         self._elastic_search_parser = Parser()
+        self._json_encoder = JsonEncoder()
 
     @gen.engine
     def search(self, callback, **search_arguments):
@@ -27,10 +29,8 @@ class ElasticSearch(object):
 
     @gen.engine
     def store(self, callback, **image_arguments):
-        # JsonEncoder
-        import json
         url = self._elastic_search_urls.type_url(Urls.IMAGE_TYPE)
-        yield gen.Task(self._http_client.fetch, url, method='POST', body=json.dumps(image_arguments))
+        yield gen.Task(self._http_client.fetch, url, method='POST', body=self._json_encoder.encode(image_arguments))
         callback()
 
     def _build_search_request(self, **search_arguments):

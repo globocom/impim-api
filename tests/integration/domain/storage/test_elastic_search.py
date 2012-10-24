@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 from datetime import datetime
 from json import dumps, loads
 
@@ -62,13 +63,13 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
     
     
     def test_search_created_date_filter(self):
-        self._elastic_search.store(self._noop_callback, title=u'First', created_date='2012-10-04T13:00:03')
+        self._elastic_search.store(self._noop_callback, title=u'First', created_date=datetime(2012, 10, 4, 13, 0, 3))
         self.wait()
-        self._elastic_search.store(self._noop_callback, title=u'Second', created_date='2012-10-04T13:00:02')
+        self._elastic_search.store(self._noop_callback, title=u'Second', created_date=datetime(2012, 10, 4, 13, 0, 2))
         self.wait()
-        self._elastic_search.store(self._noop_callback, title=u'Third', created_date='2012-10-04T13:00:01')
+        self._elastic_search.store(self._noop_callback, title=u'Third', created_date=datetime(2012, 10, 4, 13, 0, 1))
         self.wait()
-        self._elastic_search.store(self._noop_callback, title=u'Fourth', created_date='2012-10-04T13:00:00')
+        self._elastic_search.store(self._noop_callback, title=u'Fourth', created_date=datetime(2012, 10, 4, 13, 0, 0))
         self.wait()
         self.refresh_elastic_search()
 
@@ -119,13 +120,13 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
 
 
     def test_search_event_date_filter(self):
-        self._elastic_search.store(self._noop_callback, title=u'First', event_date='2012-10-04T13:00:03', created_date='2010-10-04T13:00:03')
+        self._elastic_search.store(self._noop_callback, title=u'First', event_date=datetime(2012, 10, 4, 13, 0, 3), created_date=datetime(2012, 10, 4, 13, 0, 3))
         self.wait()
-        self._elastic_search.store(self._noop_callback, title=u'Second', event_date='2012-10-04T13:00:02', created_date='2010-10-04T13:00:02')
+        self._elastic_search.store(self._noop_callback, title=u'Second', event_date=datetime(2012, 10, 4, 13, 0, 2), created_date=datetime(2012, 10, 4, 13, 0, 2))
         self.wait()
-        self._elastic_search.store(self._noop_callback, title=u'Third', event_date='2012-10-04T13:00:01', created_date='2010-10-04T13:00:01')
+        self._elastic_search.store(self._noop_callback, title=u'Third', event_date=datetime(2012, 10, 4, 13, 0, 1), created_date=datetime(2012, 10, 4, 13, 0, 1))
         self.wait()
-        self._elastic_search.store(self._noop_callback, title=u'Fourth', event_date='2012-10-04T13:00:00', created_date='2010-10-04T13:00:00')
+        self._elastic_search.store(self._noop_callback, title=u'Fourth', event_date=datetime(2012, 10, 4, 13, 0, 0), created_date=datetime(2012, 10, 4, 13, 0, 0))
         self.wait()
         self.refresh_elastic_search()
 
@@ -194,9 +195,9 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
     
     
     def test_search_order_by_newest_first_with_no_query(self):
-        self._elastic_search.store(self._noop_callback, title=u'Exact title', created_date='2012-10-04T13:00:00')
+        self._elastic_search.store(self._noop_callback, title=u'Exact title', created_date=datetime(2012, 10, 4, 13, 0, 0))
         self.wait()
-        self._elastic_search.store(self._noop_callback, title=u'Title', created_date='2012-10-05T13:00:00')
+        self._elastic_search.store(self._noop_callback, title=u'Title', created_date=datetime(2012, 10, 5, 13, 0, 0))
         self.wait()
         self.refresh_elastic_search()
 
