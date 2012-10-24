@@ -32,9 +32,6 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         self._elastic_search.store(self._noop_callback, title=u'Title')
         self.wait()
         self.refresh_elastic_search()
-        # self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-        #     'title': u'Title', 'createdDate': '2012-10-04T13:00:00'
-        # })
 
         self._elastic_search.search(self.assert_search_callback, page=1, page_size=10)
         self.wait()
