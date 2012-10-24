@@ -36,9 +36,11 @@ class ImagesResourceHandler(BaseHandler):
         logging.info('post')
         logging.info(self.request.files['image'][0]['filename'])
         logging.info(self.request.files['image'][0]['content_type'])
+        logging.info(self.get_argument('credits'))
         
         accepted_arguments = [
-            ('name', str)
+            ('title', unicode),
+            ('credits', unicode),
         ]
         arguments = self.extract_arguments(accepted_arguments)
         self._images.add(**arguments)
