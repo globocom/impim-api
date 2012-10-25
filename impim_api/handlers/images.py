@@ -33,19 +33,15 @@ class ImagesResourceHandler(BaseHandler):
     @web.asynchronous
     @gen.engine
     def post(self):
-        import logging
-        logging.info('post')
-        logging.info(self.request.files['image'][0]['filename'])
-        logging.info(self.request.files['image'][0]['content_type'])
-        logging.info(self.get_argument('credits'))
-        
         accepted_arguments = [
             ('title', unicode),
             ('credits', unicode),
+            ('created_date', 'datetime'),
+            ('event_date', 'datetime'),
         ]
         arguments = self.extract_arguments(accepted_arguments)
         yield gen.Task(self._images.add, **arguments)
-        
+
         self.set_header('Content-Type', 'application/json')
         self.set_header('Access-Control-Allow-Origin', '*')
         self.write('{}')

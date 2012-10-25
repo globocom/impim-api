@@ -19,12 +19,11 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         super(ImagesTestCase, self).setUp()
         self._elastic_search_urls = Urls(MockConfig())
         es_cleanup(self._elastic_search_urls)
-        self.post_to_elastic_search(self._elastic_search_urls.type_url(Urls.IMAGE_TYPE), {
-            'title': 'Title',
-            'url': 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
-            'created_date': '2012-10-08T17:02:00',
-            'event_date': '2012-10-08T17:02:00',
-        })
+        self.post(
+            self.get_url('/alpha/images'),
+            data=u'title=Title&credits=créditos&created_date=2012-10-08T17:02:00&event_date=2012-10-08T17:02:00'
+        )
+        self.refresh_elastic_search()
 
     def test_images(self):
         response = self.get('/alpha/images')
@@ -35,6 +34,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert body == {
             u'items': [{
                 u'title': u'Title',
+                u'credits': u'créditos',
                 u'url': u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
                 u'eventDate': u'2012-10-08T17:02:00',
                 u'createdDate': u'2012-10-08T17:02:00',
@@ -63,6 +63,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert body == {
             u'items': [{
                 u'title': u'Title',
+                u'credits': u'créditos',
                 u'url': u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
                 u'eventDate': u'2012-10-08T17:02:00',
                 u'createdDate': u'2012-10-08T17:02:00',
@@ -81,6 +82,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert body == {
             u'items': [{
                 u'title': u'Title',
+                u'credits': u'créditos',
                 u'url': u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
                 u'eventDate': u'2012-10-08T17:02:00',
                 u'createdDate': u'2012-10-08T17:02:00',
