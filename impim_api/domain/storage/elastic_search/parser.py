@@ -8,6 +8,7 @@ import re
 import dateutil.parser
 
 
+# TODO: This parser should return datetimes, not isoformat() string equivalents. See https://github.com/globocom/impim-api/issues/26
 class Parser(object):
     
     def parse_images_from_search(self, es_json):
