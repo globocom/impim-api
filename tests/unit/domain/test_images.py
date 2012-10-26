@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 
-from mock import MagicMock
+from datetime import datetime
+
+from mock import MagicMock, patch
 from tornado.testing import AsyncTestCase
 
 from impim_api.domain import Images
@@ -46,12 +48,17 @@ class ImagesTestCase(AsyncTestCase):
         self.stop()
 
     def test_add_should_store_image(self):
-        self._storage.store = MagicMock()
-        self._images.add(title=u'image title')
-        self._storage.store.assert_called_with(
-            title=u'image title',
-            url='s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
-        )
+        with patch('impim_api.domain.images.datetime') as mock_datetime:
+            mock_datetime.now.return_value = datetime(2012, 10, 25, 18, 55, 0)
+            self._storage.store = MagicMock()
+            
+            self._images.add(title=u'image title')
+            
+            self._storage.store.assert_called_with(
+                title=u'image title',
+                created_date=datetime(2012, 10, 25, 18, 55, 0),
+                url='s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
+            )
 
 
     def _all_mocks(self):

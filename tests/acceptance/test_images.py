@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
+from datetime import datetime, timedelta
 from json import loads
 from urllib import urlencode
+
+import dateutil.parser
 
 from impim_api.domain.storage.elastic_search import Urls
 
@@ -21,7 +24,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         es_cleanup(self._elastic_search_urls)
         self.post(
             self.get_url('/alpha/images'),
-            data=u'title=Title&credits=créditos&created_date=2012-10-08T17:02:00&event_date=2012-10-08T17:02:00'
+            data=u'title=Title&credits=Créditos&event_date=2012-10-08T17:02:00'
         )
         self.refresh_elastic_search()
 
@@ -31,24 +34,20 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert response.code == 200, 'response code should be 200 but was %s' % response.code
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-        assert body == {
-            u'items': [{
-                u'title': u'Title',
-                u'credits': u'créditos',
-                u'url': u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
-                u'eventDate': u'2012-10-08T17:02:00',
-                u'createdDate': u'2012-10-08T17:02:00',
-                u'thumbs': {},
-            }],
-            u'total': 1,
-            u'pageSize': 10
-        }
+        assert len(body['items']) == 1
+        assert body['items'][0]['title'] == u'Title'
+        assert body['items'][0]['credits'] == u'Créditos'
+        assert body['items'][0]['url'] == u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+        assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
+        assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
+        assert body['total'] == 1
+        assert body['pageSize'] == 10
 
     def test_images_with_query_string(self):
         query_string = {
             'q': 'Title',
-            'created_date_from': '2012-10-08T17:02:00',
-            'created_date_to': '2012-10-08T17:02:00',
+            'created_date_from': (datetime.now() - timedelta(days=1)).isoformat(),
+            'created_date_to': (datetime.now() + timedelta(days=1)).isoformat(),
             'event_date_from': '2012-10-08T17:02:00',
             'event_date_to': '2012-10-08T17:02:00',
             'thumb_sizes': '200x100',
@@ -60,18 +59,15 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-        assert body == {
-            u'items': [{
-                u'title': u'Title',
-                u'credits': u'créditos',
-                u'url': u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
-                u'eventDate': u'2012-10-08T17:02:00',
-                u'createdDate': u'2012-10-08T17:02:00',
-                u'thumbs': {'200x100': 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'},
-            }],
-            u'total': 1,
-            u'pageSize': 10
-        }
+        assert len(body['items']) == 1
+        assert body['items'][0]['title'] == u'Title'
+        assert body['items'][0]['credits'] == u'Créditos'
+        assert body['items'][0]['url'] == u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+        assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
+        assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
+        assert body['items'][0]['thumbs']['200x100'] == u'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+        assert body['total'] == 1
+        assert body['pageSize'] == 10
 
     def test_images_with_empty_query_string(self):
         response = self.get('/alpha/images?q=&created_date_from=&created_date_to=&event_date_from=&event_date_to=&page=&page_size=')
@@ -79,18 +75,15 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-        assert body == {
-            u'items': [{
-                u'title': u'Title',
-                u'credits': u'créditos',
-                u'url': u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
-                u'eventDate': u'2012-10-08T17:02:00',
-                u'createdDate': u'2012-10-08T17:02:00',
-                u'thumbs': {},
-            }],
-            u'total': 1,
-            u'pageSize': 10
-        }
+        assert len(body['items']) == 1
+        assert body['items'][0]['title'] == u'Title'
+        assert body['items'][0]['credits'] == u'Créditos'
+        assert body['items'][0]['url'] == u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+        assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
+        assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
+        assert body['items'][0]['thumbs'] == {}
+        assert body['total'] == 1
+        assert body['pageSize'] == 10
 
     def test_images_with_callback(self):
         response = self._fetch(

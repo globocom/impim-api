@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
+from datetime import datetime
+
 from tornado import gen
 
 from impim_api.domain import ThumborUrlService
@@ -24,4 +26,5 @@ class Images(object):
 
     def add(self, **image_arguments):
         image_arguments['url'] = 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+        image_arguments['created_date'] = datetime.now()
         self._storage.store(**image_arguments)
