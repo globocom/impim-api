@@ -13,7 +13,6 @@ from impim_api.domain.storage.elastic_search import Urls
 
 from tests.support import AsyncHTTPClientMixin
 from tests.support import ElasticSearchMixin
-from tests.support import es_cleanup
 from tests.support import MockConfig
 
 
@@ -27,7 +26,7 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         self._elastic_search_urls = Urls(config)
         self._elastic_search = ElasticSearch(config=config, http_client=self.http_client)
 
-        es_cleanup(self._elastic_search_urls)
+        self.cleanup_elastic_search()
 
     def test_search(self):
         self._elastic_search.store(self._noop_callback, title=u'Title')

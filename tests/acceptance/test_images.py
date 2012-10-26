@@ -11,17 +11,13 @@ import dateutil.parser
 from impim_api.domain.storage.elastic_search import Urls
 
 from tests.support import ElasticSearchMixin
-from tests.support import es_cleanup
 from tests.support import ImpimAPIAsyncHTTPTestCase
-from tests.support import MockConfig
 
 
 class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
 
     def setUp(self):
         super(ImagesTestCase, self).setUp()
-        self._elastic_search_urls = Urls(MockConfig())
-        es_cleanup(self._elastic_search_urls)
         self.post(
             self.get_url('/alpha/images'),
             data=u'title=Title&credits=Créditos&event_date=2012-10-08T17:02:00'

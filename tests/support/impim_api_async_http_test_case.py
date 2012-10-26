@@ -11,14 +11,15 @@ from impim_api.app import ImagesApplication
 from impim_api.domain.storage.elastic_search import Urls
 
 from tests.support import AsyncHTTPClientMixin
-from tests.support import es_cleanup
+from tests.support import ElasticSearchMixin
 
 
-class ImpimAPIAsyncHTTPTestCase(AsyncHTTPTestCase, AsyncHTTPClientMixin):
+class ImpimAPIAsyncHTTPTestCase(AsyncHTTPTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
     
     def setUp(self):
         super(ImpimAPIAsyncHTTPTestCase, self).setUp()
-        es_cleanup(Urls(self._app.config))
+        self._elastic_search_urls = Urls(self._app.config)
+        self.cleanup_elastic_search()
     
     def get_app(self):
         return ImagesApplication(conf_file=abspath(join(dirname(__file__), '..', 'impim_api.test.conf')))
