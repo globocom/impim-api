@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+import dateutil.parser
 
 from tornado import gen, web
 from schema import Use, Optional
@@ -14,10 +14,10 @@ from impim_api.handlers import BaseHandler
 class SearchSchema(RequestSchema):
     querystring = {
         Optional('q'): unicode,
-        Optional('created_date_from'): Use(datetime),
-        Optional('created_date_to'): Use(datetime),
-        Optional('event_date_from'): Use(datetime),
-        Optional('event_date_to'): Use(datetime),
+        Optional('created_date_from'): Use(dateutil.parser.parse),
+        Optional('created_date_to'): Use(dateutil.parser.parse),
+        Optional('event_date_from'): Use(dateutil.parser.parse),
+        Optional('event_date_to'): Use(dateutil.parser.parse),
         Optional('thumb_sizes'): Use(lambda s: s.split(',')),
         Optional('page'): Use(int),
         Optional('page_size'): Use(int),

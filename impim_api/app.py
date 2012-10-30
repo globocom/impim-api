@@ -29,7 +29,7 @@ class ImagesApplication(tornado.web.Application):
 
         rest_api = TornadoRESTful(version='alpha', base_url=base_url,
                 discovery=True)
-        rest_api.add_resource('images', ImagesResourceHandler)
+        rest_api.add_resource('alpha/images', ImagesResourceHandler)
 
         handlers = [
             (r'/healthcheck(?:/|\.html)?', HealthCheckHandler),

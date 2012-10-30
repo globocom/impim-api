@@ -22,7 +22,7 @@ class ImpimAPIAsyncHTTPTestCase(AsyncHTTPTestCase, AsyncHTTPClientMixin, Elastic
         self.cleanup_elastic_search()
     
     def get_app(self):
-        return ImagesApplication(conf_file=abspath(join(dirname(__file__), '..', 'impim_api.test.conf')))
+        return ImagesApplication(conf_file=abspath(join(dirname(__file__), '..', 'impim_api.test.conf')), base_url='')
     
     def get_new_ioloop(self):
         return IOLoop.instance()
