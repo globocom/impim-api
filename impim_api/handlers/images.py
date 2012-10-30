@@ -1,11 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 
 from tornado import gen, web
+from schema import Use, Optional
+from tapioca import RequestSchema, validate
 
 from impim_api.domain.images import Images
 from impim_api.handlers import BaseHandler
+
+
+class SearchSchema(RequestSchema):
+    querystring = {
+        Optional('q'): unicode,
+        Optional('created_date_from'): Use(datetime),
+        Optional('created_date_to'): Use(datetime),
+        Optional('event_date_from'): Use(datetime),
+        Optional('event_date_to'): Use(datetime),
+        Optional('thumb_sizes'): Use(lambda s: s.split(',')),
+        Optional('page'): Use(int),
+        Optional('page_size'): Use(int),
+    }
 
 
 class ImagesResourceHandler(BaseHandler):
@@ -15,19 +31,16 @@ class ImagesResourceHandler(BaseHandler):
         self._images = Images(config=self.application.config)
 
     @gen.engine
+    @validate(SearchSchema)
     def get_collection(self, callback):
-        accepted_arguments = [
-            ('q', str),
-            ('created_date_from', 'datetime'),
-            ('created_date_to', 'datetime'),
-            ('event_date_from', 'datetime'),
-            ('event_date_to', 'datetime'),
-            ('thumb_sizes', 'list'),
-            ('page', int, 1),
-            ('page_size', int, 10),
-        ]
-        arguments = self.extract_arguments(accepted_arguments)
-        images_dict = yield gen.Task(self._images.all, **arguments)
+        values = self.values['querystring']
+        if not 'page' in values:
+            values['page'] = 1
+        if not 'page_size' in values:
+            values['page_size'] = 10
+        if not 'thumb_sizes' in values:
+            values['thumb_sizes'] = []
+        images_dict = yield gen.Task(self._images.all, **values)
         callback(images_dict)
 
     @web.asynchronous
