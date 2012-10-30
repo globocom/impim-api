@@ -33,7 +33,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert len(body['items']) == 1
         assert body['items'][0]['title'] == u'Title'
         assert body['items'][0]['credits'] == u'Créditos'
-        assert body['items'][0]['url'] == u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+        assert body['items'][0]['url'] == u'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
         assert body['total'] == 1
@@ -58,7 +58,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert len(body['items']) == 1
         assert body['items'][0]['title'] == u'Title'
         assert body['items'][0]['credits'] == u'Créditos'
-        assert body['items'][0]['url'] == u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+        assert body['items'][0]['url'] == u'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
         assert body['items'][0]['thumbs']['200x100'] == u'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
@@ -74,7 +74,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
         assert len(body['items']) == 1
         assert body['items'][0]['title'] == u'Title'
         assert body['items'][0]['credits'] == u'Créditos'
-        assert body['items'][0]['url'] == u's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+        assert body['items'][0]['url'] == u'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
         assert body['items'][0]['thumbs'] == {}

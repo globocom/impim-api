@@ -3,3 +3,4 @@
 
 
 from .elastic_search import ElasticSearch
+from .temp_file_storage import TempFileStorage

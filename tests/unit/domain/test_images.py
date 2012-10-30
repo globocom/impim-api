@@ -10,6 +10,7 @@ from tornado.testing import AsyncTestCase
 from impim_api.domain import Images
 from impim_api.domain import ThumborUrlService
 from impim_api.domain.storage import ElasticSearch
+from impim_api.domain.storage import TempFileStorage
 
 from tests.support import MockConfig
 
@@ -20,9 +21,10 @@ class ImagesTestCase(AsyncTestCase):
         super(ImagesTestCase, self).setUp()
         
         config = MockConfig()
+        self._data_storage = TempFileStorage()
         self._metadata_storage = ElasticSearch(config=config)
         self._thumbor_url_service = ThumborUrlService(config=config)
-        self._images = Images(config=config, metadata_storage=self._metadata_storage, thumbor_url_service=self._thumbor_url_service)
+        self._images = Images(config=config, data_storage=self._data_storage, metadata_storage=self._metadata_storage, thumbor_url_service=self._thumbor_url_service)
 
     def test_all_should_return_thumb_urls(self):
         self._all_mocks()
@@ -50,14 +52,16 @@ class ImagesTestCase(AsyncTestCase):
     def test_add_should_store_image(self):
         with patch('impim_api.domain.images.datetime') as mock_datetime:
             mock_datetime.now.return_value = datetime(2012, 10, 25, 18, 55, 0)
+            self._data_storage.store = MagicMock(return_value='http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg')
             self._metadata_storage.store = MagicMock()
             
             self._images.add(title=u'image title')
             
+            self._data_storage.store.assert_called_with()
             self._metadata_storage.store.assert_called_with(
                 title=u'image title',
                 created_date=datetime(2012, 10, 25, 18, 55, 0),
-                url='s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
+                url='http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
             )
 
 
