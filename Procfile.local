@@ -1,3 +1,3 @@
 thumbor: .venvs/thumbor/bin/thumbor
 elasticsearch: elasticsearch -f
-tornado: PYTHONPATH=.:$$PYTHONPATH python impim_api/server.py -l info -d
+tornado: PYTHONPATH=.:$$PYTHONPATH python impim_api/server.py -l debug -d

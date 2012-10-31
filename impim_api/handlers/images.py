@@ -49,11 +49,12 @@ class ImagesResourceHandler(BaseHandler):
         accepted_arguments = [
             ('title', unicode),
             ('credits', unicode),
-            ('created_date', 'datetime'),
             ('event_date', 'datetime'),
         ]
-        arguments = self.extract_arguments(accepted_arguments)
-        yield gen.Task(self._images.add, **arguments)
+        meta_data = self.extract_arguments(accepted_arguments)
+        # image = self.request.files['image'][0]
+        # yield gen.Task(self._images.add, image, meta_data)
+        yield gen.Task(self._images.add, meta_data=meta_data)
 
         self.set_header('Content-Type', 'application/json')
         self.set_header('Access-Control-Allow-Origin', '*')

@@ -26,7 +26,10 @@ class Images(object):
         images_dict['pageSize'] = search_arguments.get('page_size')
         callback(images_dict)
 
-    def add(self, **image_arguments):
-        image_arguments['created_date'] = datetime.now()
-        image_arguments['url'] = self._data_storage.store()
-        self._metadata_storage.store(**image_arguments)
+    @gen.engine
+    def add(self, callback, image={}, meta_data={}):
+        meta_data['created_date'] = datetime.now()
+        meta_data['url'] = yield gen.Task(self._data_storage.store_image, **image)
+        yield gen.Task(self._metadata_storage.store, **meta_data)
+        callback()
+

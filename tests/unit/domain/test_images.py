@@ -4,7 +4,7 @@
 
 from datetime import datetime
 
-from mock import MagicMock, patch
+from mock import ANY, MagicMock, patch
 from tornado.testing import AsyncTestCase
 
 from impim_api.domain import Images
@@ -52,17 +52,23 @@ class ImagesTestCase(AsyncTestCase):
     def test_add_should_store_image(self):
         with patch('impim_api.domain.images.datetime') as mock_datetime:
             mock_datetime.now.return_value = datetime(2012, 10, 25, 18, 55, 0)
-            self._data_storage.store = MagicMock(return_value='http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg')
-            self._metadata_storage.store = MagicMock()
+            self._data_storage.store_image = MagicMock(side_effect=lambda callback, **image: callback(
+                'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+            ))
+            self._metadata_storage.store = MagicMock(side_effect=lambda callback, **image_meta_data: callback())
             
-            self._images.add(title=u'image title')
-            
-            self._data_storage.store.assert_called_with()
-            self._metadata_storage.store.assert_called_with(
-                title=u'image title',
-                created_date=datetime(2012, 10, 25, 18, 55, 0),
-                url='http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
-            )
+            self._images.add(self._add_should_store_image_callback, meta_data={'title': u'image title'})
+            self.wait()
+
+    def _add_should_store_image_callback(self):
+        self._data_storage.store_image.assert_called_with(callback=ANY)
+        self._metadata_storage.store.assert_called_with(
+            callback=ANY,
+            title=u'image title',
+            created_date=datetime(2012, 10, 25, 18, 55, 0),
+            url='http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
+        )
+        self.stop()
 
 
     def _all_mocks(self):
