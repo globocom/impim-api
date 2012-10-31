@@ -3,6 +3,7 @@
 
 
 import os
+import uuid
 
 
 class TempFileStorage(object):
@@ -12,7 +13,8 @@ class TempFileStorage(object):
             os.mkdir('/tmp/impim-api')
         except OSError:
             pass
-        with open('/tmp/impim-api/%s' % image['filename'], 'w') as image_file:
+        
+        full_path_filename = '/tmp/impim-api/%s' % uuid.uuid4().hex
+        with open(full_path_filename, 'w') as image_file:
             image_file.write(image['body'])
-            
-        callback('http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg')
+        callback(full_path_filename)

@@ -16,7 +16,6 @@ class TempFileStorageTestCase(AsyncTestCase):
         super(TempFileStorageTestCase, self).setUp()
 
         self._temp_file_storage = TempFileStorage()
-        self._actual_image_filename = '/tmp/impim-api/image.jpeg'
 
         with open(join(dirname(__file__), '..', '..', '..', 'fixtures/image.jpeg'), 'r') as image_file:
             self._image_body = image_file.read()
@@ -26,7 +25,8 @@ class TempFileStorageTestCase(AsyncTestCase):
         self.wait()
         
     def _store_image_callback(self, url):
-        with open(self._actual_image_filename, 'r') as actual_image_file:
+        print url
+        with open(url, 'r') as actual_image_file:
             actual_image_body = actual_image_file.read()
         assert actual_image_body == self._image_body
         self.stop()
