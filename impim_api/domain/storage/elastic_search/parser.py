@@ -17,17 +17,12 @@ class Parser(object):
 
         images = []
         for hit in es_data['hits']['hits']:
-            image = {}
-            for key in hit['_source'].keys():
-                camelized_key = key
-                image[camelized_key] = hit['_source'][key]
+            image = hit['_source']
+            for key in image:
                 if key in date_fields:
-                    image[camelized_key] = dateutil.parser.parse(image[camelized_key])
+                    image[key] = dateutil.parser.parse(image[key])
             images.append(image)
-
-        parsed_data = {
+        return {
             'total': es_data['hits']['total'],
             'items': images,
         }
-
-        return parsed_data
