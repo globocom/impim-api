@@ -19,12 +19,13 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
 
     def setUp(self):
         super(ImagesTestCase, self).setUp()
-        image_file = open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r').read()
-        self.multipart_post(
-            self.get_url('/alpha/images'),
-            fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
-            files=[('image', 'image.jpeg', image_file)]
-        )
+        with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
+            image_body = image_file.read()
+            self.multipart_post(
+                self.get_url('/alpha/images'),
+                fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
+                files=[('image', 'image.jpeg', image_body)]
+            )
         self.refresh_elastic_search()
 
     def test_images(self):
