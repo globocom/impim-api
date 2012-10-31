@@ -13,8 +13,8 @@ from impim_api.domain.storage import TempFileStorage
 
 class Images(object):
 
-    def __init__(self, config, data_storage=None, meta_data_storage=None, thumbor_url_service=None):
-        self._data_storage = data_storage or TempFileStorage()
+    def __init__(self, config, images_storage=None, meta_data_storage=None, thumbor_url_service=None):
+        self._images_storage = images_storage or TempFileStorage()
         self._meta_data_storage = meta_data_storage or ElasticSearch(config=config)
         self._thumbor_url_service = thumbor_url_service or ThumborUrlService(config=config)
 
@@ -29,7 +29,7 @@ class Images(object):
     @gen.engine
     def add(self, callback, image={}, meta_data={}):
         meta_data['created_date'] = datetime.now()
-        meta_data['url'] = yield gen.Task(self._data_storage.store_image, **image)
+        meta_data['url'] = yield gen.Task(self._images_storage.store_image, **image)
         yield gen.Task(self._meta_data_storage.store_meta_data, **meta_data)
         callback()
 

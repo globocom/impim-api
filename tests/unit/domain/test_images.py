@@ -21,10 +21,10 @@ class ImagesTestCase(AsyncTestCase):
         super(ImagesTestCase, self).setUp()
         
         config = MockConfig()
-        self._data_storage = MagicMock()
+        self._images_storage = MagicMock()
         self._meta_data_storage = MagicMock()
         self._thumbor_url_service = MagicMock()
-        self._images = Images(config=config, data_storage=self._data_storage, meta_data_storage=self._meta_data_storage, thumbor_url_service=self._thumbor_url_service)
+        self._images = Images(config=config, images_storage=self._images_storage, meta_data_storage=self._meta_data_storage, thumbor_url_service=self._thumbor_url_service)
 
     def test_all_should_return_thumb_urls(self):
         self._all_mocks()
@@ -52,7 +52,7 @@ class ImagesTestCase(AsyncTestCase):
     def test_add_should_store_image(self):
         with patch('impim_api.domain.images.datetime') as mock_datetime:
             mock_datetime.now.return_value = datetime(2012, 10, 25, 18, 55, 0)
-            self._data_storage.store_image = MagicMock(side_effect=lambda callback, **image: callback(
+            self._images_storage.store_image = MagicMock(side_effect=lambda callback, **image: callback(
                 'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
             ))
             self._meta_data_storage.store_meta_data = MagicMock(side_effect=lambda callback, **image_meta_data: callback())
@@ -61,7 +61,7 @@ class ImagesTestCase(AsyncTestCase):
             self.wait()
 
     def _add_should_store_image_callback(self):
-        self._data_storage.store_image.assert_called_with(callback=ANY)
+        self._images_storage.store_image.assert_called_with(callback=ANY)
         self._meta_data_storage.store_meta_data.assert_called_with(
             callback=ANY,
             title=u'image title',
