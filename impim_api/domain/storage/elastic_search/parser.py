@@ -8,7 +8,6 @@ import re
 import dateutil.parser
 
 
-# TODO: This parser should return datetimes, not isoformat() string equivalents. See https://github.com/globocom/impim-api/issues/26
 class Parser(object):
 
     def parse_images_from_search(self, es_json):
@@ -23,7 +22,7 @@ class Parser(object):
                 camelized_key = key
                 image[camelized_key] = hit['_source'][key]
                 if key in date_fields:
-                    image[camelized_key] = dateutil.parser.parse(image[camelized_key]).isoformat()
+                    image[camelized_key] = dateutil.parser.parse(image[camelized_key])
             images.append(image)
 
         parsed_data = {

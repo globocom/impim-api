@@ -4,7 +4,10 @@
 from json import loads
 from unittest import TestCase
 
+import dateutil.parser
+
 from impim_api.domain.storage.elastic_search import Parser
+
 
 class ParserTestCase(TestCase):
 
@@ -49,8 +52,8 @@ class ParserTestCase(TestCase):
         assert len(parsed['items']) == 1
         assert parsed['items'][0]['credits'] == u"Salve Jorge/TV Globo"
         assert parsed['items'][0]['url'] == "s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg"
-        assert parsed['items'][0]['created_date'] == "2012-09-24T14:12:12"
+        assert parsed['items'][0]['created_date'] == dateutil.parser.parse("2012-09-24T14:12:12")
         assert parsed['items'][0]['width'] == 940
-        assert parsed['items'][0]['event_date'] == "2012-09-24T14:12:12"
+        assert parsed['items'][0]['event_date'] == dateutil.parser.parse("2012-09-24T14:12:12")
         assert parsed['items'][0]['title'] == u"Istambul é a única cidade no mundo que fica em dois continentes: Europa e Ásia"
         assert parsed['items'][0]['height'] == 588
