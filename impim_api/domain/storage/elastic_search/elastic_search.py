@@ -28,9 +28,9 @@ class ElasticSearch(object):
         callback(images_dict)
 
     @gen.engine
-    def store(self, callback, **image_meta_data):
+    def store_meta_data(self, callback, **meta_data):
         url = self._elastic_search_urls.type_url(Urls.IMAGE_TYPE)
-        yield gen.Task(self._http_client.fetch, url, method='POST', body=self._json_encoder.encode(image_meta_data))
+        yield gen.Task(self._http_client.fetch, url, method='POST', body=self._json_encoder.encode(meta_data))
         callback()
 
     def _build_search_request(self, **search_arguments):

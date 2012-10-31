@@ -30,6 +30,6 @@ class Images(object):
     def add(self, callback, image={}, meta_data={}):
         meta_data['created_date'] = datetime.now()
         meta_data['url'] = yield gen.Task(self._data_storage.store_image, **image)
-        yield gen.Task(self._metadata_storage.store, **meta_data)
+        yield gen.Task(self._metadata_storage.store_meta_data, **meta_data)
         callback()
 
