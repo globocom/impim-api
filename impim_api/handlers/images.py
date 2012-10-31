@@ -52,9 +52,8 @@ class ImagesResourceHandler(BaseHandler):
             ('event_date', 'datetime'),
         ]
         meta_data = self.extract_arguments(accepted_arguments)
-        # image = self.request.files['image'][0]
-        # yield gen.Task(self._images.add, image, meta_data)
-        yield gen.Task(self._images.add, meta_data=meta_data)
+        image = self.request.files['image'][0]
+        yield gen.Task(self._images.add, image=image, meta_data=meta_data)
 
         self.set_header('Content-Type', 'application/json')
         self.set_header('Access-Control-Allow-Origin', '*')

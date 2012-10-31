@@ -39,7 +39,7 @@ class AsyncHTTPClientMixin(object):
             lines.append('--' + boundary)
             lines.append('Content-Disposition: form-data; name="%s"' % key)
             lines.append('')
-            lines.append(value)
+            lines.append(value.encode('utf-8'))
         for (key, filename, value) in files:
             lines.append('--' + boundary)
             lines.append('Content-Disposition: form-data; name="%s"; filename="%s"' % (key, filename))
