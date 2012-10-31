@@ -22,9 +22,9 @@ class ImagesTestCase(AsyncTestCase):
         
         config = MockConfig()
         self._data_storage = MagicMock()
-        self._metadata_storage = MagicMock()
+        self._meta_data_storage = MagicMock()
         self._thumbor_url_service = MagicMock()
-        self._images = Images(config=config, data_storage=self._data_storage, metadata_storage=self._metadata_storage, thumbor_url_service=self._thumbor_url_service)
+        self._images = Images(config=config, data_storage=self._data_storage, meta_data_storage=self._meta_data_storage, thumbor_url_service=self._thumbor_url_service)
 
     def test_all_should_return_thumb_urls(self):
         self._all_mocks()
@@ -55,14 +55,14 @@ class ImagesTestCase(AsyncTestCase):
             self._data_storage.store_image = MagicMock(side_effect=lambda callback, **image: callback(
                 'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
             ))
-            self._metadata_storage.store_meta_data = MagicMock(side_effect=lambda callback, **image_meta_data: callback())
+            self._meta_data_storage.store_meta_data = MagicMock(side_effect=lambda callback, **image_meta_data: callback())
             
             self._images.add(self._add_should_store_image_callback, meta_data={'title': u'image title'})
             self.wait()
 
     def _add_should_store_image_callback(self):
         self._data_storage.store_image.assert_called_with(callback=ANY)
-        self._metadata_storage.store_meta_data.assert_called_with(
+        self._meta_data_storage.store_meta_data.assert_called_with(
             callback=ANY,
             title=u'image title',
             created_date=datetime(2012, 10, 25, 18, 55, 0),
@@ -72,7 +72,7 @@ class ImagesTestCase(AsyncTestCase):
 
 
     def _all_mocks(self):
-        self._metadata_storage.search = MagicMock(side_effect=lambda callback, **query_arguments: callback({
+        self._meta_data_storage.search = MagicMock(side_effect=lambda callback, **query_arguments: callback({
             'items': [{'url': 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'}]
         }))
         self._thumbor_url_service.fit_in_urls = MagicMock(return_value={'200x100': 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'})
