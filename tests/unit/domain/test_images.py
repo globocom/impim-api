@@ -21,9 +21,9 @@ class ImagesTestCase(AsyncTestCase):
         super(ImagesTestCase, self).setUp()
         
         config = MockConfig()
-        self._data_storage = TempFileStorage()
-        self._metadata_storage = ElasticSearch(config=config)
-        self._thumbor_url_service = ThumborUrlService(config=config)
+        self._data_storage = MagicMock()
+        self._metadata_storage = MagicMock()
+        self._thumbor_url_service = MagicMock()
         self._images = Images(config=config, data_storage=self._data_storage, metadata_storage=self._metadata_storage, thumbor_url_service=self._thumbor_url_service)
 
     def test_all_should_return_thumb_urls(self):
