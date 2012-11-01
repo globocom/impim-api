@@ -9,6 +9,8 @@ from tapioca import RequestSchema, validate
 
 from impim_api.domain.images import Images
 from impim_api.handlers import BaseHandler
+from impim_api.infrastructure.json_encoder import JsonDatetimeSerializer, \
+        JsonpDatetimeSerializer
 
 
 class SearchSchema(RequestSchema):
@@ -24,7 +26,16 @@ class SearchSchema(RequestSchema):
     }
 
 
+class ImageCreationSchema(RequestSchema):
+    querystring = {
+        'title': unicode,
+        'credits': unicode,
+        'event_date': Use(dateutil.parser.parse),
+    }
+
+
 class ImagesResourceHandler(BaseHandler):
+    encoders = (JsonDatetimeSerializer, JsonpDatetimeSerializer,)
 
     def __init__(self, *args, **kwargs):
         super(ImagesResourceHandler, self).__init__(*args, **kwargs)
@@ -43,19 +54,9 @@ class ImagesResourceHandler(BaseHandler):
         images_dict = yield gen.Task(self._images.all, **values)
         callback(images_dict)
 
-    @web.asynchronous
     @gen.engine
-    def post(self):
-        accepted_arguments = [
-            ('title', unicode),
-            ('credits', unicode),
-            ('event_date', 'datetime'),
-        ]
-        meta_data = self.extract_arguments(accepted_arguments)
+    @validate(ImageCreationSchema)
+    def create_model(self, callback):
         image = self.request.files['image'][0]
-        yield gen.Task(self._images.add, image=image, meta_data=meta_data)
-
-        self.set_header('Content-Type', 'application/json')
-        self.set_header('Access-Control-Allow-Origin', '*')
-        self.write('{}')
-        self.finish()
+        yield gen.Task(self._images.add, image=image, meta_data=self.values['querystring'])
+        callback({'id': 1})

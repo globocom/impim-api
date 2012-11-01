@@ -9,7 +9,7 @@ from tornado.httpclient import HTTPRequest
 from impim_api.domain.storage.elastic_search import Parser
 from impim_api.domain.storage.elastic_search import SearchRequestBody
 from impim_api.domain.storage.elastic_search import Urls
-from impim_api.infrastructure import JsonEncoder
+from impim_api.infrastructure import JsonDatetimeSerializer
 
 
 class ElasticSearch(object):
@@ -18,7 +18,7 @@ class ElasticSearch(object):
         self._http_client = http_client
         self._elastic_search_urls = Urls(config=config)
         self._elastic_search_parser = Parser()
-        self._json_encoder = JsonEncoder()
+        self._json_encoder = JsonDatetimeSerializer(camel_case_transform=False)
 
     @gen.engine
     def search(self, callback, **search_arguments):

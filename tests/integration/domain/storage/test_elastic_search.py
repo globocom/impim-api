@@ -57,10 +57,10 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
     def assert_search_query_callback(self, response):
         assert response['total'] == 1
         assert response['items'][0]['title'] == u'One'
-    
+
         self.stop()
-    
-    
+
+
     def test_search_created_date_filter(self):
         self._elastic_search.store_meta_data(self._noop_callback, title=u'First', created_date=datetime(2012, 10, 4, 13, 0, 3))
         self.wait()
@@ -98,17 +98,17 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         assert response['total'] == 2
         assert response['items'][0]['title'] == u'Second'
         assert response['items'][1]['title'] == u'Third'
-    
+
         self.stop()
-    
+
     def assert_search_created_date_from_filter_callback(self, response):
         assert response['total'] == 3
         assert response['items'][0]['title'] == u'First'
         assert response['items'][1]['title'] == u'Second'
         assert response['items'][2]['title'] == u'Third'
-    
+
         self.stop()
-    
+
     def assert_search_created_date_to_filter_callback(self, response):
         assert response['total'] == 3
         assert response['items'][0]['title'] == u'Second'
@@ -155,26 +155,26 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         assert response['total'] == 2
         assert response['items'][0]['title'] == u'Second'
         assert response['items'][1]['title'] == u'Third'
-    
+
         self.stop()
-    
+
     def assert_search_event_date_from_filter_callback(self, response):
         assert response['total'] == 3
         assert response['items'][0]['title'] == u'First'
         assert response['items'][1]['title'] == u'Second'
         assert response['items'][2]['title'] == u'Third'
-    
+
         self.stop()
-    
+
     def assert_search_event_date_to_filter_callback(self, response):
         assert response['total'] == 3
         assert response['items'][0]['title'] == u'Second'
         assert response['items'][1]['title'] == u'Third'
         assert response['items'][2]['title'] == u'Fourth'
-    
+
         self.stop()
-    
-    
+
+
     def test_search_order_by_relevance_with_query(self):
         self._elastic_search.store_meta_data(self._noop_callback, title=u'Exact title')
         self.wait()
@@ -189,10 +189,10 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         assert response['total'] == 2
         assert response['items'][0]['title'] == u'Exact title'
         assert response['items'][1]['title'] == u'Title'
-    
+
         self.stop()
-    
-    
+
+
     def test_search_order_by_newest_first_with_no_query(self):
         self._elastic_search.store_meta_data(self._noop_callback, title=u'Exact title', created_date=datetime(2012, 10, 4, 13, 0, 0))
         self.wait()
@@ -207,10 +207,10 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         assert response['total'] == 2
         assert response['items'][0]['title'] == u'Title'
         assert response['items'][1]['title'] == u'Exact title'
-    
+
         self.stop()
-    
-    
+
+
     def test_search_pagination(self):
         self._elastic_search.store_meta_data(self._noop_callback, title=u'Title')
         self.wait()

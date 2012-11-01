@@ -28,7 +28,7 @@ class ImagesApplication(tornado.web.Application):
             ])
 
         rest_api = TornadoRESTful(version='alpha', base_url=base_url,
-                discovery=True)
+                discovery=True, cross_origin_enabled=True)
         rest_api.add_resource('alpha/images', ImagesResourceHandler)
 
         handlers = [

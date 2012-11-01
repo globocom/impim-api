@@ -5,12 +5,12 @@
 from datetime import datetime
 from unittest import TestCase
 
-from impim_api.infrastructure import JsonEncoder
+from impim_api.infrastructure import JsonDatetimeSerializer
 
 
 class JsonEncoderTestCase(TestCase):
-    
-    def test_encode(self):
-        encoder = JsonEncoder()
-        data = {'date': datetime(2012, 10, 24)}
-        assert encoder.encode(data) == '{"date": "2012-10-24T00:00:00"}'
+
+    def test_parse_to_string(self):
+        encoder = JsonDatetimeSerializer()
+        data = {'items': [{'date': datetime(2012, 10, 24)}]}
+        assert encoder.datetime_to_string(data) == {'items': [{'date': "2012-10-24T00:00:00"}]}
