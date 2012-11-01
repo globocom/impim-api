@@ -7,18 +7,18 @@ from os.path import dirname, join
 
 from tornado.testing import AsyncTestCase
 
-from impim_api.domain.storage import TempFileStorage
+from impim_api.domain.storage import FileStorage
 
 from tests.support import FileStorageForTest
 from tests.support import MockConfig
 
 
-class TempFileStorageTestCase(AsyncTestCase):
+class FileStorageTestCase(AsyncTestCase):
 
     def setUp(self):
-        super(TempFileStorageTestCase, self).setUp()
+        super(FileStorageTestCase, self).setUp()
 
-        self._file_storage = TempFileStorage(MockConfig())
+        self._file_storage = FileStorage(MockConfig())
         with open(join(dirname(__file__), '..', '..', '..', 'fixtures/image.jpeg'), 'r') as image_file:
             self._image_body = image_file.read()
 

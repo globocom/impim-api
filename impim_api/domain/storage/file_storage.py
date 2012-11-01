@@ -6,7 +6,7 @@ import os
 import uuid
 
 
-class TempFileStorage(object):
+class FileStorage(object):
     
     def __init__(self, config):
         self._root_path = config.FILE_STORAGE_ROOT_PATH

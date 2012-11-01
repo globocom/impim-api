@@ -8,9 +8,6 @@ from mock import ANY, MagicMock, patch
 from tornado.testing import AsyncTestCase
 
 from impim_api.domain import Images
-from impim_api.domain import ThumborUrlService
-from impim_api.domain.storage import ElasticSearch
-from impim_api.domain.storage import TempFileStorage
 
 from tests.support import MockConfig
 
