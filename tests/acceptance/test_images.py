@@ -11,11 +11,10 @@ import dateutil.parser
 
 from impim_api.domain.storage.elastic_search import Urls
 
-from tests.support import ElasticSearchMixin
 from tests.support import ImpimAPIAsyncHTTPTestCase
 
 
-class ImagesTestCase(ImpimAPIAsyncHTTPTestCase, ElasticSearchMixin):
+class ImagesTestCase(ImpimAPIAsyncHTTPTestCase):
 
     def setUp(self):
         super(ImagesTestCase, self).setUp()

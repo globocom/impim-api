@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-from json import dumps
-
-
 class ElasticSearchMixin(object):
 
     def refresh_elastic_search(self):
