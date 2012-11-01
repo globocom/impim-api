@@ -12,6 +12,7 @@ from tapioca import TornadoRESTful
 from impim_api.conf import Config
 from impim_api.handlers import HealthCheckHandler, JsonpEnabledThumborUrlHandler
 from impim_api.handlers import ImagesResourceHandler
+from impim_api.handlers import ImageHandler
 
 
 class ImagesApplication(tornado.web.Application):
@@ -34,6 +35,7 @@ class ImagesApplication(tornado.web.Application):
         handlers = [
             (r'/healthcheck(?:/|\.html)?', HealthCheckHandler),
             (r'/thumbor_urls/?', JsonpEnabledThumborUrlHandler),
+            (r'/alpha/images/(?P<key>.+)/.+', ImageHandler),
         ] + rest_api.get_url_mapping()
 
         super(ImagesApplication, self).__init__(handlers,

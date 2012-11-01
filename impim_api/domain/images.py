@@ -32,3 +32,6 @@ class Images(object):
         meta_data['url'] = yield gen.Task(self._images_storage.store_image, **image)
         yield gen.Task(self._meta_data_storage.store_meta_data, **meta_data)
         callback()
+
+    def get(self, callback, key):
+        callback(self._images_storage.fetch_image_by_key(key))

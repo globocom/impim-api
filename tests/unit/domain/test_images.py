@@ -3,6 +3,7 @@
 
 
 from datetime import datetime
+from os.path import dirname, join
 
 from mock import ANY, MagicMock, patch
 from tornado.testing import AsyncTestCase
@@ -46,10 +47,16 @@ class ImagesTestCase(AsyncTestCase):
         assert response['pageSize'] == 10
         self.stop()
 
+    def _all_mocks(self):
+        self._meta_data_storage.search = MagicMock(side_effect=lambda callback, **query_arguments: callback({
+            'items': [{'url': 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'}]
+        }))
+        self._thumbor_url_service.fit_in_urls = MagicMock(return_value={'200x100': 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'})
+
     def test_add_should_store_image(self):
         with patch('impim_api.domain.images.datetime') as mock_datetime:
             mock_datetime.now.return_value = datetime(2012, 10, 25, 18, 55, 0)
-            self._images_storage.store_image = MagicMock(side_effect=lambda callback, **image: callback(
+            self._images_storage.store_image = MagicMock(side_effect=lambda callback, image={}, meta_data={}: callback(
                 'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
             ))
             self._meta_data_storage.store_meta_data = MagicMock(side_effect=lambda callback, **image_meta_data: callback())
@@ -67,9 +74,14 @@ class ImagesTestCase(AsyncTestCase):
         )
         self.stop()
 
+    def test_get(self):
+        with open(join(dirname(__file__), '..', '..', 'fixtures/image.jpeg'), 'r') as image_file:
+            image_body = image_file.read()
+        self._images_storage.fetch_image_by_key = MagicMock(return_value=image_body)
 
-    def _all_mocks(self):
-        self._meta_data_storage.search = MagicMock(side_effect=lambda callback, **query_arguments: callback({
-            'items': [{'url': 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'}]
-        }))
-        self._thumbor_url_service.fit_in_urls = MagicMock(return_value={'200x100': 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'})
+        self._images.get(self._get_callback, key='key') == image_body
+
+    def _get_callback(self, actual_image_body):
+        with open(join(dirname(__file__), '..', '..', 'fixtures/image.jpeg'), 'r') as image_file:
+            image_body = image_file.read()
+        assert actual_image_body == image_body

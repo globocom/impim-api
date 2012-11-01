@@ -24,12 +24,18 @@ class FileStorageTestCase(AsyncTestCase):
 
         FileStorageForTest(self._file_storage).cleanup()
 
+    def test_fetch_image_by_key(self):
+        self._file_storage.store_image(self._fetch_image_by_key_callback, body=self._image_body, filename='image.jpeg')
+        self.wait()
+        
+    def _fetch_image_by_key_callback(self, url):
+        assert self._file_storage.fetch_image_by_key(url.split('/')[-2]) == self._image_body
+        self.stop()
+
     def test_store_image(self):
         self._file_storage.store_image(self._store_image_callback, body=self._image_body, filename='image.jpeg')
         self.wait()
-        
+
     def _store_image_callback(self, url):
-        with open(url, 'r') as actual_image_file:
-            actual_image_body = actual_image_file.read()
-        assert actual_image_body == self._image_body
+        self.assertRegexpMatches(url, r'http://localhost:8080/alpha/images/.+/image\.jpeg')
         self.stop()
