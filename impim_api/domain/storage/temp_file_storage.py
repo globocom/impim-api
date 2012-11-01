@@ -8,7 +8,8 @@ import uuid
 
 class TempFileStorage(object):
     
-    _root_path = '/tmp/impim-api'
+    def __init__(self, config):
+        self._root_path = config.FILE_STORAGE_ROOT_PATH
     
     def store_image(self, callback, **image):
         try:

@@ -14,7 +14,7 @@ from impim_api.domain.storage import TempFileStorage
 class Images(object):
 
     def __init__(self, config, images_storage=None, meta_data_storage=None, thumbor_url_service=None):
-        self._images_storage = images_storage or TempFileStorage()
+        self._images_storage = images_storage or TempFileStorage(config=config)
         self._meta_data_storage = meta_data_storage or ElasticSearch(config=config)
         self._thumbor_url_service = thumbor_url_service or ThumborUrlService(config=config)
 

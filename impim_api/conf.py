@@ -11,6 +11,8 @@ Config.define('JSONP_CALLBACK', 'impimCallback', 'Default callback for JSONP res
 Config.define('ELASTIC_SEARCH_BASE_URL', 'http://localhost:9200', 'ElasticSearch base url.', 'ElasticSearch')
 Config.define('ELASTIC_SEARCH_INDEX', 'impim', 'ElasticSearch index.', 'ElasticSearch')
 
+Config.define('FILE_STORAGE_ROOT_PATH', '/tmp/impim-api', 'File Storage root path.', 'File Storage')
+
 Config.define('THUMBOR_SECURITY_KEY', 'MY_SECURE_KEY', 'Thumbor security key.', 'Thumbor configuration')
 Config.define('THUMBOR_SERVER_URL', 'http://localhost:8888/', 'Thumbor server url.', 'Thumbor configuration')
 
