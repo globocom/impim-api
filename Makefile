@@ -28,7 +28,7 @@ upgrade_requirements:
 setup: requirements
 	@sh setup.sh
 
-ci: requirements test
+ci: upgrade_requirements test
 
 update_deps:
 	@pip freeze --local | grep -v coverage | grep -v honcho | grep -v mock | grep -v nose | grep -v six > requirements.txt
