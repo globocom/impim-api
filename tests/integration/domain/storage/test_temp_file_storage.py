@@ -25,7 +25,6 @@ class TempFileStorageTestCase(AsyncTestCase):
         self.wait()
         
     def _store_image_callback(self, url):
-        print url
         with open(url, 'r') as actual_image_file:
             actual_image_body = actual_image_file.read()
         assert actual_image_body == self._image_body
