@@ -54,23 +54,28 @@ class ImagesTestCase(AsyncTestCase):
         self._thumbor_url_service.fit_in_urls = MagicMock(return_value={'200x100': 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'})
 
     def test_add_should_store_image(self):
+        with open(join(dirname(__file__), '..', '..', 'fixtures/image.jpeg'), 'r') as image_file:
+            image_body = image_file.read()
+
         with patch('impim_api.domain.images.datetime') as mock_datetime:
             mock_datetime.now.return_value = datetime(2012, 10, 25, 18, 55, 0)
-            self._images_storage.store_image = MagicMock(side_effect=lambda callback, request, image={}, meta_data={}: callback(
+            self._images_storage.store_image = MagicMock(side_effect=lambda callback, request, **kwargs: callback(
                 'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
             ))
             self._meta_data_storage.store_meta_data = MagicMock(side_effect=lambda callback, **image_meta_data: callback())
             
-            self._images.add(self._add_should_store_image_callback, request=None, meta_data={'title': u'image title'})
+            self._images.add(self._add_should_store_image_callback, request=None, image={'body': image_body}, meta_data={'title': u'image title'})
             self.wait()
 
     def _add_should_store_image_callback(self):
-        self._images_storage.store_image.assert_called_with(callback=ANY, request=None)
+        self._images_storage.store_image.assert_called_with(callback=ANY, request=None, body=ANY)
         self._meta_data_storage.store_meta_data.assert_called_with(
             callback=ANY,
             title=u'image title',
             created_date=datetime(2012, 10, 25, 18, 55, 0),
             url='http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg',
+            width=134,
+            height=84
         )
         self.stop()
 
