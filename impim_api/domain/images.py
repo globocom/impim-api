@@ -27,9 +27,9 @@ class Images(object):
         callback(images_dict)
 
     @gen.engine
-    def add(self, callback, image={}, meta_data={}):
+    def add(self, callback, request, image={}, meta_data={}):
         meta_data['created_date'] = datetime.now()
-        meta_data['url'] = yield gen.Task(self._images_storage.store_image, **image)
+        meta_data['url'] = yield gen.Task(self._images_storage.store_image, request=request, **image)
         yield gen.Task(self._meta_data_storage.store_meta_data, **meta_data)
         callback()
 

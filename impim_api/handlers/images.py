@@ -58,6 +58,8 @@ class ImagesResourceHandler(BaseHandler):
     @gen.engine
     @validate(ImageCreationSchema)
     def create_model(self, callback):
+        self.set_header('Access-Control-Allow-Origin', '*')
+        
         image = self.request.files['image'][0]
-        yield gen.Task(self._images.add, image=image, meta_data=self.values['querystring'])
+        yield gen.Task(self._images.add, request=self.request, image=image, meta_data=self.values['querystring'])
         callback({'id': 1})

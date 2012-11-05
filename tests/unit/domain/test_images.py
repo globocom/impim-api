@@ -56,16 +56,16 @@ class ImagesTestCase(AsyncTestCase):
     def test_add_should_store_image(self):
         with patch('impim_api.domain.images.datetime') as mock_datetime:
             mock_datetime.now.return_value = datetime(2012, 10, 25, 18, 55, 0)
-            self._images_storage.store_image = MagicMock(side_effect=lambda callback, image={}, meta_data={}: callback(
+            self._images_storage.store_image = MagicMock(side_effect=lambda callback, request, image={}, meta_data={}: callback(
                 'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
             ))
             self._meta_data_storage.store_meta_data = MagicMock(side_effect=lambda callback, **image_meta_data: callback())
             
-            self._images.add(self._add_should_store_image_callback, meta_data={'title': u'image title'})
+            self._images.add(self._add_should_store_image_callback, request=None, meta_data={'title': u'image title'})
             self.wait()
 
     def _add_should_store_image_callback(self):
-        self._images_storage.store_image.assert_called_with(callback=ANY)
+        self._images_storage.store_image.assert_called_with(callback=ANY, request=None)
         self._meta_data_storage.store_meta_data.assert_called_with(
             callback=ANY,
             title=u'image title',
