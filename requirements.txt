@@ -1,6 +1,6 @@
 derpconf>=0.3.0
 libthumbor>=1.0.0
-Pillows>=1.7.8
+Pillow>=1.7.8
 python-dateutil>=2.1
 tapioca>=0.1.22
 tornado>=2.4
