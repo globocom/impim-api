@@ -25,10 +25,10 @@ class FileStorage(object):
             image_file.write(image['body'])
         callback(request.protocol + '://' + request.host + '/' + API_VERSION + '/images/' + key + '/' + image['filename'])
 
-    def fetch_image_by_key(self, key):
+    def fetch_image_by_key(self, callback, key):
         with open(self._full_path(key), 'r') as image_file:
             image_file_body = image_file.read()
-        return(image_file_body)
+        callback(image_file_body)
 
     def _full_path(self, key):
         return '%s/%s' % (self._root_path, key)

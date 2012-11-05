@@ -33,7 +33,12 @@ class FileStorageTestCase(AsyncTestCase):
         self.wait()
         
     def _fetch_image_by_key_callback(self, url):
-        assert self._file_storage.fetch_image_by_key(url.split('/')[-2]) == self._image_body
+        self._file_storage.fetch_image_by_key(self._fetch_image_by_key_callback_callback, url.split('/')[-2])
+        self.wait()
+        self.stop()
+
+    def _fetch_image_by_key_callback_callback(self, actual_image_body):
+        assert actual_image_body == self._image_body
         self.stop()
 
     def test_store_image(self):
