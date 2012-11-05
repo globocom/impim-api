@@ -12,7 +12,7 @@ from impim_api.domain.storage.elastic_search import Urls
 
 from tests.support import AsyncHTTPClientMixin
 from tests.support import ElasticSearchMixin
-from tests.support.storage import file_storage_for_test
+from tests.support.storage import file_system_for_test
 
 
 class ImpimAPIAsyncHTTPTestCase(AsyncHTTPTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
@@ -21,7 +21,7 @@ class ImpimAPIAsyncHTTPTestCase(AsyncHTTPTestCase, AsyncHTTPClientMixin, Elastic
         super(ImpimAPIAsyncHTTPTestCase, self).setUp()
         self._elastic_search_urls = Urls(self._app.config)
         self.cleanup_elastic_search()
-        file_storage_for_test.cleanup()
+        file_system_for_test.cleanup()
     
     def get_app(self):
         return ImagesApplication(conf_file=abspath(join(dirname(__file__), '..', 'impim_api.test.conf')), base_url='')

@@ -3,4 +3,4 @@
 
 
 from .elastic_search import ElasticSearch
-from .file_storage import FileStorage
+from .file_system import FileSystem

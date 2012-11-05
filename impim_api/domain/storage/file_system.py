@@ -8,10 +8,10 @@ import uuid
 from impim_api import API_VERSION
 
 
-class FileStorage(object):
+class FileSystem(object):
 
     def __init__(self, config):
-        self._root_path = config.FILE_STORAGE_ROOT_PATH
+        self._root_path = config.FILE_SYSTEM_ROOT_PATH
 
     def store_image(self, callback, request, **image):
         try:
