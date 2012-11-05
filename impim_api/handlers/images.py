@@ -5,8 +5,8 @@
 import dateutil.parser
 
 from tornado import gen, web
-from schema import Use, Optional
-from tapioca import RequestSchema, validate
+from schema import Use
+from tapioca import RequestSchema, validate, optional
 
 from impim_api.domain.images import Images
 from impim_api.handlers import BaseHandler
@@ -16,14 +16,14 @@ from impim_api.infrastructure.json_encoder import JsonDatetimeSerializer, \
 
 class SearchSchema(RequestSchema):
     querystring = {
-        Optional('q'): unicode,
-        Optional('created_date_from'): Use(dateutil.parser.parse),
-        Optional('created_date_to'): Use(dateutil.parser.parse),
-        Optional('event_date_from'): Use(dateutil.parser.parse),
-        Optional('event_date_to'): Use(dateutil.parser.parse),
-        Optional('thumb_sizes'): Use(lambda s: s.split(',')),
-        Optional('page'): Use(int),
-        Optional('page_size'): Use(int),
+        optional('q'): unicode,
+        optional('created_date_from'): Use(dateutil.parser.parse),
+        optional('created_date_to'): Use(dateutil.parser.parse),
+        optional('event_date_from'): Use(dateutil.parser.parse),
+        optional('event_date_to'): Use(dateutil.parser.parse),
+        optional('thumb_sizes', []): Use(lambda s: s.split(',')),
+        optional('page', 1): Use(int),
+        optional('page_size', 10): Use(int),
     }
 
 
@@ -45,15 +45,8 @@ class ImagesResourceHandler(BaseHandler):
     @gen.engine
     @validate(SearchSchema)
     def get_collection(self, callback):
-        values = self.values['querystring']
-        if not 'page' in values:
-            values['page'] = 1
-        if not 'page_size' in values:
-            values['page_size'] = 10
-        if not 'thumb_sizes' in values:
-            values['thumb_sizes'] = []
-        images_dict = yield gen.Task(self._images.all, **values)
-        callback(images_dict)
+        result = yield gen.Task(self._images.all, **self.values['querystring'])
+        callback(result)
 
     @gen.engine
     @validate(ImageCreationSchema)
