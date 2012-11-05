@@ -10,8 +10,8 @@ from tornado.testing import AsyncTestCase
 
 from impim_api.domain.storage import FileStorage
 
-from tests.support import FileStorageForTest
 from tests.support import MockConfig
+from tests.support.storage import file_storage_for_test
 
 
 class FileStorageTestCase(AsyncTestCase):
@@ -26,7 +26,7 @@ class FileStorageTestCase(AsyncTestCase):
         self._request.protocol = 'http'
         self._request.host = 'localhost:8080'
 
-        FileStorageForTest(self._file_storage).cleanup()
+        file_storage_for_test.cleanup()
 
     def test_fetch_image_by_key(self):
         self._file_storage.store_image(self._fetch_image_by_key_callback, self._request, body=self._image_body, filename='image.jpeg')
