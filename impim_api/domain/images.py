@@ -38,7 +38,12 @@ class Images(object):
 
         yield gen.Task(self._meta_data_storage.store_meta_data, **meta_data)
 
-        callback()
+        result_meta_data = {
+            'url': meta_data['url'],
+            'width': meta_data['width'],
+            'height': meta_data['height'],
+        }
+        callback(result_meta_data)
 
     @gen.engine
     def get(self, callback, key):

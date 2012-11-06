@@ -53,7 +53,7 @@ class ImagesTestCase(AsyncTestCase):
         }))
         self._thumbor_url_service.fit_in_urls = MagicMock(return_value={'200x100': 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'})
 
-    def test_add_should_store_image(self):
+    def test_add(self):
         with open(join(dirname(__file__), '..', '..', 'fixtures/image.jpeg'), 'r') as image_file:
             image_body = image_file.read()
 
@@ -64,10 +64,10 @@ class ImagesTestCase(AsyncTestCase):
             ))
             self._meta_data_storage.store_meta_data = MagicMock(side_effect=lambda callback, **image_meta_data: callback())
             
-            self._images.add(self._add_should_store_image_callback, request=None, image={'body': image_body}, meta_data={'title': u'image title'})
+            self._images.add(self._add_callback, request=None, image={'body': image_body}, meta_data={'title': u'image title'})
             self.wait()
 
-    def _add_should_store_image_callback(self):
+    def _add_callback(self, result_meta_data):
         self._images_storage.store_image.assert_called_with(callback=ANY, request=None, body=ANY)
         self._meta_data_storage.store_meta_data.assert_called_with(
             callback=ANY,
@@ -77,6 +77,11 @@ class ImagesTestCase(AsyncTestCase):
             width=134,
             height=84
         )
+
+        assert result_meta_data['url'] == 'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+        assert result_meta_data['width'] == 134
+        assert result_meta_data['height'] == 84
+        
         self.stop()
 
     def test_get(self):
