@@ -38,6 +38,9 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['items'][0]['credits'] == u'Créditos'
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
+        assert body['items'][0]['width'] == 134
+        assert body['items'][0]['height'] == 84
+        assert body['items'][0]['thumbs'] == {}
         assert body['total'] == 1
         assert body['pageSize'] == 10
 
@@ -67,6 +70,8 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['items'][0]['credits'] == u'Créditos'
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
+        assert body['items'][0]['width'] == 134
+        assert body['items'][0]['height'] == 84
         self.assertRegexpMatches(body['items'][0]['thumbs']['200x100'], r'http://localhost:8888/.*/fit-in/200x100/.*')
         assert body['total'] == 1
         assert body['pageSize'] == 10
@@ -87,6 +92,8 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['items'][0]['credits'] == u'Créditos'
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
+        assert body['items'][0]['width'] == 134
+        assert body['items'][0]['height'] == 84
         assert body['items'][0]['thumbs'] == {}
         assert body['total'] == 1
         assert body['pageSize'] == 10
