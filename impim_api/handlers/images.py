@@ -10,7 +10,7 @@ from tapioca import RequestSchema, validate, optional
 
 from impim_api.domain.images import Images
 from impim_api.handlers import BaseHandler
-from impim_api.infrastructure.json_encoder import JsonDatetimeSerializer, \
+from impim_api.infrastructure.encoder import JsonDatetimeSerializer, \
         JsonpDatetimeSerializer
 
 

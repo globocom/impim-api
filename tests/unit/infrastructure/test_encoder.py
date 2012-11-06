@@ -5,7 +5,7 @@
 from datetime import datetime
 from unittest import TestCase
 
-from impim_api.infrastructure import JsonDatetimeSerializer
+from impim_api.infrastructure.encoder import JsonDatetimeSerializer
 
 
 class JsonEncoderTestCase(TestCase):

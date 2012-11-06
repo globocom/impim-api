@@ -9,7 +9,7 @@ from tornado.httpclient import HTTPRequest
 from impim_api.domain.storage.elastic_search import Parser
 from impim_api.domain.storage.elastic_search import SearchRequestBody
 from impim_api.domain.storage.elastic_search import Urls
-from impim_api.infrastructure import JsonDatetimeSerializer
+from impim_api.infrastructure.encoder import JsonDatetimeSerializer
 
 
 class ElasticSearch(object):
