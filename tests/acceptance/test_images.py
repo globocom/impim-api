@@ -103,13 +103,6 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
 
         assert actual_image_body == self._image_body
 
-    def test_get_images_with_callback(self):
-        response = self._fetch(
-            self.get_url('/alpha/images?callback=my_images'), 'GET', headers={
-                'Accept': 'text/javascript'
-            })
-        self.assertTrue(response.body.startswith('my_images('))
-
 
 class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
     
