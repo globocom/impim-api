@@ -118,7 +118,6 @@ class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert response.code == 201
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
-
         self.assertRegexpMatches(body['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')
         assert body['width'] == 134
         assert body['height'] == 84
