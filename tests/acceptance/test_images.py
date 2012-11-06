@@ -14,20 +14,20 @@ from impim_api.domain.storage.elastic_search import Urls
 from tests.support import ImpimAPIAsyncHTTPTestCase
 
 
-class ImagesTestCase(ImpimAPIAsyncHTTPTestCase):
+class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
 
     def setUp(self):
-        super(ImagesTestCase, self).setUp()
+        super(GetImagesTestCase, self).setUp()
         with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
             self._image_body = image_file.read()
-            self.multipart_post(
-                self.get_url('/alpha/images'),
-                fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
-                files=[('image', 'image.jpeg', self._image_body)]
-            )
+        self.multipart_post(
+            self.get_url('/alpha/images'),
+            fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
+            files=[('image', 'image.jpeg', self._image_body)]
+        )
         self.refresh_elastic_search()
 
-    def test_images(self):
+    def test_get_images(self):
         response = self.get('/alpha/images')
 
         assert response.code == 200, 'response code should be 200 but was %s' % response.code
@@ -46,7 +46,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase):
 
         assert actual_image_body == self._image_body
 
-    def test_images_with_query_string(self):
+    def test_get_images_with_query_string(self):
         query_string = {
             'q': 'Title',
             'created_date_from': (datetime.now() - timedelta(days=1)).isoformat(),
@@ -76,7 +76,7 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase):
 
         assert actual_image_body == self._image_body
 
-    def test_images_with_empty_query_string(self):
+    def test_get_images_with_empty_query_string(self):
         response = self.get('/alpha/images?q=&created_date_from=&created_date_to=&event_date_from=&event_date_to=&page=&page_size=')
 
         assert response.code == 200
@@ -96,9 +96,26 @@ class ImagesTestCase(ImpimAPIAsyncHTTPTestCase):
 
         assert actual_image_body == self._image_body
 
-    def test_images_with_callback(self):
+    def test_get_images_with_callback(self):
         response = self._fetch(
             self.get_url('/alpha/images?callback=my_images'), 'GET', headers={
                 'Accept': 'text/javascript'
             })
         self.assertTrue(response.body.startswith('my_images('))
+
+
+class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
+    
+    def test_post_images(self):
+        with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
+            self._image_body = image_file.read()
+        response = self.multipart_post(
+            self.get_url('/alpha/images'),
+            fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
+            files=[('image', 'image.jpeg', self._image_body)]
+        )
+        
+        assert response.code == 201
+        assert 'application/json' in response.headers['Content-Type']
+        body = loads(response.body)
+        assert body == {}

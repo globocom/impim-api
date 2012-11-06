@@ -53,4 +53,9 @@ class ImagesResourceHandler(BaseHandler):
     def create_model(self, callback):
         image = self.request.files['image'][0]
         yield gen.Task(self._images.add, request=self.request, image=image, meta_data=self.values['querystring'])
+        
+        from json import dumps
+        self.set_header('Content-Type', 'application/json')
+        self.write(dumps({}))
+        
         callback({'id': 1})
