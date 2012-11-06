@@ -6,10 +6,8 @@ from json import dumps
 
 from tapioca import ResourceHandler
 
-from impim_api.handlers import ExtractArgumentsMixin
 
-
-class BaseHandler(ResourceHandler, ExtractArgumentsMixin):
+class BaseHandler(ResourceHandler):
     
     def __init__(self, *args, **kwargs):
         super(ResourceHandler, self).__init__(*args, **kwargs)

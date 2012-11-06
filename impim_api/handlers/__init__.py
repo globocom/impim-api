@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-from .extract_arguments_mixin import ExtractArgumentsMixin
 from .base import BaseHandler
 from .healthcheck import HealthCheckHandler
 from .image import ImageHandler
