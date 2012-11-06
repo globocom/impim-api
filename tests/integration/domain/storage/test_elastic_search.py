@@ -12,8 +12,8 @@ from impim_api.domain.storage import ElasticSearch
 from impim_api.domain.storage.elastic_search import Urls
 
 from tests.support import AsyncHTTPClientMixin
-from tests.support import ElasticSearchMixin
 from tests.support import MockConfig
+from tests.support.storage import ElasticSearchMixin
 
 
 class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):

@@ -11,7 +11,7 @@ from impim_api.app import ImagesApplication
 from impim_api.domain.storage.elastic_search import Urls
 
 from tests.support import AsyncHTTPClientMixin
-from tests.support import ElasticSearchMixin
+from tests.support.storage import ElasticSearchMixin
 from tests.support.storage import file_system_for_test
 
 
