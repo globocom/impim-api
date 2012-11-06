@@ -78,10 +78,12 @@ class ImagesTestCase(AsyncTestCase):
             height=84
         )
 
+        assert result_meta_data['title'] == 'image title'
+        assert isinstance(result_meta_data['created_date'], datetime)
         assert result_meta_data['url'] == 'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
         assert result_meta_data['width'] == 134
         assert result_meta_data['height'] == 84
-        
+
         self.stop()
 
     def test_get(self):

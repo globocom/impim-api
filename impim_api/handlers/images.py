@@ -53,9 +53,11 @@ class ImagesResourceHandler(BaseHandler):
     def create_model(self, callback):
         image = self.request.files['image'][0]
         result = yield gen.Task(self._images.add, request=self.request, image=image, meta_data=self.values['querystring'])
-        
-        from json import dumps
+
+        # TODO: This will be implemented by Tapioca
+        encoder = JsonDatetimeSerializer()
         self.set_header('Content-Type', 'application/json')
-        self.write(dumps(result))
+        self.write(encoder.encode(result))
+        # ENDTODO: This will be implemented by Tapioca
         
         callback({'id': 1})

@@ -125,7 +125,10 @@ class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert response.code == 201
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
+        assert body['title'] == u'Title'
+        assert body['credits'] == u'Créditos'
+        assert body['eventDate'] == u'2012-10-08T17:02:00'
+        assert isinstance(dateutil.parser.parse(body['createdDate']), datetime)
         self.assertRegexpMatches(body['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')
         assert body['width'] == 134
         assert body['height'] == 84
-
