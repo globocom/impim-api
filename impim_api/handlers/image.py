@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
+import magic
 from tornado import gen, web
 from tornado.web import RequestHandler
 
@@ -18,6 +19,6 @@ class ImageHandler(RequestHandler):
     @gen.engine
     def get(self, key):
         image = yield gen.Task(self._images.get, key=key)
-        self.set_header('Content-Type', 'image/jpeg')
+        self.set_header('Content-Type', magic.from_buffer(image, mime=True))
         self.write(image)
         self.finish()

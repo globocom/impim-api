@@ -45,9 +45,10 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['pageSize'] == 10
 
         path = '/' + ('/').join(body['items'][0]['url'].split('/')[3:])
-        actual_image_body = self.get(path).body
+        actual_image_response = self.get(path)
 
-        assert actual_image_body == self._image_body
+        assert 'image/jpeg' in actual_image_response.headers['Content-Type']
+        assert actual_image_response.body == self._image_body
 
     def test_get_images_with_query_string(self):
         query_string = {
@@ -77,9 +78,10 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['pageSize'] == 10
 
         path = '/' + ('/').join(body['items'][0]['url'].split('/')[3:])
-        actual_image_body = self.get(path).body
+        actual_image_response = self.get(path)
 
-        assert actual_image_body == self._image_body
+        assert 'image/jpeg' in actual_image_response.headers['Content-Type']
+        assert actual_image_response.body == self._image_body
 
     def test_get_images_with_empty_query_string(self):
         response = self.get('/alpha/images?q=&created_date_from=&created_date_to=&event_date_from=&event_date_to=&page=&page_size=')
@@ -99,9 +101,10 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['pageSize'] == 10
 
         path = '/' + ('/').join(body['items'][0]['url'].split('/')[3:])
-        actual_image_body = self.get(path).body
+        actual_image_response = self.get(path)
 
-        assert actual_image_body == self._image_body
+        assert 'image/jpeg' in actual_image_response.headers['Content-Type']
+        assert actual_image_response.body == self._image_body
 
 
 class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):

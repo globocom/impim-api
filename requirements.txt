@@ -2,6 +2,7 @@ Pillow>=1.7.8
 derpconf>=0.3.0
 libthumbor>=1.0.0
 python-dateutil>=2.1
+python-magic>=0.4.3
 tapioca>=0.1.24
 tornado>=2.4
 tornado-thumbor-url>=0.1.1
