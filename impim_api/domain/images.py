@@ -41,6 +41,6 @@ class Images(object):
         callback(meta_data)
 
     @gen.engine
-    def get(self, callback, key):
+    def get_image(self, callback, key):
         image_body = yield gen.Task(self._images_storage.fetch_image_by_key, key=key)
         callback(image_body)

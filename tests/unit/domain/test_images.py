@@ -86,14 +86,14 @@ class ImagesTestCase(AsyncTestCase):
 
         self.stop()
 
-    def test_get(self):
+    def test_get_image(self):
         with open(join(dirname(__file__), '..', '..', 'fixtures/image.jpeg'), 'r') as image_file:
             image_body = image_file.read()
         self._images_storage.fetch_image_by_key = MagicMock(return_value=image_body)
 
-        self._images.get(self._get_callback, key='key') == image_body
+        self._images.get_image(self._get_image_callback, key='key') == image_body
 
-    def _get_callback(self, actual_image_body):
+    def _get_image_callback(self, actual_image_body):
         with open(join(dirname(__file__), '..', '..', 'fixtures/image.jpeg'), 'r') as image_file:
             image_body = image_file.read()
         assert actual_image_body == image_body

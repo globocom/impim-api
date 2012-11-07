@@ -49,6 +49,10 @@ class ImagesResourceHandler(BaseHandler):
         callback(result)
 
     @gen.engine
+    def get_model(self, key, callback):
+        callback(key)
+
+    @gen.engine
     @validate(ImageCreationSchema)
     def create_model(self, callback):
         image = self.request.files['image'][0]
