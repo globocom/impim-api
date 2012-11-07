@@ -19,11 +19,11 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
     def setUp(self):
         super(GetImagesTestCase, self).setUp()
         with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
-            self._image_body = image_file.read()
+            image_body = image_file.read()
         self.multipart_post(
             self.get_url('/alpha/images'),
             fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
-            files=[('image', 'image.jpeg', self._image_body)]
+            files=[('image', 'image.jpeg', image_body)]
         )
         self.refresh_elastic_search()
 
@@ -38,17 +38,12 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['items'][0]['credits'] == u'Créditos'
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
+        self.assertRegexpMatches(body['items'][0]['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')
         assert body['items'][0]['width'] == 134
         assert body['items'][0]['height'] == 84
         assert body['items'][0]['thumbs'] == {}
         assert body['total'] == 1
         assert body['pageSize'] == 10
-
-        path = '/' + ('/').join(body['items'][0]['url'].split('/')[3:])
-        actual_image_response = self.get(path)
-
-        assert 'image/jpeg' in actual_image_response.headers['Content-Type']
-        assert actual_image_response.body == self._image_body
 
     def test_get_images_with_query_string(self):
         query_string = {
@@ -71,17 +66,12 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['items'][0]['credits'] == u'Créditos'
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
+        self.assertRegexpMatches(body['items'][0]['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')
         assert body['items'][0]['width'] == 134
         assert body['items'][0]['height'] == 84
         self.assertRegexpMatches(body['items'][0]['thumbs']['200x100'], r'http://localhost:8888/.*/fit-in/200x100/.*')
         assert body['total'] == 1
         assert body['pageSize'] == 10
-
-        path = '/' + ('/').join(body['items'][0]['url'].split('/')[3:])
-        actual_image_response = self.get(path)
-
-        assert 'image/jpeg' in actual_image_response.headers['Content-Type']
-        assert actual_image_response.body == self._image_body
 
     def test_get_images_with_empty_query_string(self):
         response = self.get('/alpha/images?q=&created_date_from=&created_date_to=&event_date_from=&event_date_to=&page=&page_size=')
@@ -94,17 +84,12 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['items'][0]['credits'] == u'Créditos'
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
+        self.assertRegexpMatches(body['items'][0]['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')
         assert body['items'][0]['width'] == 134
         assert body['items'][0]['height'] == 84
         assert body['items'][0]['thumbs'] == {}
         assert body['total'] == 1
         assert body['pageSize'] == 10
-
-        path = '/' + ('/').join(body['items'][0]['url'].split('/')[3:])
-        actual_image_response = self.get(path)
-
-        assert 'image/jpeg' in actual_image_response.headers['Content-Type']
-        assert actual_image_response.body == self._image_body
 
 
 class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
