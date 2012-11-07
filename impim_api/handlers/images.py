@@ -56,12 +56,6 @@ class ImagesResourceHandler(BaseHandler):
     @validate(ImageCreationSchema)
     def create_model(self, callback):
         image = self.request.files['image'][0]
-        result = yield gen.Task(self._images.add, request=self.request, image=image, meta_data=self.values['querystring'])
-
-        # TODO: This will be implemented by Tapioca
-        encoder = JsonDatetimeSerializer()
-        self.set_header('Content-Type', 'application/json')
-        self.write(encoder.encode(result))
-        # ENDTODO: This will be implemented by Tapioca
-        
-        callback({'id': 1})
+        result = yield gen.Task(self._images.add, request=self.request,
+                image=image, meta_data=self.values['querystring'])
+        callback(result)

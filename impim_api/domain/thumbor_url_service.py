@@ -5,8 +5,6 @@
 from libthumbor import CryptoURL
 from tornado import gen
 
-from impim_api.domain.storage import ElasticSearch
-
 
 class ThumborUrlService(object):
 
