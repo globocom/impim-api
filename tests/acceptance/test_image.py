@@ -26,4 +26,8 @@ class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
         assert response.code == 200
         assert 'image/jpeg' in response.headers['Content-Type']
         assert response.body == image_body
-    
+
+    def test_get_image_returns_404(self):
+        response = self.get('/alpha/images/no-image/image.jpeg')
+        assert response.code == 404
+        assert response.body == ''

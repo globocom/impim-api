@@ -24,9 +24,12 @@ class FileSystem(object):
         callback(request.protocol + '://' + request.host + '/' + API_VERSION + '/images/' + image_id + '/' + image['filename'])
 
     def fetch_image_by_id(self, callback, image_id):
-        with open(self._full_path(image_id), 'r') as image_file:
-            image_file_body = image_file.read()
-        callback(image_file_body)
+        if os.path.isfile(self._full_path(image_id)):
+            with open(self._full_path(image_id), 'r') as image_file:
+                image_file_body = image_file.read()
+            callback(image_file_body)
+        else:
+            callback(None)
 
     def _full_path(self, image_id):
         return '%s/%s' % (self._root_path, image_id)

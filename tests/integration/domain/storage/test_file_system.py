@@ -42,6 +42,14 @@ class FileSystemTestCase(AsyncTestCase):
         assert actual_image_body == self._image_body
         self.stop()
 
+    def test_fetch_image_by_id_when_image_does_not_exist(self):
+        self._storage.fetch_image_by_id(self._fetch_image_by_id_when_image_does_not_exist_callback, 'non-existent')
+        self.wait()
+
+    def _fetch_image_by_id_when_image_does_not_exist_callback(self, actual_image_body):
+        assert actual_image_body == None
+        self.stop()
+
     def test_store_image(self):
         self._storage.store_image(self._store_image_callback, self._image_id, self._request, body=self._image_body, filename='image.jpeg')
         self.wait()

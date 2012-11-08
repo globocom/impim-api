@@ -19,6 +19,9 @@ class ImageHandler(RequestHandler):
     @gen.engine
     def get(self, key):
         image = yield gen.Task(self._images.get_image, image_id=key)
-        self.set_header('Content-Type', magic.from_buffer(image, mime=True))
-        self.write(image)
+        if image is None:
+            self.set_status(404)
+        else:
+            self.set_header('Content-Type', magic.from_buffer(image, mime=True))
+            self.write(image)
         self.finish()
