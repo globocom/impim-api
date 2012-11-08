@@ -26,7 +26,7 @@ class ParserTestCase(TestCase):
                 "_index" : "impim-test",
                 "_type" : "image",
                 "_id" : "id",
-                "_score" : 1.0,
+                "exists": true,
                 "_source" : {
                     "credits": "Salve Jorge/TV Globo",
                     "url": "s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg",
@@ -52,6 +52,10 @@ class ParserTestCase(TestCase):
 
     def test_parse_image_from_document_when_index_doesnt_exist(self):
         es_json = """{"status": 404, "error": "IndexMissingException[[impim-test] missing]"}"""
+        assert self._es_parser.parse_image_from_document(es_json) == None
+
+    def test_parse_image_from_document_when_image_doesnt_exist(self):
+        es_json = """{"_type": "image", "_id": "non-existent", "exists": false, "_index": "impim-test"}"""
         assert self._es_parser.parse_image_from_document(es_json) == None
 
     def test_parse_images_from_search(self):

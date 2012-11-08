@@ -67,8 +67,8 @@ class Parser(object):
 
     def parse_image_from_document(self, es_json):
         es_data = loads(es_json)
-        
-        if es_data.get('status') == 404:
+
+        if self._index_does_not_exist(es_data) or self._document_does_not_exist(es_data):
             return None
 
         parsed_image = {'id': es_data['_id']}
@@ -97,6 +97,12 @@ class Parser(object):
             if key in date_fields:
                 parsed_source[key] = dateutil.parser.parse(parsed_source[key])
         return parsed_source
+
+    def _index_does_not_exist(self, es_data):
+        return es_data.get('status') == 404
+
+    def _document_does_not_exist(self, es_data):
+        return not es_data.get('exists')
 
 
 class SearchRequestBody(object):
