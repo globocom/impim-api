@@ -6,6 +6,8 @@ import derpconf.config as config
 from derpconf.config import Config
 
 
+Config.define('APPLICATION_URL', '0.0.0.0:8080', 'The url to access the running application.', 'General')
+
 Config.define('JSONP_CALLBACK', 'impimCallback', 'Default callback for JSONP responses.', 'General')
 
 Config.define('ELASTIC_SEARCH_BASE_URL', 'http://localhost:9200', 'ElasticSearch base url.', 'ElasticSearch')

@@ -32,8 +32,7 @@ def main():
 
     application = ImagesApplication(
         conf_file=opt.conf,
-        debug=opt.debug,
-        base_url="http://{0}:{1}".format(opt.ip, opt.port)
+        debug=opt.debug
     )
 
     server = HTTPServer(application)

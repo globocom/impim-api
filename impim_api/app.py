@@ -17,7 +17,7 @@ from impim_api.handlers import ImageHandler
 
 class ImagesApplication(tornado.web.Application):
 
-    def __init__(self, conf_file=None, base_url=None, *args, **kwargs):
+    def __init__(self, conf_file=None, *args, **kwargs):
         here = dirname(dirname(sys.argv[0]))
         self.config = Config.load(path=conf_file, conf_name="impim_api.conf",
             lookup_paths=[
@@ -28,7 +28,7 @@ class ImagesApplication(tornado.web.Application):
                 dirname(__file__),
             ])
 
-        rest_api = TornadoRESTful(version='', base_url=base_url,
+        rest_api = TornadoRESTful(version='', base_url=self.config.APPLICATION_URL,
                 discovery=True, cross_origin_enabled=True)
         rest_api.add_resource('alpha/images', ImagesResourceHandler)
 
