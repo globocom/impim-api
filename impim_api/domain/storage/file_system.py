@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
-import os
+from os import mkdir
+from os.path import exists
 
 from impim_api import API_VERSION
 
@@ -14,7 +15,7 @@ class FileSystem(object):
 
     def store_image(self, callback, image_id, request, **image):
         try:
-            os.mkdir(self._root_path)
+            mkdir(self._root_path)
         except OSError:
             pass
 
@@ -24,7 +25,7 @@ class FileSystem(object):
         callback(request.protocol + '://' + request.host + '/' + API_VERSION + '/images/' + image_id + '/' + image['filename'])
 
     def fetch_image_by_id(self, callback, image_id):
-        if os.path.isfile(self._full_path(image_id)):
+        if exists(self._full_path(image_id)):
             with open(self._full_path(image_id), 'r') as image_file:
                 image_file_body = image_file.read()
             callback(image_file_body)
