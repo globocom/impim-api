@@ -103,6 +103,12 @@ class ParserTestCase(TestCase):
         assert parsed['items'][0]['title'] == u"Istambul é a única cidade no mundo que fica em dois continentes: Europa e Ásia"
         assert parsed['items'][0]['height'] == 588
 
+    def test_parse_images_from_search_when_index_doesnt_exist(self):
+        es_json = """{"status": 404, "error": "IndexMissingException[[impim-test] missing]"}"""
+        parsed = self._es_parser.parse_images_from_search(es_json)
+        assert parsed['total'] == 0
+        assert len(parsed['items']) == 0
+
 
 class SearchRequestBodyTestCase(TestCase):
 

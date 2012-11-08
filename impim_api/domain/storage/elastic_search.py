@@ -79,14 +79,17 @@ class Parser(object):
     def parse_images_from_search(self, es_json):
         es_data = loads(es_json)
 
+        total = 0
         images = []
-        for hit in es_data['hits']['hits']:
-            parsed_image = {'id': hit['_id']}
-            parsed_image.update(self._parse_source(hit['_source']))
-            images.append(parsed_image)
+        if self._index_exists(es_data):
+            total = es_data['hits']['total']
+            for hit in es_data['hits']['hits']:
+                parsed_image = {'id': hit['_id']}
+                parsed_image.update(self._parse_source(hit['_source']))
+                images.append(parsed_image)
 
         return {
-            'total': es_data['hits']['total'],
+            'total': total,
             'items': images,
         }
 
@@ -97,6 +100,9 @@ class Parser(object):
             if key in date_fields:
                 parsed_source[key] = dateutil.parser.parse(parsed_source[key])
         return parsed_source
+
+    def _index_exists(self, es_data):
+        return not self._index_does_not_exist(es_data)
 
     def _index_does_not_exist(self, es_data):
         return es_data.get('status') == 404
