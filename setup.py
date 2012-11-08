@@ -10,7 +10,7 @@ def readfile(file_name):
 
 setup(
     name='impim-api',
-    version='0.1.0dev',
+    version='0.1.1dev',
     author='globo.com',
     author_email='lambda@corp.globo.com',
     license = 'MIT',
