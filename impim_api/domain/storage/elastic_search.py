@@ -67,6 +67,9 @@ class Parser(object):
 
     def parse_image_from_document(self, es_json):
         es_data = loads(es_json)
+        
+        if es_data.get('status') == 404:
+            return None
 
         parsed_image = {'id': es_data['_id']}
         parsed_image.update(self._parse_source(es_data['_source']))

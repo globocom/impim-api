@@ -134,6 +134,11 @@ class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['width'] == 134
         assert body['height'] == 84
 
+    def test_get_image_returns_404(self):
+        response = self.get('/alpha/images/no-image')
+        assert response.code == 404
+        assert response.body == ''
+
 
 class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
 

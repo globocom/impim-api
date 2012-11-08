@@ -53,7 +53,11 @@ class ImagesResourceHandler(BaseHandler):
     @gen.engine
     def get_model(self, image_id, callback):
         result = yield gen.Task(self._images.get, image_id=image_id)
-        callback(result)
+        if result is None:
+            self.set_status(404)
+            self.finish()
+        else:
+            callback(result)
 
     @gen.engine
     @validate(ImageCreationSchema)
