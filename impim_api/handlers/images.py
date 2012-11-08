@@ -5,7 +5,7 @@
 import dateutil.parser
 
 from tornado import gen, web
-from schema import Use
+from schema import Use, And
 from tapioca import RequestSchema, validate, optional
 
 from impim_api.domain.images import Images
@@ -23,7 +23,9 @@ class SearchSchema(RequestSchema):
         optional('event_date_to'): Use(dateutil.parser.parse),
         optional('thumb_sizes', []): Use(lambda s: s.split(',')),
         optional('page', 1): Use(int),
-        optional('page_size', 10): Use(int),
+        optional('page_size', 10): (And(Use(int),
+            lambda page_size: 1 <= page_size <= 50),
+                "The minimum accepted value is 1 and the maximum is 50."),
     }
 
 
@@ -59,7 +61,7 @@ class ImagesResourceHandler(BaseHandler):
         image = self.request.files['image'][0]
         result = yield gen.Task(self._images.add, request=self.request,
                 image=image, meta_data=self.values['querystring'])
-        
+
         location_values = {
             'protocol': self.request.protocol,
             'host': self.request.host,
@@ -67,5 +69,5 @@ class ImagesResourceHandler(BaseHandler):
             'id': result['id']
         }
         location = '%(protocol)s://%(host)s%(path)s/%(id)s' % location_values
-                
+
         callback(content=result, location=location)

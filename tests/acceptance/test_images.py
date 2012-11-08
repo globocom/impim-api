@@ -91,9 +91,25 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['total'] == 1
         assert body['pageSize'] == 10
 
+    def test_get_images_with_page_size_more_than_the_accepted(self):
+        response = self.get('/alpha/images?page_size=51')
+
+        assert response.code == 400
+        assert 'application/json' in response.headers['Content-Type']
+        body = loads(response.body)
+        assert body['error'] == 'The "page_size" parameter value is not valid.'
+
+    def test_get_images_with_page_size_less_than_the_accepted(self):
+        response = self.get('/alpha/images?page_size=0')
+
+        assert response.code == 400
+        assert 'application/json' in response.headers['Content-Type']
+        body = loads(response.body)
+        assert body['error'] == 'The "page_size" parameter value is not valid.'
+
 
 class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
-    
+
     def test_get_image(self):
         with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
             image_body = image_file.read()
@@ -102,11 +118,11 @@ class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
             fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
             files=[('image', 'image.jpeg', image_body)]
         )
-        
+
         url = response.headers['Location']
         path = '/' + ('/').join(url.split('/')[3:])
         response = self.get(path)
-        
+
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
         body = loads(response.body)
@@ -120,7 +136,7 @@ class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
 
 
 class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
-    
+
     def test_post_images(self):
         with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
             self._image_body = image_file.read()
