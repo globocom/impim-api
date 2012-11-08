@@ -18,7 +18,7 @@ class ImageHandler(RequestHandler):
     @web.asynchronous
     @gen.engine
     def get(self, key):
-        image = yield gen.Task(self._images.get_image, key=key)
+        image = yield gen.Task(self._images.get_image, image_id=key)
         self.set_header('Content-Type', magic.from_buffer(image, mime=True))
         self.write(image)
         self.finish()

@@ -92,6 +92,33 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['pageSize'] == 10
 
 
+class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
+    
+    def test_get_image(self):
+        with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
+            image_body = image_file.read()
+        response = self.multipart_post(
+            self.get_url('/alpha/images'),
+            fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
+            files=[('image', 'image.jpeg', image_body)]
+        )
+        
+        url = response.headers['Location']
+        path = '/' + ('/').join(url.split('/')[3:])
+        response = self.get(path)
+        
+        assert response.code == 200
+        assert 'application/json' in response.headers['Content-Type']
+        body = loads(response.body)
+        assert body['title'] == u'Title'
+        assert body['credits'] == u'Créditos'
+        assert body['eventDate'] == u'2012-10-08T17:02:00'
+        assert isinstance(dateutil.parser.parse(body['createdDate']), datetime)
+        self.assertRegexpMatches(body['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')
+        assert body['width'] == 134
+        assert body['height'] == 84
+
+
 class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
     
     def test_post_images(self):

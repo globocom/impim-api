@@ -22,27 +22,28 @@ class FileSystemTestCase(AsyncTestCase):
         self._storage = FileSystem(MockConfig())
         with open(join(dirname(__file__), '..', '..', '..', 'fixtures/image.jpeg'), 'r') as image_file:
             self._image_body = image_file.read()
+        self._image_id = 'id'
         self._request = MagicMock()
         self._request.protocol = 'http'
         self._request.host = 'localhost:8080'
 
         file_system_for_test.cleanup()
 
-    def test_fetch_image_by_key(self):
-        self._storage.store_image(self._fetch_image_by_key_callback, self._request, body=self._image_body, filename='image.jpeg')
+    def test_fetch_image_by_id(self):
+        self._storage.store_image(self._fetch_image_by_id_callback, self._image_id, self._request, body=self._image_body, filename='image.jpeg')
         self.wait()
         
-    def _fetch_image_by_key_callback(self, url):
-        self._storage.fetch_image_by_key(self._fetch_image_by_key_callback_callback, url.split('/')[-2])
+    def _fetch_image_by_id_callback(self, url):
+        self._storage.fetch_image_by_id(self._fetch_image_by_id_callback_callback, url.split('/')[-2])
         self.wait()
         self.stop()
 
-    def _fetch_image_by_key_callback_callback(self, actual_image_body):
+    def _fetch_image_by_id_callback_callback(self, actual_image_body):
         assert actual_image_body == self._image_body
         self.stop()
 
     def test_store_image(self):
-        self._storage.store_image(self._store_image_callback, self._request, body=self._image_body, filename='image.jpeg')
+        self._storage.store_image(self._store_image_callback, self._image_id, self._request, body=self._image_body, filename='image.jpeg')
         self.wait()
 
     def _store_image_callback(self, url):

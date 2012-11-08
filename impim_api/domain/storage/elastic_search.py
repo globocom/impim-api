@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
+import copy
 import dateutil.parser
 from json import dumps, loads
 from urllib import urlencode
@@ -29,9 +30,16 @@ class ElasticSearch(object):
         callback(images_dict)
 
     @gen.engine
-    def store_meta_data(self, callback, **meta_data):
-        url = self._elastic_search_urls.type_url(Urls.IMAGE_TYPE)
-        yield gen.Task(self._http_client.fetch, url, method='POST', body=self._json_encoder.encode(meta_data))
+    def fetch_meta_data(self, callback, image_id):
+        url = self._elastic_search_urls.document_url(Urls.IMAGE_TYPE, image_id)
+        elastic_search_response = yield gen.Task(self._http_client.fetch, url, method='GET')
+        image_dict = self._elastic_search_parser.parse_image_from_document(elastic_search_response.body)
+        callback(image_dict)
+
+    @gen.engine
+    def store_meta_data(self, callback, image_id, **meta_data):
+        url = self._elastic_search_urls.document_url(Urls.IMAGE_TYPE, image_id)
+        yield gen.Task(self._http_client.fetch, url, method='PUT', body=self._json_encoder.encode(meta_data))
         callback()
 
     def _build_search_request(self, **search_arguments):
@@ -57,22 +65,35 @@ class ElasticSearch(object):
 
 class Parser(object):
 
+    def parse_image_from_document(self, es_json):
+        es_data = loads(es_json)
+
+        parsed_image = {'id': es_data['_id']}
+        parsed_image.update(self._parse_source(es_data['_source']))
+
+        return parsed_image
+
     def parse_images_from_search(self, es_json):
         es_data = loads(es_json)
 
-        date_fields = ['created_date', 'event_date']
-
         images = []
         for hit in es_data['hits']['hits']:
-            image = hit['_source']
-            for key in image:
-                if key in date_fields:
-                    image[key] = dateutil.parser.parse(image[key])
-            images.append(image)
+            parsed_image = {'id': hit['_id']}
+            parsed_image.update(self._parse_source(hit['_source']))
+            images.append(parsed_image)
+
         return {
             'total': es_data['hits']['total'],
             'items': images,
         }
+
+    def _parse_source(self, source):
+        date_fields = ['created_date', 'event_date']
+        parsed_source = copy.copy(source)
+        for key in source:
+            if key in date_fields:
+                parsed_source[key] = dateutil.parser.parse(parsed_source[key])
+        return parsed_source
 
 
 class SearchRequestBody(object):
@@ -138,6 +159,9 @@ class Urls(object):
 
     def type_url(self, document_type):
         return '%s/%s' % (self.index_url(), document_type)
+
+    def document_url(self, document_type, image_id):
+        return '%s/%s' % (self.type_url(document_type), image_id)
 
     def search_url(self, document_type, **kwargs):
         query_string = urlencode(kwargs)

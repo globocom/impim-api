@@ -19,6 +19,37 @@ class ParserTestCase(TestCase):
     def setUp(self):
         self._es_parser = Parser()
 
+
+    def test_parse_image_from_document(self):
+        es_json = """
+            {
+                "_index" : "impim-test",
+                "_type" : "image",
+                "_id" : "id",
+                "_score" : 1.0,
+                "_source" : {
+                    "credits": "Salve Jorge/TV Globo",
+                    "url": "s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg",
+                    "created_date": "2012-09-24T14:12:12",
+                    "width": 940,
+                    "event_date": "2012-09-24T14:12:12",
+                    "title": "Istambul é a única cidade no mundo que fica em dois continentes: Europa e Ásia",
+                    "height": 588
+                }
+            }
+        """
+
+        parsed = self._es_parser.parse_image_from_document(es_json)
+
+        assert parsed['id'] == "id"
+        assert parsed['credits'] == u"Salve Jorge/TV Globo"
+        assert parsed['url'] == "s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg"
+        assert parsed['created_date'] == dateutil.parser.parse("2012-09-24T14:12:12")
+        assert parsed['width'] == 940
+        assert parsed['event_date'] == dateutil.parser.parse("2012-09-24T14:12:12")
+        assert parsed['title'] == u"Istambul é a única cidade no mundo que fica em dois continentes: Europa e Ásia"
+        assert parsed['height'] == 588
+
     def test_parse_images_from_search(self):
         es_json = """
             {
@@ -35,7 +66,7 @@ class ParserTestCase(TestCase):
                 "hits" : [ {
                   "_index" : "impim-api",
                   "_type" : "image",
-                  "_id" : "Ngpkqld6T0SftZpL6KnMhA",
+                  "_id" : "id",
                   "_score" : 1.0,
                   "_source" : {
                     "credits": "Salve Jorge/TV Globo",
@@ -55,6 +86,7 @@ class ParserTestCase(TestCase):
 
         assert parsed['total'] == 1
         assert len(parsed['items']) == 1
+        assert parsed['items'][0]['id'] == "id"
         assert parsed['items'][0]['credits'] == u"Salve Jorge/TV Globo"
         assert parsed['items'][0]['url'] == "s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg"
         assert parsed['items'][0]['created_date'] == dateutil.parser.parse("2012-09-24T14:12:12")
@@ -126,6 +158,9 @@ class UrlsTestCase(TestCase):
 
     def test_type_url(self):
         assert self._elastic_search_urls.type_url(Urls.IMAGE_TYPE) == 'http://localhost:9200/impim-test/image'
+
+    def test_document_url(self):
+        assert self._elastic_search_urls.document_url(Urls.IMAGE_TYPE, 1) == 'http://localhost:9200/impim-test/image/1'
 
     def test_search_url(self):
         assert self._elastic_search_urls.search_url(Urls.IMAGE_TYPE, q='search term') == 'http://localhost:9200/impim-test/image/_search?q=search+term'

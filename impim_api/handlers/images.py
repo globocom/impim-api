@@ -49,8 +49,9 @@ class ImagesResourceHandler(BaseHandler):
         callback(result)
 
     @gen.engine
-    def get_model(self, key, callback):
-        callback(key)
+    def get_model(self, image_id, callback):
+        result = yield gen.Task(self._images.get, image_id=image_id)
+        callback(result)
 
     @gen.engine
     @validate(ImageCreationSchema)
@@ -58,4 +59,13 @@ class ImagesResourceHandler(BaseHandler):
         image = self.request.files['image'][0]
         result = yield gen.Task(self._images.add, request=self.request,
                 image=image, meta_data=self.values['querystring'])
-        callback(result)
+        
+        location_values = {
+            'protocol': self.request.protocol,
+            'host': self.request.host,
+            'path': self.request.path,
+            'id': result['id']
+        }
+        location = '%(protocol)s://%(host)s%(path)s/%(id)s' % location_values
+                
+        callback(content=result, location=location)
