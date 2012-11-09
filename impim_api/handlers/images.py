@@ -33,6 +33,7 @@ class ImageCreationSchema(RequestSchema):
     querystring = {
         'title': unicode,
         'credits': unicode,
+        'tags': Use(lambda argument: [a.strip() for a in argument.split(',')]),
         'event_date': Use(dateutil.parser.parse),
     }
 

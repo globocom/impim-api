@@ -31,6 +31,7 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert len(body['items']) == 1
         assert body['items'][0]['title'] == u'Title'
         assert body['items'][0]['credits'] == u'Créditos'
+        assert body['items'][0]['tags'] == [u'tag1', u'tag2']
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
         self.assertRegexpMatches(body['items'][0]['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')
@@ -59,6 +60,7 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert len(body['items']) == 1
         assert body['items'][0]['title'] == u'Title'
         assert body['items'][0]['credits'] == u'Créditos'
+        assert body['items'][0]['tags'] == [u'tag1', u'tag2']
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
         self.assertRegexpMatches(body['items'][0]['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')
@@ -77,6 +79,7 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert len(body['items']) == 1
         assert body['items'][0]['title'] == u'Title'
         assert body['items'][0]['credits'] == u'Créditos'
+        assert body['items'][0]['tags'] == [u'tag1', u'tag2']
         assert body['items'][0]['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['items'][0]['createdDate']), datetime)
         self.assertRegexpMatches(body['items'][0]['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')
@@ -118,6 +121,7 @@ class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
         body = loads(response.body)
         assert body['title'] == u'Title'
         assert body['credits'] == u'Créditos'
+        assert body['tags'] == [u'tag1', u'tag2']
         assert body['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['createdDate']), datetime)
         self.assertRegexpMatches(body['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')
@@ -141,6 +145,7 @@ class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         body = loads(response.body)
         assert body['title'] == u'Title'
         assert body['credits'] == u'Créditos'
+        assert body['tags'] == [u'tag1', u'tag2']
         assert body['eventDate'] == u'2012-10-08T17:02:00'
         assert isinstance(dateutil.parser.parse(body['createdDate']), datetime)
         self.assertRegexpMatches(body['url'], r'http://localhost:\d+/alpha/images/.+/image\.jpeg')

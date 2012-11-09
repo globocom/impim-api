@@ -15,7 +15,12 @@ class ImagesFactory(object):
     def create_image(self):
         response = self._http_client.multipart_post(
             self._images_url,
-            fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
+            fields=[
+                ('title', u'Title'),
+                ('credits', u'Créditos'),
+                ('tags', u'tag1, tag2'),
+                ('event_date', u'2012-10-08T17:02:00')
+            ],
             files=[('image', 'image.jpeg', self._get_image_body())]
         )
         return response
