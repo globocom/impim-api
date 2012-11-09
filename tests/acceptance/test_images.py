@@ -4,7 +4,6 @@
 
 from datetime import datetime, timedelta
 from json import loads
-from os.path import dirname, join
 from urllib import urlencode
 
 import dateutil.parser
@@ -12,19 +11,15 @@ import dateutil.parser
 from impim_api.domain.storage.elastic_search import Urls
 
 from tests.support import ImpimAPIAsyncHTTPTestCase
+from tests.support.factories import ImagesFactory
 
 
 class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
 
     def setUp(self):
         super(GetImagesTestCase, self).setUp()
-        with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
-            image_body = image_file.read()
-        self._http_client.multipart_post(
-            self.get_url('/alpha/images'),
-            fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
-            files=[('image', 'image.jpeg', image_body)]
-        )
+        images_factory = ImagesFactory(http_client=self._http_client, images_url=self.get_url('/alpha/images'))
+        images_factory.create_image()
         self._elastic_search_for_test.refresh()
 
     def test_get_images(self):
@@ -111,13 +106,8 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
 class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
 
     def test_get_image(self):
-        with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
-            image_body = image_file.read()
-        response = self._http_client.multipart_post(
-            self.get_url('/alpha/images'),
-            fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
-            files=[('image', 'image.jpeg', image_body)]
-        )
+        images_factory = ImagesFactory(http_client=self._http_client, images_url=self.get_url('/alpha/images'))
+        response = images_factory.create_image()
 
         url = response.headers['Location']
         path = '/' + ('/').join(url.split('/')[3:])
@@ -143,13 +133,8 @@ class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
 class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
 
     def test_post_images(self):
-        with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
-            self._image_body = image_file.read()
-        response = self._http_client.multipart_post(
-            self.get_url('/alpha/images'),
-            fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
-            files=[('image', 'image.jpeg', self._image_body)]
-        )
+        images_factory = ImagesFactory(http_client=self._http_client, images_url=self.get_url('/alpha/images'))
+        response = images_factory.create_image()
 
         assert response.code == 201
         assert 'application/json' in response.headers['Content-Type']
