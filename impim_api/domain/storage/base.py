@@ -13,6 +13,9 @@ class ImageStorage(object):
 
 class MetadataStorage(object):
 
+    def search(self, callback, **search_arguments):
+        raise NotImplementedError
+
     def fetch_meta_data(self, callback, image_id):
         raise NotImplementedError
 
