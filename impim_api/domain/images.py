@@ -26,7 +26,7 @@ class Images(object):
         images_dict = yield gen.Task(self._meta_data_storage.search, **search_arguments)
         for item in images_dict['items']:
             item['thumbs'] = self._thumbor_url_service.fit_in_urls(item['url'], search_arguments.get('thumb_sizes'))
-        images_dict['pageSize'] = search_arguments.get('page_size')
+        images_dict['page_size'] = search_arguments.get('page_size')
         callback(images_dict)
 
     @gen.engine

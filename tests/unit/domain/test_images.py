@@ -24,34 +24,25 @@ class ImagesTestCase(AsyncTestCase):
         self._thumbor_url_service = MagicMock()
         self._images = Images(config=config, images_storage=self._images_storage, meta_data_storage=self._meta_data_storage, thumbor_url_service=self._thumbor_url_service)
 
-    def test_all_should_return_thumb_urls(self):
-        self._all_mocks()
+    def test_all(self):
+        self._meta_data_storage.search = MagicMock(side_effect=lambda callback, **query_arguments: callback({
+            'items': [{'url': 'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'}]
+        }))
+        self._thumbor_url_service.fit_in_urls = MagicMock(return_value={'200x100': 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'})
+
         self._images.all(
-            self._all_should_return_thumb_urls,
+            self._all_callback,
             thumb_sizes=['200x100'],
             page=1,
             page_size=10
         )
         self.wait()
 
-    def _all_should_return_thumb_urls(self, response):
+    def _all_callback(self, response):
+        assert response['items'][0]['url'] == 'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
         assert response['items'][0]['thumbs']['200x100'] == 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
+        assert response['page_size'] == 10
         self.stop()
-
-    def test_all_should_return_page_size(self):
-        self._all_mocks()
-        self._images.all(self._all_should_return_page_size_callback, page=1, page_size=10)
-        self.wait()
-
-    def _all_should_return_page_size_callback(self, response):
-        assert response['pageSize'] == 10
-        self.stop()
-
-    def _all_mocks(self):
-        self._meta_data_storage.search = MagicMock(side_effect=lambda callback, **query_arguments: callback({
-            'items': [{'url': 's.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'}]
-        }))
-        self._thumbor_url_service.fit_in_urls = MagicMock(return_value={'200x100': 'http://localhost:8888/77_UVuSt6igaJ02ShpEISeYgDxk=/fit-in/200x100/s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'})
 
     def test_get(self):
         self._meta_data_storage.fetch_meta_data = MagicMock(side_effect=lambda callback, image_id: callback({
