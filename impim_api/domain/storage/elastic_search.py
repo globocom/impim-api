@@ -11,10 +11,11 @@ from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPRequest
 
+from .base import MetadataStorage
 from impim_api.infrastructure.encoder import JsonDatetimeSerializer
 
 
-class ElasticSearch(object):
+class ElasticSearch(MetadataStorage):
 
     def __init__(self, config, http_client=AsyncHTTPClient()):
         self._http_client = http_client

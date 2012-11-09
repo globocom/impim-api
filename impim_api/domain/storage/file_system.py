@@ -5,10 +5,11 @@
 from os import mkdir
 from os.path import exists
 
+from .base import ImageStorage
 from impim_api import API_VERSION
 
 
-class FileSystem(object):
+class FileSystem(ImageStorage):
 
     def __init__(self, config):
         self._root_path = config.FILE_SYSTEM_ROOT_PATH
