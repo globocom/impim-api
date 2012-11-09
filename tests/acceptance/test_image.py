@@ -6,18 +6,15 @@ from json import loads
 from os.path import dirname, join
 
 from tests.support import ImpimAPIAsyncHTTPTestCase
+from tests.support.factories import ImagesFactory
 
 
 class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
 
     def test_get_image(self):
-        with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
-            image_body = image_file.read()
-        response = self._http_client.multipart_post(
-            self.get_url('/alpha/images'),
-            fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
-            files=[('image', 'image.jpeg', image_body)]
-        )
+        images_factory = ImagesFactory(http_client=self._http_client, images_url=self.get_url('/alpha/images'))
+        image_body = images_factory.create_image_body()
+        response = images_factory.create_image()
 
         url = loads(response.body)['url']
         path = '/' + ('/').join(url.split('/')[3:])
