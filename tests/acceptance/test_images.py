@@ -20,15 +20,15 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         super(GetImagesTestCase, self).setUp()
         with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
             image_body = image_file.read()
-        self.multipart_post(
+        self._http_client.multipart_post(
             self.get_url('/alpha/images'),
             fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
             files=[('image', 'image.jpeg', image_body)]
         )
-        self.refresh_elastic_search()
+        self._elastic_search_for_test.refresh()
 
     def test_get_images(self):
-        response = self.get('/alpha/images')
+        response = self._http_client.get('/alpha/images')
 
         assert response.code == 200, 'response code should be 200 but was %s' % response.code
         assert 'application/json' in response.headers['Content-Type']
@@ -56,7 +56,7 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
             'page': '1',
             'page_size': '10',
         }
-        response = self.get('/alpha/images?%s' % urlencode(query_string))
+        response = self._http_client.get('/alpha/images?%s' % urlencode(query_string))
 
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
@@ -74,7 +74,7 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['pageSize'] == 10
 
     def test_get_images_with_empty_query_string(self):
-        response = self.get('/alpha/images?q=&created_date_from=&created_date_to=&event_date_from=&event_date_to=&page=&page_size=')
+        response = self._http_client.get('/alpha/images?q=&created_date_from=&created_date_to=&event_date_from=&event_date_to=&page=&page_size=')
 
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
@@ -92,7 +92,7 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['pageSize'] == 10
 
     def test_get_images_with_page_size_more_than_the_accepted(self):
-        response = self.get('/alpha/images?page_size=51')
+        response = self._http_client.get('/alpha/images?page_size=51')
 
         assert response.code == 400
         assert 'application/json' in response.headers['Content-Type']
@@ -100,7 +100,7 @@ class GetImagesTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['error'] == 'The "page_size" parameter value is not valid.'
 
     def test_get_images_with_page_size_less_than_the_accepted(self):
-        response = self.get('/alpha/images?page_size=0')
+        response = self._http_client.get('/alpha/images?page_size=0')
 
         assert response.code == 400
         assert 'application/json' in response.headers['Content-Type']
@@ -113,7 +113,7 @@ class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
     def test_get_image(self):
         with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
             image_body = image_file.read()
-        response = self.multipart_post(
+        response = self._http_client.multipart_post(
             self.get_url('/alpha/images'),
             fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
             files=[('image', 'image.jpeg', image_body)]
@@ -121,7 +121,7 @@ class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
 
         url = response.headers['Location']
         path = '/' + ('/').join(url.split('/')[3:])
-        response = self.get(path)
+        response = self._http_client.get(path)
 
         assert response.code == 200
         assert 'application/json' in response.headers['Content-Type']
@@ -135,7 +135,7 @@ class GetImageTestCase(ImpimAPIAsyncHTTPTestCase):
         assert body['height'] == 84
 
     def test_get_image_returns_404(self):
-        response = self.get('/alpha/images/no-image')
+        response = self._http_client.get('/alpha/images/no-image')
         assert response.code == 404
         assert response.body == ''
 
@@ -145,7 +145,7 @@ class PostImagesTestCase(ImpimAPIAsyncHTTPTestCase):
     def test_post_images(self):
         with open(join(dirname(__file__), '..', 'fixtures/image.jpeg'), 'r') as image_file:
             self._image_body = image_file.read()
-        response = self.multipart_post(
+        response = self._http_client.multipart_post(
             self.get_url('/alpha/images'),
             fields=[('title', u'Title'), ('credits', u'Créditos'), ('event_date', u'2012-10-08T17:02:00')],
             files=[('image', 'image.jpeg', self._image_body)]

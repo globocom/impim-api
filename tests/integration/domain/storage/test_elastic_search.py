@@ -12,27 +12,30 @@ from tornado.testing import AsyncTestCase
 from impim_api.domain.storage import ElasticSearch
 from impim_api.domain.storage.elastic_search import Urls
 
-from tests.support import AsyncHTTPClientMixin
+from tests.support import AsyncHTTPClient as TestAsyncHTTPClient
 from tests.support import MockConfig
-from tests.support.storage import ElasticSearchMixin
+from tests.support.storage import ElasticSearchForTest
 
 
-class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMixin):
+class ElasticSearchTestCase(AsyncTestCase):
 
     def setUp(self):
         super(ElasticSearchTestCase, self).setUp()
 
-        self.http_client = AsyncHTTPClient(self.io_loop)
         config = MockConfig()
-        self._elastic_search_urls = Urls(config)
-        self._elastic_search = ElasticSearch(config=config, http_client=self.http_client)
 
-        self.cleanup_elastic_search()
+        self._http_client = AsyncHTTPClient(self.io_loop)
+        self._test_http_client = TestAsyncHTTPClient(self)
+        self._elastic_search_urls = Urls(config)
+        self._elastic_search = ElasticSearch(config=config, http_client=self._http_client)
+        self._elastic_search_for_test = ElasticSearchForTest(config=config, http_client=self._test_http_client)
+
+        self._elastic_search_for_test.cleanup()
 
     def test_search(self):
         self._elastic_search.store_meta_data(self._noop_callback, 'id1', title=u'Title')
         self.wait()
-        self.refresh_elastic_search()
+        self._elastic_search_for_test.refresh()
 
         self._elastic_search.search(self.assert_search_callback, page=1, page_size=10)
         self.wait()
@@ -50,7 +53,7 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         self.wait()
         self._elastic_search.store_meta_data(self._noop_callback, 'id2', title=u'Two')
         self.wait()
-        self.refresh_elastic_search()
+        self._elastic_search_for_test.refresh()
 
         self._elastic_search.search(self.assert_search_query_callback, q='One', page=1, page_size=10)
         self.wait()
@@ -71,7 +74,7 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         self.wait()
         self._elastic_search.store_meta_data(self._noop_callback, 'id4', title=u'Fourth', created_date=datetime(2012, 10, 4, 13, 0, 0))
         self.wait()
-        self.refresh_elastic_search()
+        self._elastic_search_for_test.refresh()
 
         self._elastic_search.search(
             self.assert_search_created_date_filter_callback,
@@ -128,7 +131,7 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         self.wait()
         self._elastic_search.store_meta_data(self._noop_callback, 'id4', title=u'Fourth', event_date=datetime(2012, 10, 4, 13, 0, 0), created_date=datetime(2012, 10, 4, 13, 0, 0))
         self.wait()
-        self.refresh_elastic_search()
+        self._elastic_search_for_test.refresh()
 
         self._elastic_search.search(
             self.assert_search_event_date_filter_callback,
@@ -181,7 +184,7 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         self.wait()
         self._elastic_search.store_meta_data(self._noop_callback, 'id2', title=u'Title')
         self.wait()
-        self.refresh_elastic_search()
+        self._elastic_search_for_test.refresh()
 
         self._elastic_search.search(self.assert_search_order_by_relevance_with_query, q='Exact title', page=1, page_size=10)
         self.wait()
@@ -199,7 +202,7 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         self.wait()
         self._elastic_search.store_meta_data(self._noop_callback, 'id2', title=u'Title', created_date=datetime(2012, 10, 5, 13, 0, 0))
         self.wait()
-        self.refresh_elastic_search()
+        self._elastic_search_for_test.refresh()
 
         self._elastic_search.search(self.assert_search_order_by_newest_first_with_no_query, page=1, page_size=10)
         self.wait()
@@ -217,7 +220,7 @@ class ElasticSearchTestCase(AsyncTestCase, AsyncHTTPClientMixin, ElasticSearchMi
         self.wait()
         self._elastic_search.store_meta_data(self._noop_callback, 'id2', title=u'Title')
         self.wait()
-        self.refresh_elastic_search()
+        self._elastic_search_for_test.refresh()
 
         self._elastic_search.search(self.assert_search_pagination_callback_page_1, page=1, page_size=1)
         self.wait()

@@ -5,11 +5,17 @@
 import mimetypes
 import urllib
 
+from tornado.httpclient import AsyncHTTPClient as TornadoAsyncHTTPClient
 
-class AsyncHTTPClientMixin(object):
+
+class AsyncHTTPClient(object):
+    
+    def __init__(self, test_case):
+        self._test_case = test_case
+        self._http_client = getattr(self._test_case, 'http_client', TornadoAsyncHTTPClient(self._test_case.io_loop))
     
     def get(self, path, **querystring):
-        url = self.get_url(path)
+        url = self._test_case.get_url(path)
         if querystring:
             url = "%s?%s" % (url, urllib.urlencode(querystring))
         return self._fetch(url, 'GET')
@@ -28,8 +34,8 @@ class AsyncHTTPClientMixin(object):
         return self._fetch(url, 'DELETE')
     
     def _fetch(self, url, method, **kwargs):
-        self.http_client.fetch(url, self.stop, method=method, **kwargs)
-        return self.wait()
+        self._http_client.fetch(url, self._test_case.stop, method=method, **kwargs)
+        return self._test_case.wait()
 
     def _encode_multipart_formdata(self, fields, files):
         boundary = '----------ThIs_Is_tHe_bouNdaRY_$'
