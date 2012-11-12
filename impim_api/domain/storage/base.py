@@ -4,7 +4,7 @@
 
 class ImageStorage(object):
 
-    def store_image(self, callback, image_id, request, **image):
+    def store_image(self, callback, image_id, request, body=None, **kwargs):
         raise NotImplementedError
 
     def fetch_image_by_id(self, callback, image_id):

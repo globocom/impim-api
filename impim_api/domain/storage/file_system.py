@@ -3,6 +3,10 @@
 
 
 from os import mkdir
+<<<<<<< HEAD
+=======
+from os.path import exists, join
+>>>>>>> s3 storage
 
 from .base import ImageStorage
 from impim_api import API_VERSION
@@ -28,7 +32,7 @@ class FileSystem(ImageStorage):
         callback(image_file_body)
 
     def _full_path(self, image_id):
-        return '%s/%s' % (self._root_path, image_id)
+        return join(self._root_path, image_id)
 
     def _safe_mkdir(self, path):
         try:
