@@ -3,10 +3,7 @@
 
 
 from os import mkdir
-<<<<<<< HEAD
-=======
 from os.path import exists, join
->>>>>>> s3 storage
 
 from .base import ImageStorage
 from impim_api import API_VERSION
