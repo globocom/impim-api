@@ -21,7 +21,9 @@ class FileSystem(ImageStorage):
         with open(full_path, 'w') as image_file:
             image_file.write(image['body'])
 
-        callback(request.protocol + '://' + request.host + '/' + API_VERSION + '/images/' + image_id + '/' + image['filename'])
+        url_schema = '{request.protocol}://{request.host}/{api_version}/images/{image_id}/{filename}'
+        callback(url_schema.format(request=request, api_version=API_VERSION,
+            image_id=image_id, filename=image['filename']))
 
     def fetch_image_by_id(self, callback, image_id):
         full_path = self._full_path(image_id)
