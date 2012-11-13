@@ -73,6 +73,6 @@ class ImagesResourceHandler(BaseHandler):
             'path': self.request.path,
             'id': result['id']
         }
-        location = '%(protocol)s://%(host)s%(path)s/%(id)s' % location_values
+        location = '{protocol}://{host}{path}/{id}'.format(**location_values)
 
         callback(content=result, location=location)
