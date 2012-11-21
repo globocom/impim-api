@@ -3,7 +3,7 @@ derpconf>=0.3.0
 libthumbor>=1.0.0
 python-dateutil>=2.1
 python-magic>=0.4.3
-tapioca>=0.1.26
+tapioca>=0.1.27
 tornado>=2.4
 tornado-thumbor-url>=0.1.1
 boto==2.6.0

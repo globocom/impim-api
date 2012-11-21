@@ -45,8 +45,8 @@ class ImagesResourceHandler(BaseHandler):
         super(ImagesResourceHandler, self).__init__(*args, **kwargs)
         self._images = Images(config=self.application.config)
 
-    @gen.engine
     @validate(SearchSchema)
+    @gen.engine
     def get_collection(self, callback):
         result = yield gen.Task(self._images.all, **self.values['querystring'])
         callback(result)
@@ -60,19 +60,22 @@ class ImagesResourceHandler(BaseHandler):
         else:
             callback(result)
 
-    @gen.engine
     @validate(ImageCreationSchema)
+    @gen.engine
     def create_model(self, callback):
-        image = self.request.files['image'][0]
-        result = yield gen.Task(self._images.add, request=self.request,
-                image=image, meta_data=self.values['querystring'])
+        try:
+            image = self.request.files['image'][0]
+            result = yield gen.Task(self._images.add, request=self.request,
+                    image=image, meta_data=self.values['querystring'])
 
-        location_values = {
-            'protocol': self.request.protocol,
-            'host': self.request.host,
-            'path': self.request.path,
-            'id': result['id']
-        }
-        location = '{protocol}://{host}{path}/{id}'.format(**location_values)
+            location_values = {
+                'protocol': self.request.protocol,
+                'host': self.request.host,
+                'path': self.request.path,
+                'id': result['id']
+            }
+            location = '{protocol}://{host}{path}/{id}'.format(**location_values)
 
-        callback(content=result, location=location)
+            callback(content=result, location=location)
+        except ParamError as e:
+            callback(content=[e.param])
