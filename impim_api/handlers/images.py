@@ -6,13 +6,15 @@ import dateutil.parser
 
 from tornado import gen, web
 from schema import Use, And
-from tapioca import RequestSchema, validate, optional
+from tapioca import RequestSchema, ParamError, validate, optional
 
 from impim_api.domain.images import Images
 from impim_api.handlers import BaseHandler
 from impim_api.infrastructure.encoder import JsonDatetimeSerializer, \
         JsonpDatetimeSerializer
 
+
+not_blank = lambda x: len(x) > 0
 
 class SearchSchema(RequestSchema):
     querystring = {
@@ -31,8 +33,8 @@ class SearchSchema(RequestSchema):
 
 class ImageCreationSchema(RequestSchema):
     querystring = {
-        'title': unicode,
-        'credits': unicode,
+        'title': And(unicode, not_blank),
+        'credits': And(unicode, not_blank),
         'tags': Use(lambda argument: [a.strip() for a in argument.split(',')]),
         'event_date': Use(dateutil.parser.parse),
     }
@@ -64,6 +66,10 @@ class ImagesResourceHandler(BaseHandler):
     @gen.engine
     def create_model(self, callback):
         try:
+            if not 'image' in self.request.files:
+                callback(content=['image'])
+                return
+
             image = self.request.files['image'][0]
             result = yield gen.Task(self._images.add, request=self.request,
                     image=image, meta_data=self.values['querystring'])
