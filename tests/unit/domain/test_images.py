@@ -15,14 +15,23 @@ from tests.support import MockConfig
 
 class ImagesTestCase(AsyncTestCase):
 
-    def setUp(self):
+    @patch('impim_api.domain.storage.FileSystem')
+    @patch('impim_api.domain.storage.ElasticSearch')
+    def setUp(self, elastic_search_class, filesystem_class):
         super(ImagesTestCase, self).setUp()
-        
+
         config = MockConfig()
-        self._images_storage = MagicMock()
-        self._meta_data_storage = MagicMock()
+        config.IMAGES_STORAGE = 'impim_api.domain.storage.FileSystem'
+        config.METADATA_STORAGE = 'impim_api.domain.storage.ElasticSearch'
+
         self._thumbor_url_service = MagicMock()
-        self._images = Images(config=config, images_storage=self._images_storage, meta_data_storage=self._meta_data_storage, thumbor_url_service=self._thumbor_url_service)
+        self._meta_data_storage = MagicMock()
+        self._images_storage = MagicMock()
+
+        filesystem_class.return_value = self._images_storage
+        elastic_search_class.return_value = self._meta_data_storage
+
+        self._images = Images(config=config, thumbor_url_service=self._thumbor_url_service)
 
     def test_all(self):
         self._meta_data_storage.search = MagicMock(side_effect=lambda callback, **query_arguments: callback({
@@ -65,7 +74,7 @@ class ImagesTestCase(AsyncTestCase):
                 'http://s.glbimg.com/et/nv/f/original/2012/09/24/istambul_asia.jpg'
             ))
             self._meta_data_storage.store_meta_data = MagicMock(side_effect=lambda callback, **image_meta_data: callback())
-            
+
             self._images.add(self._add_callback, request=None, image={'body': image_body}, meta_data={'title': u'image title'})
             self.wait()
 

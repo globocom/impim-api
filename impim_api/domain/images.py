@@ -9,6 +9,7 @@ import uuid
 from PIL import Image
 from tornado import gen
 
+from impim_api.infrastructure import importer
 from impim_api.domain import ThumborUrlService
 from impim_api.domain.storage import ElasticSearch
 from impim_api.domain.storage import FileSystem
@@ -16,9 +17,9 @@ from impim_api.domain.storage import FileSystem
 
 class Images(object):
 
-    def __init__(self, config, images_storage=None, meta_data_storage=None, thumbor_url_service=None):
-        self._images_storage = images_storage or FileSystem(config=config)
-        self._meta_data_storage = meta_data_storage or ElasticSearch(config=config)
+    def __init__(self, config, thumbor_url_service=None):
+        self._images_storage = importer.import_class(config.IMAGES_STORAGE)(config=config)
+        self._meta_data_storage = importer.import_class(config.METADATA_STORAGE)(config=config)
         self._thumbor_url_service = thumbor_url_service or ThumborUrlService(config=config)
 
     @gen.engine
