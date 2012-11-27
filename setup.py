@@ -16,6 +16,8 @@ setup(
     license = 'MIT',
     url="https://github.com/globocom/impim-api",
     include_package_data=True,
+    packages = ['impim_api'],
+    package_dir = {"impim_api": "impim_api"},
     install_requires=[requirement for requirement in readfile('requirements.txt').split('\n') if requirement],
     entry_points = {
         'console_scripts': [
