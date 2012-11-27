@@ -14,6 +14,7 @@ setup(
     author='globo.com',
     author_email='lambda@corp.globo.com',
     license = 'MIT',
+    url="https://github.com/globocom/impim-api",
     install_requires=[requirement for requirement in readfile('requirements.txt').split('\n') if requirement],
     entry_points = {
         'console_scripts': [
