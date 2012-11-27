@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 def readfile(file_name):
     f = open(os.path.join(os.path.dirname(__file__), file_name))
@@ -10,13 +10,13 @@ def readfile(file_name):
 
 setup(
     name='impim-api',
-    version='0.1.2',
+    version='0.1.3',
     author='globo.com',
     author_email='lambda@corp.globo.com',
     license = 'MIT',
     url="https://github.com/globocom/impim-api",
     include_package_data=True,
-    packages = ['impim_api'],
+    packages = find_packages('impim_api'),
     package_dir = {"impim_api": "impim_api"},
     install_requires=[requirement for requirement in readfile('requirements.txt').split('\n') if requirement],
     entry_points = {
